@@ -1,5 +1,5 @@
-import Client from 'discord.js';
-import token from './auth.json';
+const Client = require('discord.js');
+const token = require('./auth.json');
 
 const client = new Client();
 
