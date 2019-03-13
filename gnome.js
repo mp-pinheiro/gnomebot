@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const token = require('./auth.json');
+const auth = require('./auth.json');
 
 const client = new Discord.Client();
 
@@ -85,4 +85,4 @@ function printMessage(message) {
 }
 
 
-client.login(token);
+client.login(auth.token);
