@@ -51,7 +51,7 @@ async function woo(voice) {
     voice.channel.join()
         .then(connection => {
             console.log('Joined voice channel');
-            const dispatcher = connection.play('./gnome_quick.wav');
+            const dispatcher = connection.play('./gnome_quick.ogg', {type: 'ogg/opus'});
 
             dispatcher.on('start', () => {
                 console.log('Started voice.');
