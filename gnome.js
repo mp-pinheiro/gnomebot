@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const auth = require('./auth.json');
+const fs = require('fs');
 
 const client = new Discord.Client();
 
@@ -51,10 +52,14 @@ async function woo(voice) {
     voice.channel.join()
         .then(connection => {
             console.log('Joined voice channel');
-            const dispatcher = connection.play('gnome_quick.ogg', {type: 'ogg/opus'});
+            const dispatcher = connection.play(
+                fs.createReadStream('gnome_quick.ogg'), {
+                    highWaterMark: 1
+                });
 
             dispatcher.on('start', () => {
                 console.log('Started voice.');
+                connection.player.streamingData.pausedTime = 0;
             });
 
             dispatcher.on('finish', () => {
@@ -69,8 +74,6 @@ async function woo(voice) {
                 dispatcher.destroy();
                 connection.disconnect();
             });
-
-            dispatcher.setVolume(0.5);
         })
         .catch(console.log);
 
