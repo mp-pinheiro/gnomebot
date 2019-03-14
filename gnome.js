@@ -38,12 +38,13 @@ client.on('voiceStateUpdate', (os, ns) => {
     if (!ns.channel) return;
     let member = ns.member;
 
+    if (member.id !== '275816996266835968' && member.id !== '187034695941357568') return;
+
+    if (os.channelID === ns.channelID) return;
+
     console.log(`${member.user.username} joined channel: ${ns.channel.name} (${ns.channel.id})`);
 
-    if (member.id === '275816996266835968' || member.id === '187034695941357568') {
-        woo(member.voice);
-    }
-
+    woo(member.voice);
 });
 
 
