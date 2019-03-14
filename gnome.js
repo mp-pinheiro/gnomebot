@@ -38,7 +38,7 @@ client.on('voiceStateUpdate', (os, ns) => {
     if (!ns.channel) return;
     let member = ns.member;
 
-    if (member.id !== '275816996266835968' && member.id !== '187034695941357568') return;
+    if (Math.random() > 0.04) return;
 
     if (os.channelID === ns.channelID) return;
 
@@ -52,7 +52,7 @@ async function woo(voice) {
 
     voice.channel.join()
         .then(connection => {
-            console.log('Joined voice channel');
+            console.log('Joined voice channel.');
             const dispatcher = connection.play(
                 fs.createReadStream('gnome_quick.ogg'), {
                     highWaterMark: 1
@@ -85,7 +85,7 @@ function printMessage(message) {
     let user = `${message.author.username} (${message.author.id})`;
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
     let channel = server === 'none' ? message.channel.id : `${message.channel.name} (${message.channel.id})`;
-    console.log(`Message:\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+    console.log(`Message:\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}\n`);
 }
 
 
