@@ -17,9 +17,10 @@ client.on('message', messageInfo => {
     if (!messageInfo.guild) return;
 
     let message = messageInfo.content;
-    if (message === '!woo') {
+    if (message.toLowerCase() === 'hello me ol chum') {
         if (messageInfo.member.voice.channel) {
             woo(messageInfo.member.voice);
+            printMessage(messageInfo);
         } else {
             messageInfo.reply('you are not in a voice channel!');
         }

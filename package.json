@@ -9,8 +9,5 @@
   "author": "BiplaneDuck",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
-    "ffmpeg-binaries": "^4.0.0",
-    "node-opus": "^0.3.1"
   }
 }
