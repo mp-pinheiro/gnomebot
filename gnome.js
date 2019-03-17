@@ -13,27 +13,27 @@ client.on('ready', function (evt) {
 });
 
 
-client.on('message', messageInfo => {
-    if (!messageInfo.guild) return;
+client.on('message', info => {
+    if (!info.guild) return;
 
-    let message = messageInfo.content;
+    let message = info.content;
     if (message.toLowerCase() === 'hello me ol chum') {
-        if (messageInfo.member.voice.channel) {
-            woo(messageInfo.member.voice);
-            printMessage(messageInfo);
+        if (info.member.voice.channel) {
+            woo(info.member.voice);
+            printMessage(info);
         } else {
-            messageInfo.reply('you are not in a voice channel!');
+            info.reply('you are not in a voice channel!');
         }
 
-        printMessage(messageInfo);
+        printMessage(info);
     } else if (message.toLowerCase().includes('gnome')) {
-        messageInfo.channel.send(ascii_gnome);
-        printMessage(messageInfo);
+        info.channel.send(ascii_gnome);
+        printMessage(info);
     }
 });
 
 
-
+// Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
 client.on('voiceStateUpdate', (os, ns) => {
 
     if (!ns.channel) return;
@@ -78,7 +78,6 @@ async function woo(voice) {
             });
         })
         .catch(console.log);
-
 }
 
 
