@@ -1,4 +1,4 @@
-# gnomebot
+# Gnome Bot
 Gnomes! A lovely addition to any discord server!
 
 ## Triggers
@@ -28,7 +28,7 @@ gnomebot will repond with:
 ⣿⣿⣿⣿⣿⣿⡟⠄⠄⠁⠄⠻⠇⠄⠐⠄⠄⠈⠙⢻
 ⣿⣿⣿⣿⣿⣿⡇⡀⠄⠂⠁⢀⠐⠄⣥⡀⠁⢀⠄⣿
 ```
-each time a message contains the word 'gnome.'
+each time a message contains 'gnome'
 
 ### Voice Channels
-By typing `!woo`, gnomebot will deliver you and your friends a lovely "woo!" if you are in a voice channel
+Type `hello me ol chum` and gnomebot will join your voice channel and deliver a delightful "woo!"
