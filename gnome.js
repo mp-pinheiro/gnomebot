@@ -20,7 +20,6 @@ client.on('message', info => {
     if (message.toLowerCase() === 'hello me ol chum') {
         if (info.member.voice.channel) {
             woo(info.member.voice);
-            printMessage(info);
         } else {
             info.reply('you are not in a voice channel!');
         }
