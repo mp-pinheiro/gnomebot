@@ -86,10 +86,11 @@ async function woo(vs) { // vs = voice state
 
 
 function printMessage(message) {
+    let d = new Date();
     let user = `${message.author.username} (${message.author.id})`;
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
     let channel = server === 'none' ? message.channel.id : `${message.channel.name} (${message.channel.id})`;
-    console.log(`\nMessage (${message.id}):\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+    console.log(`\nMessage (${message.id}):\n\tTime: ${d.toUTCString()}\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
 }
 
 
