@@ -8,8 +8,13 @@ const ascii_gnome = '⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿\n⣿⣿⣿⣿⣿⣿
 
 
 client.on('ready', function (evt) {
-    console.log('Connected');
+    console.log('Client connected.');
     console.log('Logged in as: ' + client.user.username + ' - (' + client.user.id + ')');
+});
+
+
+client.on('disconnect', function (evt) {
+    console.log('Client disconnected.');
 });
 
 
@@ -48,11 +53,11 @@ client.on('voiceStateUpdate', (os, ns) => {
 });
 
 
-async function woo(voice) {
+async function woo(vs) { // vs = voice state
 
-    voice.channel.join()
+    vs.channel.join()
         .then(connection => {
-            console.log('\nJoined voice channel.');
+            console.log(`\nJoined voice channel: ${vs.channel.name} (${vs.channel.id})`);
             const dispatcher = connection.play(
                 fs.createReadStream('gnome_quick.ogg'), {
                     highWaterMark: 1
@@ -84,7 +89,7 @@ function printMessage(message) {
     let user = `${message.author.username} (${message.author.id})`;
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
     let channel = server === 'none' ? message.channel.id : `${message.channel.name} (${message.channel.id})`;
-    console.log(`\nMessage:\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+    console.log(`\nMessage (${message.id}):\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
 }
 
 
