@@ -9,5 +9,7 @@
   "author": "BiplaneDuck",
   "license": "ISC",
   "dependencies": {
+    "discord.js": "github:discordjs/discord.js",
+    "node-opus": "^0.3.1"
   }
 }
