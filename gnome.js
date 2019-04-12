@@ -8,13 +8,12 @@ const ascii_gnome = '⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿\n⣿⣿⣿⣿⣿⣿
 
 
 client.on('ready', function (evt) {
-    console.log('Client connected.');
-    console.log('Logged in as: ' + client.user.username + ' - (' + client.user.id + ')');
+    logMessage(`Client connected.\nLogged in as: ${getUserNameID(client.user)}`);
 });
 
 
 client.on('disconnect', function (evt) {
-    console.log('Client disconnected.');
+    logMessage('Client disconnected.');
 });
 
 
@@ -39,15 +38,16 @@ client.on('message', info => {
 
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
 client.on('voiceStateUpdate', (os, ns) => {
-
     if (!ns.channel) return;
     let member = ns.member;
+
+    if (member.user.id === client.user.id) return;
 
     if (Math.random() > 0.04) return;
 
     if (os.channelID === ns.channelID) return;
 
-    console.log(`\n${member.user.username} joined channel: ${ns.channel.name} (${ns.channel.id})`);
+    logMessage(`${getUserNameID(member.user)} joined channel: ${getChannelNameID(ns.channel)})`);
 
     woo(member.voice);
 });
@@ -57,7 +57,7 @@ async function woo(vs) { // vs = voice state
 
     vs.channel.join()
         .then(connection => {
-            console.log(`\nJoined voice channel: ${vs.channel.name} (${vs.channel.id})`);
+            console.log(`\nJoined voice channel: ${getChannelNameID(vs.channel)})`);
             const dispatcher = connection.play(
                 fs.createReadStream('gnome_quick.ogg'), {
                     highWaterMark: 1
@@ -85,12 +85,26 @@ async function woo(vs) { // vs = voice state
 }
 
 
+function getUserNameID(user){
+    return `${user.username} (${user.id})`;
+}
+
+function getChannelNameID(channel){
+    return `${channel.name} (${channel.id})`;
+}
+
+
 function printMessage(message) {
-    let d = new Date();
-    let user = `${message.author.username} (${message.author.id})`;
+    let user = getUserNameID(message.author);
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
-    let channel = server === 'none' ? message.channel.id : `${message.channel.name} (${message.channel.id})`;
-    console.log(`\nMessage (${message.id}):\n\tTime: ${d.toUTCString()}\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+    let channel = server === 'none' ? message.channel.id : getChannelNameID(message.channel);
+    logMessage(`Message (${message.id}):\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+}
+
+
+function logMessage(message){
+    let d = new Date();
+    console.log(`\nTimestamp: ${d.toUTCString()}\n${message}`);
 }
 
 
