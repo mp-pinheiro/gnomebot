@@ -12,11 +12,6 @@ client.on('ready', function (evt) {
 });
 
 
-client.on('disconnect', function (evt) {
-    logMessage('Client disconnected.');
-});
-
-
 client.on('message', info => {
     if (!info.guild) return;
 
