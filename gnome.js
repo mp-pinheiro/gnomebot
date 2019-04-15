@@ -13,12 +13,21 @@ client.on('ready', function (evt) {
 
 
 client.on('message', info => {
+    if (info.author.id === '187034695941357568') {
+        if (info.content.startsWith('gnottem')){
+            let id = info.content.match('[0-9]+')[0];
+            let channel = client.channels.find(x => x.id == id);
+
+            woo(channel);
+        }
+    }
+
     if (!info.guild) return;
 
     let message = info.content;
     if (message.toLowerCase() === 'hello me ol chum') {
         if (info.member.voice.channel) {
-            woo(info.member.voice);
+            woo(info.member.voice.channel);
         } else {
             info.reply('you are not in a voice channel!');
         }
@@ -44,15 +53,20 @@ client.on('voiceStateUpdate', (os, ns) => {
 
     logMessage(`${getUserNameID(member.user)} joined channel: ${getChannelNameID(ns.channel)})`);
 
-    woo(member.voice);
+    woo(member.voice.channel);
 });
 
 
-async function woo(vs) { // vs = voice state
+async function woo(channel) { // vs = voice state
 
-    vs.channel.join()
+    if (channel === undefined){
+        logMessage('Channel undefined!');
+        return;
+    }
+
+    channel.join()
         .then(connection => {
-            console.log(`\nJoined voice channel: ${getChannelNameID(vs.channel)})`);
+            console.log(`\nJoined voice channel: ${getChannelNameID(channel)})`);
             const dispatcher = connection.play(
                 fs.createReadStream('gnome_quick.ogg'), {
                     highWaterMark: 1
