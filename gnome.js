@@ -8,7 +8,7 @@ const ascii_gnome = '⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿\n⣿⣿⣿⣿⣿⣿
 
 
 client.on('ready', function (evt) {
-    logMessage(`Client connected.\nLogged in as: ${getUserNameID(client.user)}`);
+    log(`Client connected.\nLogged in as: ${getUserNameID(client.user)}`);
 });
 
 
@@ -18,7 +18,10 @@ client.on('message', info => {
             let id = info.content.match('[0-9]+')[0];
             let channel = client.channels.find(x => x.id == id);
 
+            printMessage(info);
             woo(channel);
+            
+            return;
         }
     }
 
@@ -51,7 +54,7 @@ client.on('voiceStateUpdate', (os, ns) => {
 
     if (os.channelID === ns.channelID) return;
 
-    logMessage(`${getUserNameID(member.user)} joined channel: ${getChannelNameID(ns.channel)})`);
+    log(`${getUserNameID(member.user)} joined channel: ${getChannelNameID(ns.channel)})`);
 
     woo(member.voice.channel);
 });
@@ -60,7 +63,7 @@ client.on('voiceStateUpdate', (os, ns) => {
 async function woo(channel) { // vs = voice state
 
     if (channel === undefined){
-        logMessage('Channel undefined!');
+        log('Channel undefined!');
         return;
     }
 
@@ -107,11 +110,11 @@ function printMessage(message) {
     let user = getUserNameID(message.author);
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
     let channel = server === 'none' ? message.channel.id : getChannelNameID(message.channel);
-    logMessage(`Message (${message.id}):\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
+    log(`Message (${message.id}):\n\tUser: ${user}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`);
 }
 
 
-function logMessage(message){
+function log(message){
     let d = new Date();
     console.log(`\nTimestamp: ${d.toUTCString()}\n${message}`);
 }
