@@ -13,16 +13,14 @@ client.on('ready', function (evt) {
 
 
 client.on('message', info => {
-    if (info.author.id === '187034695941357568') {
-        if (info.content.startsWith('gnottem')){
-            let id = info.content.match('[0-9]+')[0];
-            let channel = client.channels.find(x => x.id == id);
+    if (info.author.id === '187034695941357568' && info.content.startsWith('gnottem')) {
+        let id = info.content.match('[0-9]+')[0];
+        let channel = client.channels.find(x => x.id == id);
 
-            printMessage(info);
-            woo(channel);
-            
-            return;
-        }
+        printMessage(info);
+        woo(channel);
+        
+        return;
     }
 
     if (!info.guild) return;
