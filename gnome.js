@@ -43,6 +43,8 @@ client.on('message', info => {
                 printMessage(info);
 
                 log(`${getUserNameID(info.author)} triggered a gnome warning.`);
+            }else{
+                log('This video does not contain any gnomes.');
             }
         });
 
@@ -70,10 +72,13 @@ async function analyseVideoComments(id) {
     let commentPage = await fetchComments(id);
 
     while (commentPage) {
-        let str = JSON.stringify(commentPage.comments);
-        let matches = str.match('([Gg]\s*[Nn]\s*[Oo]\s*[Mm]\s*[Ee])');
-        if (matches && matches.length > 0) {
-            return true;
+        for(let comment of commentPage.comments){
+            let str = comment.text;
+            let matches = str.match('([Gg]\s*[Nn]\s*[Oo]\s*[Mm]\s*[Ee])');
+            
+            if (matches && matches.length > 0) {
+                return true;
+            }
         }
 
         if (commentPage.nextPageToken) {
