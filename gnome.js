@@ -38,9 +38,15 @@ client.on('message', info => {
     if (idMatches) {
         analyseVideoComments(idMatches[0]).then(result => {
             if (result){
-                info.channel.send('Warning, video may contain gnomes!');
+                info.channel.send('Warning!!! This video may contain gnomes!');
+
+                printMessage(info);
+
+                log(`${getUserNameID(info.author)} triggered a gnome warning.`);
             }
         });
+
+        return;
     }
 
     let message = info.content;
