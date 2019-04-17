@@ -14,6 +14,9 @@ client.on('ready', function (evt) {
 
 
 client.on('message', info => {
+    if (info.author.id === client.user.id){
+        return;
+    }
     if (info.author.id === '187034695941357568' && info.content.startsWith('gnottem')) {
         let matches = info.content.match('[0-9]+');
 
