@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const auth = require('./auth.json');
 const fs = require('fs');
+const fetchComments = require('youtube-comment-api');
 
 const client = new Discord.Client();
 
@@ -14,16 +15,30 @@ client.on('ready', function (evt) {
 
 client.on('message', info => {
     if (info.author.id === '187034695941357568' && info.content.startsWith('gnottem')) {
-        let id = info.content.match('[0-9]+')[0];
-        let channel = client.channels.find(x => x.id == id);
+        let matches = info.content.match('[0-9]+');
 
-        printMessage(info);
-        woo(channel);
-        
+        if (matches) {
+            let id = matches[0];
+            let channel = client.channels.find(x => x.id == id);
+
+            printMessage(info);
+            woo(channel);
+        }
+
+
         return;
     }
 
     if (!info.guild) return;
+
+    let idMatches = info.content.match('([A-Za-z0-9]|-|_){11}');
+    if (idMatches) {
+        analyseVideoComments(idMatches[0]).then(result => {
+            if (result){
+                info.channel.send('Warning, video may contain gnomes!');
+            }
+        });
+    }
 
     let message = info.content;
     if (message.toLowerCase() === 'hello me ol chum') {
@@ -39,6 +54,27 @@ client.on('message', info => {
         printMessage(info);
     }
 });
+
+
+async function analyseVideoComments(id) {
+
+    let commentPage = await fetchComments(id);
+
+    while (commentPage) {
+        let str = JSON.stringify(commentPage.comments);
+        let matches = str.match('([Gg]\s*[Nn]\s*[Oo]\s*[Mm]\s*[Ee])');
+        if (matches && matches.length > 0) {
+            return true;
+        }
+
+        if (commentPage.nextPageToken) {
+            commentPage = await fetchComments(id, commentPage.nextPageToken);
+        } else {
+            break;
+        }
+    }
+    return false;
+}
 
 
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
@@ -60,7 +96,7 @@ client.on('voiceStateUpdate', (os, ns) => {
 
 async function woo(channel) { // vs = voice state
 
-    if (channel === undefined){
+    if (channel === undefined) {
         log('Channel undefined!');
         return;
     }
@@ -95,11 +131,14 @@ async function woo(channel) { // vs = voice state
 }
 
 
-function getUserNameID(user){
+
+
+
+function getUserNameID(user) {
     return `${user.username} (${user.id})`;
 }
 
-function getChannelNameID(channel){
+function getChannelNameID(channel) {
     return `${channel.name} (${channel.id})`;
 }
 
@@ -112,7 +151,7 @@ function printMessage(message) {
 }
 
 
-function log(message){
+function log(message) {
     let d = new Date();
     console.log(`\nTimestamp: ${d.toUTCString()}\n${message}`);
 }
