@@ -4,7 +4,7 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 
 ## Triggers
 ### Text Channels
-gnomebot will repond with:
+For each message that contains the word 'gnome' gnomebot will repond with:
 ```
 ⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿
 ⣿⣿⣿⣿⣿⣿⢋⠄⠐⠄⠐⠄⠠⠈⠄⠂⠠⠄⠈⣿
@@ -29,10 +29,12 @@ gnomebot will repond with:
 ⣿⣿⣿⣿⣿⣿⡟⠄⠄⠁⠄⠻⠇⠄⠐⠄⠄⠈⠙⢻
 ⣿⣿⣿⣿⣿⣿⡇⡀⠄⠂⠁⢀⠐⠄⣥⡀⠁⢀⠄⣿
 ```
-each time a message contains 'gnome'
+<br>
+If a user shares a youtube video, gnomebot will use the latest and greatest, state of the art algorithms to make a judgement whether or not the video is contaminated with gnomes. If there is a eveidence beyond a reasonable doubt there may be gnomes in the video, gnomebot will warn against watching the video.
 
 ### Voice Channels
-Type `hello me ol chum` and gnomebot will join your voice channel and deliver a delightful "woo!" You must present in a voice channel for this feature to work.<br>
+Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel and leave soon after.<br>
+If you become impatient, you can type `hello me ol chum` and gnomebot will perform the same activity on command.<br>
 If granted the permission, users can type `gnottem <voice channel id>` to prank their friends without the need to be in a voice channel.
 
 
