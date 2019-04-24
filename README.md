@@ -1,6 +1,6 @@
 # Gnomebot
-Gnomes! A lovely addition to any discord server!<br>
-Gnomebot started as a silly discord bot I created to prank my friends and slowly snowballed into a feature-rich discord bot.
+* Gnomes! A lovely addition to any discord server!<br>
+* Gnomebot started as a silly discord bot I created to prank my friends and slowly snowballed into a feature-rich discord bot.
 
 ## Triggers
 ### Text Channels
@@ -29,7 +29,6 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 ⣿⣿⣿⣿⣿⣿⡟⠄⠄⠁⠄⠻⠇⠄⠐⠄⠄⠈⠙⢻
 ⣿⣿⣿⣿⣿⣿⡇⡀⠄⠂⠁⢀⠐⠄⣥⡀⠁⢀⠄⣿
 ```
-<br>
 * If a user shares a youtube video, gnomebot will use the latest and greatest, state of the art algorithms to make a judgement whether or not the video is contaminated with gnomes. If there is a eveidence beyond a reasonable doubt there may be gnomes in the video, gnomebot will warn against watching the video.
 
 ### Voice Channels
