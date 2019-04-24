@@ -37,5 +37,5 @@ If granted the permission, users can type `gnottem <voice channel id>` to prank 
 
 
 ## References
-[discord.js](https://discord.js.org/#/)
+[discord.js](https://discord.js.org/#/)<br>
 [youtube-comment-api](https://github.com/philbot9/youtube-comment-api)
