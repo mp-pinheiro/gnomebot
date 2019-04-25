@@ -37,5 +37,5 @@
 
 
 ## References
-* [discord.js](https://discord.js.org/#/){target="_blank"}<br>
-* [youtube-comment-api](https://github.com/philbot9/youtube-comment-api){target="_blank"}
+* <a href="https://discord.js.org/#/" target="_blank">discord.js</a><br>
+* <a href="https://github.com/philbot9/youtube-comment-api/" target="_blank">youtube-comment-api</a>
