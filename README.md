@@ -1,5 +1,4 @@
 # Gnomebot
-* Gnomes! A lovely addition to any discord server!<br>
 * Gnomebot started as a silly discord bot I created to prank my friends and slowly snowballed into a feature-rich discord bot.
 
 ## Triggers
@@ -33,10 +32,10 @@
 
 ### Voice Channels
 * Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel, leaving shortly after.<br>
-* If you become impatient, you can type `hello me ol chum` and gnomebot will perform the same activity on command.<br>
+* If you become impatient, you can type `hello me ol chum` and gnomebot will perform the same activity on command. You must be in a voice channel for this feature to work.<br>
 * If granted the permission, users can type `gnottem <voice channel id>` to prank their friends without the need to be in a voice channel.
 
 
 ## References
-* [discord.js](https://discord.js.org/#/)<br>
-* [youtube-comment-api](https://github.com/philbot9/youtube-comment-api)
+* [discord.js](https://discord.js.org/#/){target="_blank"}<br>
+* [youtube-comment-api](https://github.com/philbot9/youtube-comment-api){target="_blank"}
