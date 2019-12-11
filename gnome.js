@@ -4,17 +4,23 @@ const fs = require('fs');
 const fetchComments = require('youtube-comment-api');
 
 const client = new Discord.Client();
+client.commands = new Discord.Collection();
 
-const ascii_gnome = '⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿\n⣿⣿⣿⣿⣿⣿⢋⠄⠐⠄⠐⠄⠠⠈⠄⠂⠠⠄⠈⣿\n⣿⣿⣿⣿⣿⡟⠄⠄⠄⠁⢀⠈⠄⠐⠈⠄⠠⠄⠁⠈⠹\n⣿⣿⣿⣿⣿⣀⡀⡖⣖⢯⢮⢯⡫⡯⢯⡫⡧⣳⡣⣗⣼\n⣿⣿⣿⣿⣷⣕⢱⢻⢮⢯⢯⡣⣃⣉⢪⡪⣊⣀⢯⣺⣺\n⣿⣿⣿⣿⣿⣷⡝⣜⣗⢽⢜⢎⢧⡳⡕⡵⡱⣕⡕⡮⣾\n⣿⣿⣿⣿⣿⡿⠓⣕⢯⢮⡳⣝⣕⢗⡭⣎⢭⠮⣞⣽⡺\n⣿⣿⣿⡿⠋⠄⠄⠸⣝⣗⢯⣳⢕⣗⡲⣰⡢⡯⣳⣳⣫\n⣿⣿⠋⠄⠄⠄⠄⠄⠘⢮⣻⣺⢽⣺⣺⣳⡽⣽⣳⣳⠏⠛⠛⠛⢿\n⣿⠇⠄⢁⠄⠄⠄⠁⠄⠈⠳⢽⢽⣺⢞⡾⣽⣺⣞⠞⠄⠄⠈⢄⢎⡟⣏⢯⢝⢛⠿\n⡇⠄⡧⣣⢢⢔⢤⢢⢄⠂⠄⠄⠁⠉⠙⠙⠓⠉⠈⢀⠄⠄⠄⠑⢃⣗⢕⣕⢥⡣⣫⢽\n⣯⠄⢽⢸⡪⡪⡣⠲⢤⠄⠄⠂⠄⠄⠄⡀⠄⠠⠐⠄⣶⣤⣬⣴⣿⣿⣷⡹⣿⣿⣾⣿\n⣿⣶⣾⣵⢱⠕⡕⡱⠔⠄⠁⢀⠠⠄⠄⢀⠄⠄⢀⣾\n⣿⣿⣿⣿⡷⡗⠬⡘⠂⠄⠈⠄⠄⠄⠈⠄⠄⠄⢸\n⣿⣿⣿⣿⣿⣿⣇⠄⢀⠄⡀⢁⠄⠐⠈⢀⠠⠐⡀⣶\n⣿⣿⣿⣿⣿⣿⣇⠄⢀⠄⡀⢁⠄⠐⠈⢀⠠⠐⡀⣶\n⣿⣿⣿⣿⣿⣿⣧⢁⠂⠔⠠⠈⣾⠄⠂⠄⡁⢲\n⣿⣿⣿⣿⣿⣿⠿⠠⠈⠌⠨⢐⡉⠄⠁⡂⠔⠼\n⣿⣿⣿⣿⣿⣿⡆⠈⠈⠈⠄⠂⣆⠄⠄⠄⠄⣼\n⣿⣿⣿⣿⣿⣿⣿⠄⠁⠈⠄⣾⡿⠄⠄⠂⢸\n⣿⣿⣿⣿⣿⣿⡟⠄⠄⠁⠄⠻⠇⠄⠐⠄⠄⠈⠙⢻\n⣿⣿⣿⣿⣿⣿⡇⡀⠄⠂⠁⢀⠐⠄⣥⡀⠁⢀⠄⣿';
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+// Load commands
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
+}
 
-client.on('ready', function (evt) {
+client.on('ready', event => {
     log(`Client connected.\nLogged in as: ${getUserNameID(client.user)}`);
 });
 
 
 client.on('message', info => {
-    if (info.author.id === client.user.id){
+    if (info.author.id === client.user.id) {
         return;
     }
     if (info.author.id === '187034695941357568' && info.content.startsWith('gnottem')) {
@@ -24,7 +30,7 @@ client.on('message', info => {
             let id = matches[0];
             let channel = client.channels.find(x => x.id == id);
 
-            printMessage(info);
+            logMessage(info);
             woo(channel);
         }
 
@@ -37,16 +43,16 @@ client.on('message', info => {
     let idMatches = info.content.match('([A-Za-z0-9]|-|_){11}');
     if (idMatches) {
         analyseVideoComments(idMatches[0]).then(result => {
-            if (result){
+            if (result) {
                 info.channel.send('Warning!!! This video may contain gnomes!');
 
-                printMessage(info);
+                logMessage(info);
 
                 log(`${getUserNameID(info.author)} triggered a gnome warning.`);
-            }else{
+            } else {
                 log('This video does not contain any gnomes.');
             }
-        });
+        }).catch(() => console.log('An error occured while fetching youtube comments.'));
 
         return;
     }
@@ -59,10 +65,10 @@ client.on('message', info => {
             info.reply('you are not in a voice channel!');
         }
 
-        printMessage(info);
+        logMessage(info);
     } else if (message.toLowerCase().includes('gnome')) {
         info.channel.send(ascii_gnome);
-        printMessage(info);
+        logMessage(info);
     }
 });
 
@@ -72,10 +78,10 @@ async function analyseVideoComments(id) {
     let commentPage = await fetchComments(id);
 
     while (commentPage) {
-        for(let comment of commentPage.comments){
+        for (let comment of commentPage.comments) {
             let str = comment.text;
             let matches = str.match('([Gg]\s*[Nn]\s*[Oo]\s*[Mm]\s*[Ee])');
-            
+
             if (matches && matches.length > 0) {
                 return true;
             }
@@ -108,7 +114,7 @@ client.on('voiceStateUpdate', (os, ns) => {
 });
 
 
-async function woo(channel) { // vs = voice state
+async function woo(channel) {
 
     if (channel === undefined) {
         log('Channel undefined!');
@@ -117,11 +123,11 @@ async function woo(channel) { // vs = voice state
 
     channel.join()
         .then(connection => {
-            console.log(`\nJoined voice channel: ${getChannelNameID(channel)})`);
+            log(`\nJoined voice channel: ${getChannelNameID(channel)})`);
             const dispatcher = connection.play(
                 fs.createReadStream('gnome_quick.ogg'), {
-                    highWaterMark: 1
-                });
+                highWaterMark: 1
+            });
 
             dispatcher.on('start', () => {
                 console.log('Started voice.');
@@ -157,7 +163,7 @@ function getChannelNameID(channel) {
 }
 
 
-function printMessage(message) {
+function logMessage(message) {
     let user = getUserNameID(message.author);
     let server = message.guild ? `${message.guild.name} (${message.guild.id})` : 'none';
     let channel = server === 'none' ? message.channel.id : getChannelNameID(message.channel);
