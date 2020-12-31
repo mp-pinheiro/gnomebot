@@ -39,9 +39,6 @@ class DiscordUtil {
    * @param {String} file_path
    */
   static async play_sound(channel, file_path) {
-    if (playing) {
-      logger.log("Already playing a song.")
-    }
     if (channel === undefined) {
       logger.log("Channel undefined!")
       return
