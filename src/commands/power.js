@@ -14,7 +14,7 @@ module.exports = {
    */
   async execute(message, args) {
     if (args.length > 0 && args[0].toLowerCase() == "stop") {
-      message.guild?.voice.channel?.leave()
+      message.guild?.voice?.channel?.leave()
       return
     }
     if (message.member.voice.channel) {
