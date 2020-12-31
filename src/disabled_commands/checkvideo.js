@@ -3,7 +3,7 @@ const URL = require('url')
 
 module.exports = {
   name: 'checkvideo',
-  description: 'Determines if a video contains gnomes.',
+  desc: 'Determines if a video contains gnomes.',
   /**
    * @param {Message} message
    * @param {Array<String>} args

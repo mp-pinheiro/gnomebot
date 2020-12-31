@@ -2,16 +2,17 @@
   "name": "gnomebot",
   "version": "1.0.0",
   "description": "Gnomes everywhere!",
-  "main": "gnome.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon gnome.js",
-    "start": "node gnome.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "BiplaneDuck",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "github:discordjs/opus",
     "discord.js": "^12.5.1",
+    "@discordjs/opus": "github:discordjs/opus",
+    "opusscript": "0.0.7",
     "ffmpeg-static": "^4.2.7"
   },
   "devDependencies": {

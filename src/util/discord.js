@@ -28,7 +28,7 @@ class DiscordUtil {
     )
   }
 
-  static async woo(channel) {
+  static async play_sound(channel, file_path) {
     if (channel === undefined) {
       logger.log('Channel undefined!')
       return
@@ -37,7 +37,7 @@ class DiscordUtil {
     try {
       const connection = await channel.join()
       logger.log(`\nJoined voice channel: ${DiscordUtil.getChannelNameIDString(channel)})`)
-      const dispatcher = connection.play(fs.createReadStream('gnome_quick.ogg'), {
+      const dispatcher = connection.play(fs.createReadStream(file_path), {
         highWaterMark: 1,
       })
 
