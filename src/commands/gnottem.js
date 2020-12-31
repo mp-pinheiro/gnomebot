@@ -16,7 +16,7 @@ module.exports = {
       const channel_id = args[0]
 
       if (!message.member.permissions.has("ADMINISTRATOR")) {
-        console.log(
+        logger.log(
           `${getUserNameIDString(message.author)} is not an administrator.`
         )
 
@@ -28,7 +28,7 @@ module.exports = {
       await play_sound(channel, WOO)
     } catch (err) {
       logger.log("An error occured in gnottem")
-      console.log(err)
+      logger.log(err)
     }
   },
 }

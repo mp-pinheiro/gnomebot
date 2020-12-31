@@ -1,20 +1,20 @@
-const logger = require('../util/logger')
-const { Message } = require('discord.js')
+const logger = require("../util/logger")
+const { Message } = require("discord.js")
+const { GNOME_POWER } = require("../constants/sound_files")
 
 module.exports = {
-  name: 'power',
-  desc: 'Plays GNOME POWER in your voice chat.',
+  name: "power",
+  desc: "Plays GNOME POWER in your voice chat.",
   /**
    *
    * @param {Message} message
    * @param {Array<String>} args
    */
   async execute(message, args) {
-    try {
-      let gnome = ascii_gnomes[Math.floor(Math.random() * ascii_gnomes.length)]
-      message.channel.send(gnome)
-    } catch (err) {
-      logger.log('An error occured in ascii command')
+    if (message.member.voice.channel) {
+      play_sound(message.member.voice.channel, GNOME_POWER)
+    } else {
+      message.reply("you are not in a voice channel!")
     }
   },
 }

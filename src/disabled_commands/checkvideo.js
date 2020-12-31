@@ -1,5 +1,6 @@
 const { Message } = require('discord.js')
 const URL = require('url')
+const logger = require('../util/logger')
 
 module.exports = {
   name: 'checkvideo',
@@ -17,7 +18,7 @@ module.exports = {
     const id = url?.query?.v
 
     if (!id) {
-      console.log('Unable to parse URL.')
+      logger.log('Unable to parse URL.')
       return
     }
 

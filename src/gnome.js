@@ -40,7 +40,7 @@ client.on("message", (message) => {
     client.commands.get(command).execute(message, args)
     DiscordUtil.logMessage(message)
   } catch (err) {
-    console.log(err)
+    logger.log(err)
     message.reply("An error occurred while executing that command!")
   }
 })
