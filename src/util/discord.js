@@ -2,8 +2,6 @@ const logger = require("./logger")
 const fs = require("fs")
 const discord = require("discord.js")
 
-let playing = false
-
 class DiscordUtil {
   /**
    *
@@ -35,6 +33,11 @@ class DiscordUtil {
     )
   }
 
+  /**
+   *
+   * @param {discord.VoiceChannel} channel
+   * @param {String} file_path
+   */
   static async play_sound(channel, file_path) {
     if (playing) {
       logger.log("Already playing a song.")
@@ -45,7 +48,6 @@ class DiscordUtil {
     }
 
     try {
-      playing = true
       const connection = await channel.join()
       logger.log(
         `\nJoined voice channel: ${DiscordUtil.getChannelNameIDString(
@@ -65,19 +67,19 @@ class DiscordUtil {
         logger.log("Finished voice.")
         dispatcher.destroy()
         connection.disconnect()
-        playing = false
       })
 
       dispatcher.on("error", (e) => {
         logger.log("An error occured while playing a sound.")
         dispatcher.destroy()
         connection.disconnect()
-        playing = false
+      })
+      connection.on("disconnect", (err) => {
+        dispatcher.destroy()
       })
     } catch (err) {
       logger.log("An error occured while join voice.")
       logger.log(err)
-      playing = false
     }
   }
 }
