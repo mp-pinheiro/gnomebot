@@ -4,14 +4,17 @@
   "description": "Gnomes everywhere!",
   "main": "gnome.js",
   "scripts": {
-    "test": "node gnome.js"
+    "dev": "nodemon gnome.js",
+    "start": "node gnome.js"
   },
   "author": "BiplaneDuck",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
-    "ffmpeg-binaries": "^4.0.0",
-    "node-opus": "^0.3.1",
-    "youtube-comment-api": "github:philbot9/youtube-comment-api"
+    "@discordjs/opus": "github:discordjs/opus",
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.2.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }

@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const DiscordUtil = require("./util/discordutil");
+const DiscordUtil = require("./util/discord");
 const logger = require("./util/logger");
 const auth = require("./auth.json");
 const fs = require("fs");
@@ -19,14 +19,14 @@ for (const file of command_files) {
 
 client.on("ready", event => {
   logger.log(`Client connected.\nLogged in as: ${DiscordUtil.getUserNameIDString(client.user)}`);
-  client.user.setActivity("twitch streamers get trolled.", { type: "WATCHING" });
+  client.user.setActivity("Hello me ol' chum!");
 });
 
 client.on("message", message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
   const args = message.content.split(/\s+/);
   args.shift();
-  const command = args.shift().toLowerCase();
+  const command = args.shift()?.toLowerCase();
 
   if (!client.commands.has(command)) return;
 
@@ -37,12 +37,6 @@ client.on("message", message => {
     console.log(err);
     message.reply("An error occurred while executing that command!");
   }
-
-  // if (message.toLowerCase() === "hello me ol chum") {
-  // } else if (message.toLowerCase().includes("gnome")) {
-  //   message.channel.send(ascii_gnome);
-  //   logger.logMessage(message);
-  // }
 });
 
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
