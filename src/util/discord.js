@@ -40,7 +40,7 @@ class DiscordUtil {
     }
 
     if (file_path === undefined) {
-      logger.log('FILE PATH')
+      logger.error('No file path specified!!')
       return
     }
 
