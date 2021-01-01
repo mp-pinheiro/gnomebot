@@ -1,7 +1,7 @@
 import logger from "../util/logger.js"
 import DiscordUtil from "../util/discord.js"
 import { Message } from "discord.js"
-import { WOO } from "../constants/sound_files.js"
+import { WOO } from "../constants.js"
 
 export default {
   name: "woo",

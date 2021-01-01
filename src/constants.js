@@ -1,3 +1,5 @@
+export const COMMAND_PREFIX = "!gnome"
+
 export const ASCII_GNOMES = [
   `⣿⠿⠋⠉⠄⠄⠄⠄⠄⠉⠙⢻⣿
 ⣿⣿⣿⣿⣿⣿⢋⠄⠐⠄⠐⠄⠠⠈⠄⠂⠠⠄⠈⣿
@@ -53,3 +55,6 @@ export const ASCII_GNOMES = [
 ⣿⣿⣿⣿⣯⠄⠄⡀⠈⠂⣀⠄⢀⠄⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣶⣄⣀⠐⢀⣸⣷⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿`,
 ]
+
+export const WOO = "assets/sounds/woo.ogg"
+export const GNOME_POWER = "assets/sounds/gnome_power.ogg"

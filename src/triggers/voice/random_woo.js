@@ -1,13 +1,13 @@
-import { VoiceState } from 'discord.js'
-import { WOO } from '../../constants/sound_files.js'
-import DiscordUtil from '../../util/discord.js'
-import logger from '../../util/logger.js'
+import { VoiceState } from "discord.js"
+import { WOO } from "../../constants.js"
+import DiscordUtil from "../../util/discord.js"
+import logger from "../../util/logger.js"
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 
 export default {
-  name: 'Random Woo',
-  desc: 'Randomly joins a chat channel and woo.',
+  name: "Random Woo",
+  desc: "Randomly joins a chat channel and woo.",
   /**
    * @param {VoiceState} oldVoiceState
    * @param {VoiceState} newVoiceState
@@ -27,7 +27,11 @@ export default {
   async execute(oldVoiceState, newVoiceState) {
     let member = newVoiceState.member
 
-    logger.log(`${getUserNameIDString(member.user)} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`)
+    logger.log(
+      `${getUserNameIDString(
+        member.user
+      )} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`
+    )
 
     DiscordUtil.play_sound(newVoiceState.channel, WOO)
   },
