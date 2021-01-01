@@ -3,6 +3,8 @@ import DiscordUtil from "../util/discord.js"
 import { Message } from "discord.js"
 import { WOO } from "../constants.js"
 
+const { getUserNameIDString } = DiscordUtil
+
 export default {
   name: "woo",
   desc: "Gnomebot will join your channel and deliver a woo.",
