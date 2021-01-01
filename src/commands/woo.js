@@ -1,9 +1,9 @@
-const logger = require("../util/logger")
-const { play_sound } = require("../util/discord")
-const { Message } = require("discord.js")
-const { WOO } = require("../constants/sound_files")
+import logger from "../util/logger.js"
+import DiscordUtil from "../util/discord.js"
+import { Message } from "discord.js"
+import { WOO } from "../constants/sound_files.js"
 
-module.exports = {
+export default {
   name: "woo",
   desc: "Gnomebot will join your channel and deliver a woo.",
   /**
@@ -23,9 +23,9 @@ module.exports = {
 
       let channel = await message.client.channels.fetch(channel_id)
 
-      play_sound(channel, WOO)
+      DiscordUtil.play_sound(channel, WOO)
     } else if (message.member.voice.channel) {
-      play_sound(message.member.voice.channel, WOO)
+      DiscordUtil.play_sound(message.member.voice.channel, WOO)
     } else {
       message.reply("you are not in a voice channel!")
     }

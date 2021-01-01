@@ -2,10 +2,10 @@
   "name": "gnomebot",
   "version": "1.0.0",
   "description": "Gnomes everywhere!",
-  "main": "index.js",
+  "main": "src/gnome.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon src/gnome.js",
+    "start": "node src/index.js"
   },
   "author": "BiplaneDuck",
   "license": "ISC",
@@ -13,7 +13,9 @@
     "@discordjs/opus": "github:discordjs/opus",
     "bufferutil": "^4.0.2",
     "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
     "erlpack": "^0.1.3",
+    "eslint": "^7.16.0",
     "ffmpeg-static": "^4.2.7",
     "lodash": "^4.17.20",
     "sodium": "^3.0.2",
@@ -22,5 +24,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
-  }
+  },
+  "type": "module"
 }

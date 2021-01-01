@@ -1,8 +1,8 @@
-const { Message } = require('discord.js')
-const URL = require('url')
-const logger = require('../util/logger')
+import { Message } from 'discord.js'
+import URL from 'url'
+import logger from '../util/logger.js'
 
-module.exports = {
+export default {
   name: 'checkvideo',
   desc: 'Determines if a video contains gnomes.',
   /**

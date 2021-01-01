@@ -1,11 +1,11 @@
-const logger = require('./logger')
-const fs = require('fs')
-const discord = require('discord.js')
+import logger from './logger.js'
+import fs from 'fs'
+import Discord from 'discord.js'
 
-class DiscordUtil {
+export default class DiscordUtil {
   /**
    *
-   * @param {discord.User} user
+   * @param {Discord.User} user
    */
   static getUserNameIDString(user) {
     return `${user.username} (${user.id})`
@@ -13,7 +13,7 @@ class DiscordUtil {
 
   /**
    *
-   * @param {discord.Channel} channel
+   * @param {Discord.Channel} channel
    */
   static getChannelNameIDString(channel) {
     return `${channel.name} (${channel.id})`
@@ -30,7 +30,7 @@ class DiscordUtil {
 
   /**
    *
-   * @param {discord.VoiceChannel} channel
+   * @param {Discord.VoiceChannel} channel
    * @param {String} file_path
    */
   static async play_sound(channel, file_path) {
@@ -76,5 +76,3 @@ class DiscordUtil {
     }
   }
 }
-
-module.exports = DiscordUtil

@@ -1,7 +1,7 @@
-const logger = require('../util/logger')
-const { Message } = require('discord.js')
+import logger from '../util/logger.js'
+import { Message } from 'discord.js'
 
-module.exports = {
+export default {
   name: 'help',
   desc: 'Displays all commands and their descriptions.',
   /**
