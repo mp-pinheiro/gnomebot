@@ -5,9 +5,9 @@
   "main": "src/gnome.js",
   "scripts": {
     "dev": "nodemon src/gnome.js",
-    "start": "node src/index.js"
+    "start": "node src/gnome.js"
   },
-  "author": "BiplaneDuck",
+  "author": "Nick Hadley",
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "github:discordjs/opus",

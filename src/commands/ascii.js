@@ -1,11 +1,11 @@
-import logger from '../util/logger.js'
-import { Message } from 'discord.js'
-import { ASCII_GNOMES } from '../constants/ascii.js'
-import _ from 'lodash'
+import logger from "../util/logger.js"
+import { Message } from "discord.js"
+import { ASCII_GNOMES } from "../constants.js"
+import _ from "lodash"
 
 export default {
-  name: 'ascii',
-  desc: 'Prints a random ascii gnome to the chat.',
+  name: "ascii",
+  desc: "Prints a random ascii gnome to the chat.",
   /**
    *
    * @param {Message} message
@@ -16,7 +16,7 @@ export default {
       const gnome = _.sample(ASCII_GNOMES)
       message.channel.send(gnome)
     } catch (err) {
-      logger.log('An error occured in ascii command')
+      logger.log("An error occured in ascii command")
     }
   },
 }

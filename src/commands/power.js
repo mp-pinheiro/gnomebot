@@ -1,6 +1,6 @@
 import logger from "../util/logger.js"
 import { Message } from "discord.js"
-import { GNOME_POWER } from "../constants/sound_files.js"
+import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
 
 export default {

@@ -1,12 +1,11 @@
-import { Message } from 'discord.js'
-import { ASCII_GNOMES } from '../../constants/ascii.js'
-import _ from 'lodash'
-import logger from '../../util/logger.js'
+import { Message } from "discord.js"
+import { ASCII_GNOMES } from "../../constants.js"
+import _ from "lodash"
 
 const gnome_regex = /.*g.*n.*o.*m.*e.*/gi
 
 export default {
-  name: 'Random Woo',
+  name: "Random Woo",
   desc: `Prints a gnome if a message contains 'gnome'.`,
   /**
    * @param {Message} message
