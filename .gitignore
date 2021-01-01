@@ -1,3 +1,5 @@
-auth.json
+.vscode/
+discord-auth.json
 log.txt
 node_modules/
+google-translate-key.json

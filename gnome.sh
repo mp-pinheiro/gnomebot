@@ -1,7 +1,11 @@
 git pull
 
+npm ci
+
+export GOOGLE_APPLICATION_CREDENTIALS="./google-translate-key.json"
+
 if [ "$1" = "-r" ]; then
-	node gnome.js | tee log.txt
+	npm run start | tee log.txt
 else
-	node gnome.js | tee -a log.txt
+	npm run start | tee -a log.txt
 fi
