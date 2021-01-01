@@ -10,10 +10,11 @@
   "author": "BiplaneDuck",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.5.1",
     "@discordjs/opus": "github:discordjs/opus",
-    "opusscript": "0.0.7",
-    "ffmpeg-static": "^4.2.7"
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.2.7",
+    "lodash": "^4.17.20",
+    "opusscript": "0.0.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

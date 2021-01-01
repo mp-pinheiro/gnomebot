@@ -11,11 +11,27 @@ const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
 const command_files = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.js'))
+const voice_trigger_files = fs.readdirSync('./src/triggers/voice').filter((file) => file.endsWith('.js'))
+const text_trigger_files = fs.readdirSync('./src/triggers/text').filter((file) => file.endsWith('.js'))
+
+const voice_triggers = []
+const text_triggers = []
 
 // Load commands
 for (const file of command_files) {
   const command = require(`./commands/${file}`)
   client.commands.set(command.name, command)
+}
+
+// Load Voice Triggers
+for (const file of voice_trigger_files) {
+  const trigger = require(`./triggers/voice/${file}`)
+  voice_triggers.push(trigger)
+}
+
+for (const file of text_trigger_files) {
+  const trigger = require(`./triggers/text/${file}`)
+  text_triggers.push(trigger)
 }
 
 client.on('ready', (event) => {
@@ -24,35 +40,39 @@ client.on('ready', (event) => {
 })
 
 client.on('message', (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return
-  const args = message.content.split(/\s+/)
-  args.shift()
-  const command = args.shift()?.toLowerCase()
+  if (message.author.id == client.user.id) return
+  if (message.content.startsWith(prefix)) {
+    const args = message.content.split(/\s+/)
+    args.shift()
+    const command = args.shift()?.toLowerCase()
 
-  if (!client.commands.has(command)) return
+    if (!client.commands.has(command)) return
 
-  try {
-    client.commands.get(command).execute(message, args)
-    DiscordUtil.logMessage(message)
-  } catch (err) {
-    logger.log(err)
-    message.reply('An error occurred while executing that command!')
+    try {
+      client.commands.get(command).execute(message, args)
+      DiscordUtil.logMessage(message)
+    } catch (err) {
+      logger.log(err)
+      message.reply('An error occurred while executing that command!')
+    }
+  } else {
+    if (message.author.id === message.client.user.id) return
+
+    text_triggers.forEach(async (trigger) => {
+      const triggered = await trigger.test(message)
+      if (triggered) trigger.execute(message)
+    })
   }
 })
 
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
-client.on('voiceStateUpdate', (os, ns) => {
-  if (!ns.channel) return
-  let member = ns.member
-  if (member.bot) return
-  if (os.channelID === ns.channelID) return
-  if (Math.random() > 0.04) return
-
-  logger.log(
-    `${DiscordUtil.getUserNameIDString(member.user)} joined channel: ${DiscordUtil.getChannelNameIDString(ns.channel)})`
-  )
-
-  DiscordUtil.play_sound(ns.channel, WOO)
+client.on('voiceStateUpdate', (oldVoiceState, newVoiceState) => {
+  if (oldVoiceState.member.user.id === oldVoiceState.client.user.id) return
+  voice_triggers.forEach(async (trigger) => {
+    if (await trigger.test(oldVoiceState, newVoiceState)) {
+      trigger.execute(oldVoiceState, newVoiceState)
+    }
+  })
 })
 
 client.login(auth.token)

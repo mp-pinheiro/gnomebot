@@ -2,7 +2,6 @@ const logger = require("../util/logger")
 const { Message } = require("discord.js")
 const { GNOME_POWER } = require("../constants/sound_files")
 const { play_sound } = require("../util/discord")
-const DiscordUtil = require("../util/discord")
 
 module.exports = {
   name: "power",
