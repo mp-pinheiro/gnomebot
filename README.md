@@ -46,7 +46,7 @@
 ### Voice Channels
 * Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel, leaving shortly after.<br>
 * If you become impatient, you can type `!gnome woo` and gnomebot will perform the same activity on command. You must be in a voice channel for this feature to work.<br>
-* Users with the Administrator permission can type `!gnome gnottem <voice channel id>` to prank their friends without the need to be in a voice channel.
+* Users with the Administrator permission can type `!gnome woo <voice channel id>` to prank their friends without the need to be in a voice channel.
 
 ## Setup
 ### Required Libraries
