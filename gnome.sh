@@ -1,5 +1,7 @@
 git pull
 
+npm ci
+
 export GOOGLE_APPLICATION_CREDENTIALS="./google-translate-key.json"
 
 if [ "$1" = "-r" ]; then
