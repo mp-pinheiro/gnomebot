@@ -5,9 +5,8 @@
         "es6": false
     },
     "parserOptions": {
-        "ecmaVersion": 2019
+        "ecmaVersion": 2019,
+        "sourceType": "module"
     },
-    "rules": {
-
-    }
+    "rules": {}
 }

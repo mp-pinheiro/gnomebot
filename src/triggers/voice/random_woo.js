@@ -1,9 +1,11 @@
-const { VoiceState } = require('discord.js')
-const { WOO } = require('../../constants/sound_files')
-const { getUserNameIDString, getChannelNameIDString, play_sound } = require('../../util/discord')
-const logger = require('../../util/logger')
+import { VoiceState } from 'discord.js'
+import { WOO } from '../../constants/sound_files.js'
+import DiscordUtil from '../../util/discord.js'
+import logger from '../../util/logger.js'
 
-module.exports = {
+const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
+
+export default {
   name: 'Random Woo',
   desc: 'Randomly joins a chat channel and woo.',
   /**
@@ -27,6 +29,6 @@ module.exports = {
 
     logger.log(`${getUserNameIDString(member.user)} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`)
 
-    play_sound(newVoiceState.channel, WOO)
+    DiscordUtil.play_sound(newVoiceState.channel, WOO)
   },
 }

@@ -1,11 +1,11 @@
-const { Message } = require('discord.js')
-const { ASCII_GNOMES } = require('../../constants/ascii')
-const _ = require('lodash')
-const logger = require('../../util/logger')
+import { Message } from 'discord.js'
+import { ASCII_GNOMES } from '../../constants/ascii.js'
+import _ from 'lodash'
+import logger from '../../util/logger.js'
 
 const gnome_regex = /.*g.*n.*o.*m.*e.*/gi
 
-module.exports = {
+export default {
   name: 'Random Woo',
   desc: `Prints a gnome if a message contains 'gnome'.`,
   /**

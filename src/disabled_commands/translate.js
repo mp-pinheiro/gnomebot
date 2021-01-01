@@ -1,9 +1,7 @@
-const { Translate } = require('@google-cloud/translate').v2
-const { Message } = require('discord.js')
+import Translate from '@google-cloud/translate'
+import { Message } from 'discord.js'
 
-const translate = new Translate()
-
-module.exports = {
+export default {
   name: 'translate',
   desc: 'Translates a language from detected language to desired language',
   /**

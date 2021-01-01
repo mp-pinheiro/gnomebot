@@ -1,14 +1,19 @@
-const Discord = require('discord.js')
-const DiscordUtil = require('./util/discord')
-const logger = require('./util/logger')
-const auth = require('../discord-auth.json')
-const fs = require('fs')
-const { WOO } = require('./constants/sound_files')
+import Discord, { Client, Collection } from 'discord.js'
+import DiscordUtil from './util/discord.js'
+import logger from './util/logger.js'
+import fs from 'fs'
+import env from 'dotenv'
+
+env.config()
+
+const { getUserNameIDString } = DiscordUtil
+
+const { DISCORD_AUTH_TOKEN } = process.env
 
 const prefix = '!gnome'
 
-const client = new Discord.Client()
-client.commands = new Discord.Collection()
+const client = new Client()
+client.commands = new Collection()
 
 const command_files = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.js'))
 const voice_trigger_files = fs.readdirSync('./src/triggers/voice').filter((file) => file.endsWith('.js'))
@@ -19,23 +24,23 @@ const text_triggers = []
 
 // Load commands
 for (const file of command_files) {
-  const command = require(`./commands/${file}`)
+  const {default: command} = await import(`./commands/${file}`)
   client.commands.set(command.name, command)
 }
 
 // Load Voice Triggers
 for (const file of voice_trigger_files) {
-  const trigger = require(`./triggers/voice/${file}`)
-  voice_triggers.push(trigger)
+  const trigger = await import(`./triggers/voice/${file}`)
+  voice_triggers.push(trigger.default)
 }
 
 for (const file of text_trigger_files) {
-  const trigger = require(`./triggers/text/${file}`)
-  text_triggers.push(trigger)
+  const trigger = await import(`./triggers/text/${file}`)
+  text_triggers.push(trigger.default)
 }
 
 client.on('ready', (event) => {
-  logger.log(`Client connected.\nLogged in as: ${DiscordUtil.getUserNameIDString(client.user)}`)
+  logger.log(`Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`)
   client.user.setActivity("Hello me ol' chum!")
 })
 
@@ -75,4 +80,6 @@ client.on('voiceStateUpdate', (oldVoiceState, newVoiceState) => {
   })
 })
 
-client.login(auth.token)
+client.login(DISCORD_AUTH_TOKEN)
+
+export default client

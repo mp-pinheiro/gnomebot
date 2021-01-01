@@ -1,9 +1,9 @@
-const logger = require("../util/logger")
-const { Message } = require("discord.js")
-const { GNOME_POWER } = require("../constants/sound_files")
-const { play_sound } = require("../util/discord")
+import logger from "../util/logger.js"
+import { Message } from "discord.js"
+import { GNOME_POWER } from "../constants/sound_files.js"
+import DiscordUtil from "../util/discord.js"
 
-module.exports = {
+export default {
   name: "power",
   desc: "Plays GNOME POWER in your voice chat.",
   /**
@@ -17,7 +17,7 @@ module.exports = {
       return
     }
     if (message.member.voice.channel) {
-      play_sound(message.member.voice.channel, GNOME_POWER)
+      DiscordUtil.play_sound(message.member.voice.channel, GNOME_POWER)
     } else {
       message.reply("you are not in a voice channel!")
     }

@@ -1,9 +1,9 @@
-const logger = require('../util/logger')
-const { Message } = require('discord.js')
-const { ASCII_GNOMES } = require('../constants/ascii')
-const _ = require('lodash')
+import logger from '../util/logger.js'
+import { Message } from 'discord.js'
+import { ASCII_GNOMES } from '../constants/ascii.js'
+import _ from 'lodash'
 
-module.exports = {
+export default {
   name: 'ascii',
   desc: 'Prints a random ascii gnome to the chat.',
   /**

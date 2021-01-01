@@ -1,4 +1,2 @@
-module.exports = {
-  WOO: "assets/sounds/woo.ogg",
-  GNOME_POWER: "assets/sounds/gnome_power.ogg",
-}
+export const WOO = "assets/sounds/woo.ogg"
+export const GNOME_POWER = "assets/sounds/gnome_power.ogg"
