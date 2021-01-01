@@ -9,10 +9,10 @@
 **power** - Gnomebot joins your voice channel and plays 'GNOME POWER'.<br>
 
 ### Future Commands:
-**translate** - Translates text using Google Cloud Translation API.
-**checkvideo** - Checks to see if a video contains gnomes.
-**script** - Ability to run gnomescripts (We'll see).
-**chess** - Ability to play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).
+**translate** - Translates text using Google Cloud Translation API.<br>
+**checkvideo** - Checks to see if a video contains gnomes.<br>
+**script** - Ability to run gnomescripts (We'll see).<br>
+**chess** - Ability to play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
 
 ## Triggers
 ### Text Channels
