@@ -3,6 +3,10 @@ class Logger {
     let d = new Date()
     console.log(`\nTimestamp: ${d.toUTCString()}\n${message}`)
   }
+
+  static error(message) {
+    Logger.log(`ERROR: ${message}`)
+  }
 }
 
 export default Logger

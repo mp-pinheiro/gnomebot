@@ -5,7 +5,7 @@
   "main": "src/gnome.js",
   "scripts": {
     "dev": "nodemon src/gnome.js",
-    "start": "node src/index.js"
+    "start": "node src/gnome.js"
   },
   "author": "BiplaneDuck",
   "license": "ISC",
