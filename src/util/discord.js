@@ -57,7 +57,7 @@ export default class DiscordUtil {
 
     try {
       const connection = await channel.join()
-      logger.log(`\nJoined voice channel: ${channelString})`)
+      logger.log(`\nJoined voice channel: ${channelString}`)
       const dispatcher = connection.play(fs.createReadStream(file_path), {
         highWaterMark: 1,
       })
