@@ -4,6 +4,7 @@ import logger from "./util/logger.js"
 import fs from "fs"
 import env from "dotenv"
 import { COMMAND_PREFIX } from "./constants.js"
+import { parseArgsStringToArgv as parseArgs } from "string-argv"
 
 env.config()
 
@@ -54,7 +55,9 @@ client.on("ready", (event) => {
 client.on("message", (message) => {
   if (message.author.id == client.user.id) return
   if (message.content.toLowerCase().startsWith(COMMAND_PREFIX)) {
-    const args = message.content.split(/\s+/)
+    //const args = message.content.split(/\s+/)
+    const args = parseArgs(message.content).filter((x) => !!x.trim())
+
     args.shift()
     const command = args.shift()?.toLowerCase()
 
