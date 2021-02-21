@@ -1,6 +1,6 @@
 import logger from "../util/logger.js"
 import { Message } from "discord.js"
-import { SOUNDS } from "../constants.js"
+import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
 
 export default {
@@ -17,7 +17,7 @@ export default {
       return
     }
     if (message.member.voice.channel) {
-      DiscordUtil.play_sound(message.member.voice.channel, SOUNDS.GNOME_POWER)
+      DiscordUtil.play_sound(message.member.voice.channel, GNOME_POWER)
     } else {
       message.reply("you are not in a voice channel!")
     }

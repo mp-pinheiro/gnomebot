@@ -83,9 +83,10 @@ export const ASCII_GNOMES = [
 
 export const SOUNDS = {
   WOO: "assets/sounds/woo.ogg",
-  WOOHOHO: "assets/sounds/woohoho.ogg",
+  WOOHOHO: "assets/sounds/wohoho.ogg",
   ELF: "assets/sounds/elf.ogg",
-  GNOME_POWER: "assets/sounds/gnome_power.ogg"
 };
+
+export const GNOME_POWER = "assets/sounds/gnome_power.ogg"
 
 export const RANDOM_WOO_CHANCE = 0.1; // testing 10%
