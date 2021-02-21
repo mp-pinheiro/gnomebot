@@ -87,3 +87,5 @@ export const SOUNDS = {
   ELF = "assets/sounds/elf.ogg",
   GNOME_POWER = "assets/sounds/gnome_power.ogg"
 };
+
+export const RANDOM_WOO_CHANCE = 0.1; // testing 10%
