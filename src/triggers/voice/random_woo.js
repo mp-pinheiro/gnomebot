@@ -1,5 +1,5 @@
 import { VoiceState } from "discord.js"
-import { WOO } from "../../constants.js"
+import { SOUNDS } from "../../constants.js"
 import DiscordUtil from "../../util/discord.js"
 import logger from "../../util/logger.js"
 
@@ -33,6 +33,6 @@ export default {
       )} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`
     )
 
-    DiscordUtil.play_sound(newVoiceState.channel, WOO)
+    DiscordUtil.play_sound(newVoiceState.channel, SOUNDS.WOO)
   },
 }
