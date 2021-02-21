@@ -18,25 +18,24 @@ export default {
    * @param {Array<String>} args
    */
   async execute(message, args) {
+    var sound = random(SOUNDS);
     if (args.length > 0) {
-      const channel_id = args[0]
+      const channel_id = args[0];
 
       if (!message.member.permissions.has("ADMINISTRATOR")) {
         logger.log(
           `${getUserNameIDString(message.author)} is not an administrator.`
-        )
-        return
+        );
+        return;
       }
 
-      let channel = await message.client.channels.fetch(channel_id)
+      let channel = await message.client.channels.fetch(channel_id);
 
-      var sound = random(SOUNDS);
-
-      DiscordUtil.play_sound(channel, sound)
+      DiscordUtil.play_sound(channel, sound);
     } else if (message.member.voice.channel) {
-      DiscordUtil.play_sound(message.member.voice.channel, sound)
+      DiscordUtil.play_sound(message.member.voice.channel, sound);
     } else {
-      message.reply("you are not in a voice channel!")
+      message.reply("you are not in a voice channel!");
     }
   },
 }
