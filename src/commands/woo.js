@@ -18,7 +18,7 @@ export default {
    * @param {Array<String>} args
    */
   async execute(message, args) {
-    var sound = random(SOUNDS);
+    let sound = random(SOUNDS);
     if (args.length > 0) {
       const channel_id = args[0];
 
