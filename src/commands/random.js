@@ -1,7 +1,7 @@
 import logger from "../util/logger.js"
 import DiscordUtil from "../util/discord.js"
 import { Message } from "discord.js"
-import { WOO } from "../constants.js"
+import { SOUNDS } from "../constants.js"
 
 const { getUserNameIDString } = DiscordUtil
 
