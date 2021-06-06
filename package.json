@@ -13,7 +13,7 @@
     "@discordjs/opus": "^0.5.0",
     "@google-cloud/translate": "^6.0.5",
     "bufferutil": "^4.0.2",
-    "chess-image-generator": "https://www.github.com/hadley31/chess-image-generator.git",
+    "chess-image-generator": "git+https://github.com/hadley31/chess-image-generator.git",
     "chess.js": "^0.12.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
