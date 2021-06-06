@@ -1,7 +1,10 @@
 FROM node:14.15.3
-WORKDIR /app
-COPY . .
 
+WORKDIR /app
+
+COPY package.json package-lock.json ./
 RUN npm ci
+
+COPY . .
 
 CMD ["npm", "run", "start"]
