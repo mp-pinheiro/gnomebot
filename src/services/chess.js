@@ -1,7 +1,10 @@
+import Logger from '../util/logger.js'
 import { Chess } from 'chess.js'
 import { Message, MessageAttachment } from 'discord.js'
 import ChessImageGenerator from "chess-image-generator"
 import _ from "lodash"
+
+const logger = new Logger('services/chess')
 
 const imageOptions = {
     'size': 512,
@@ -20,6 +23,7 @@ const games = {}
 export default function handleDiscordMessage(message, move) {
     const game = getChessGame(message.channel.id)
     if (!game.move(move)) {
+        logger.log(`${message.author.username} tried to play ${move}, what an idiot lol`)
         return message.reply('Invalid move!')
     }
 

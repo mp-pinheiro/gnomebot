@@ -66,8 +66,8 @@ client.on("message", (message) => {
     if (!client.commands.has(command)) return
 
     try {
-      client.commands.get(command).execute(message, args)
       DiscordUtil.logMessage(message)
+      client.commands.get(command).execute(message, args)
     } catch (err) {
       logger.log(err)
       message.reply("An error occurred while executing that command!")
