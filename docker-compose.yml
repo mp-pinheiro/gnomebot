@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  gnomebot-dev:
+    container_name: 'gnomebot_dev'
+    build: .
+    volumes:
+      - './src:/app/src'
+    command: npm run dev
