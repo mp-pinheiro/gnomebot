@@ -2,7 +2,7 @@ import { Message } from "discord.js"
 import { ASCII_GNOMES } from "../../constants.js"
 import _ from "lodash"
 
-const gnome_regex = /.*g.*n.*o.*m.*e.*/gi
+const gnome_regex = /.*g.*n.*[o0].*m.*[e3].*/gi
 
 export default {
   name: "Random Woo",
