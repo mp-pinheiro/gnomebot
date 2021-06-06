@@ -74,10 +74,13 @@ client.on("message", (message) => {
     }
   } else {
     text_triggers.forEach(async (trigger) => {
-      const triggered = await trigger.test(message)
-      if (triggered) {
-        logger.log(`${trigger} trigger executed`)
-        trigger.execute(message)
+      try {
+        if (await trigger.test(message)) {
+          logger.log(`${trigger.name} text trigger executed`)
+          trigger.execute(message)
+        }
+      } catch (err) {
+        logger.error(`An error occurred while executing ${trigger.name} text trigger:\n${err}`)
       }
     })
   }
@@ -87,8 +90,13 @@ client.on("message", (message) => {
 client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   if (oldVoiceState.member.user.id === oldVoiceState.client.user.id) return
   voice_triggers.forEach(async (trigger) => {
-    if (await trigger.test(oldVoiceState, newVoiceState)) {
-      trigger.execute(oldVoiceState, newVoiceState)
+    try {
+      if (await trigger.test(oldVoiceState, newVoiceState)) {
+        logger.log(`${trigger.name} voice trigger executed`)
+        trigger.execute(oldVoiceState, newVoiceState)
+      }
+    } catch (err) {
+      logger.error(`An error occurred while executing ${trigger.name} text trigger:\n${err}`)
     }
   })
 })
