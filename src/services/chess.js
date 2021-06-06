@@ -9,7 +9,7 @@ const imageOptions = {
 }
 
 const imageGenerator = new ChessImageGenerator(imageOptions)
-export const game = new Chess()
+const games = {}
 
 
 /**
@@ -18,6 +18,7 @@ export const game = new Chess()
  * @param {String} move
  */
 export default function handleDiscordMessage(message, move) {
+    const game = getChessGame(message.channel.id)
     if (!game.move(move)) {
         return message.reply('Invalid move!')
     }
@@ -42,6 +43,18 @@ export default function handleDiscordMessage(message, move) {
 
     // Game is not over
     return replyWithGameImage(message, game.fen(), `sick move! My move is ${gnomeMove}.`)
+}
+
+export function getMoves(channelID) {
+    return getChessGame(channelID).moves()
+}
+
+
+export function getChessGame(channelID) {
+    if (!(channelID in games)) {
+        games[channelID] = new Chess()
+    }
+    return games[channelID]
 }
 
 

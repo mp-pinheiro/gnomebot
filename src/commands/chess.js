@@ -1,6 +1,6 @@
 import Logger from "../util/logger.js"
 import { Message, MessageAttachment } from "discord.js"
-import handleDiscordMessage, { game } from "../services/chess.js"
+import handleDiscordMessage, { getMoves } from "../services/chess.js"
 
 
 const logger = new Logger("commands/chess")
@@ -8,6 +8,7 @@ const logger = new Logger("commands/chess")
 export default {
   name: "chess",
   desc: "Play chess with gnomebot",
+  help: '**!gnome chess moves** - Displays possible moves',
   /**
    *
    * @param {Message} message
@@ -19,7 +20,7 @@ export default {
     }
 
     if (args[0] == "moves") {
-      const moves = game.moves().join(', ')
+      const moves = getMoves(message.channel.id).join(', ')
       return message.reply(`valid moves are: ${moves}`)
     }
 

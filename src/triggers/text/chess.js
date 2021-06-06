@@ -1,6 +1,6 @@
 import { Message } from "discord.js"
 import _ from "lodash"
-import handleDiscordMessage, { game } from "../../services/chess.js"
+import handleDiscordMessage, { getMoves } from "../../services/chess.js"
 
 export default {
   name: "Chess",
@@ -9,7 +9,7 @@ export default {
    * @param {Message} message
    */
   async test(message) {
-    return game.moves().includes(message.content)
+    return getMoves(message.channel.id).includes(message.content)
   },
   
   /**
