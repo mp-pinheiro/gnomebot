@@ -1,6 +1,9 @@
 version: '3'
 
 services:
+  gnomebot:
+    container_name: 'gnomebot'
+    build: .
   gnomebot-dev:
     container_name: 'gnomebot_dev'
     build: .
