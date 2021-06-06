@@ -7,7 +7,7 @@ import { COMMAND_PREFIX } from "./constants.js"
 import { parseArgsStringToArgv as parseArgs } from "string-argv"
 
 
-const logger = new Logger('gnome')
+const logger = new Logger('gnome.js')
 env.config()
 
 const { getUserNameIDString } = DiscordUtil
@@ -77,7 +77,10 @@ client.on("message", (message) => {
 
     text_triggers.forEach(async (trigger) => {
       const triggered = await trigger.test(message)
-      if (triggered) trigger.execute(message)
+      if (triggered) {
+        logger.log(`${trigger} trigger executed`)
+        trigger.execute(message)
+      }
     })
   }
 })
