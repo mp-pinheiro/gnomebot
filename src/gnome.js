@@ -1,11 +1,13 @@
 import Discord, { Client, Collection } from "discord.js"
 import DiscordUtil from "./util/discord.js"
-import logger from "./util/logger.js"
+import Logger from "./util/logger.js"
 import fs from "fs"
 import env from "dotenv"
 import { COMMAND_PREFIX } from "./constants.js"
 import { parseArgsStringToArgv as parseArgs } from "string-argv"
 
+
+const logger = new Logger('gnome')
 env.config()
 
 const { getUserNameIDString } = DiscordUtil

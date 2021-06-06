@@ -1,6 +1,8 @@
-import logger from "./logger.js"
+import Logger from "./logger.js"
 import fs from "fs"
 import Discord from "discord.js"
+
+const logger = new Logger("util/discord")
 
 export default class DiscordUtil {
   /**

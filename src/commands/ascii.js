@@ -1,7 +1,9 @@
-import logger from "../util/logger.js"
+import Logger from "../util/logger.js"
 import { Message } from "discord.js"
 import { ASCII_GNOMES } from "../constants.js"
 import _ from "lodash"
+
+const logger = new Logger('ascii')
 
 export default {
   name: "ascii",

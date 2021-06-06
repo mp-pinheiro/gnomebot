@@ -1,4 +1,3 @@
-import logger from "../util/logger.js"
 import { Message } from "discord.js"
 
 export default {

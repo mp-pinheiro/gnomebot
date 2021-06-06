@@ -1,6 +1,8 @@
 import { Message } from 'discord.js'
 import URL from 'url'
-import logger from '../util/logger.js'
+import Logger from '../util/logger.js'
+
+const logger = new Logger("checkvideo")
 
 export default {
   name: 'checkvideo',

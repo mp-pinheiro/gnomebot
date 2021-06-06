@@ -1,5 +1,7 @@
-import logger from '../util/logger.js'
+import Logger from '../util/logger.js'
 import { Message } from 'discord.js'
+
+const logger = new Logger("help")
 
 export default {
   name: 'help',

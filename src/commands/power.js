@@ -1,7 +1,9 @@
-import logger from "../util/logger.js"
+import Logger from "../util/logger.js"
 import { Message } from "discord.js"
 import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
+
+const logger = new Logger("gnome_power")
 
 export default {
   name: "power",

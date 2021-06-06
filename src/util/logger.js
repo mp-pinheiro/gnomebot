@@ -1,14 +1,18 @@
 class Logger {
-  static log(message) {
+  constructor(name) {
+    this.name = name
+  }
+
+  log(message) {
     const d = new Date()
     const timestamp = d.toLocaleString("en-US", {
       timeZoneName: "short",
     })
-    console.log(`\nTimestamp: ${timestamp}\n${message}`)
+    console.log(`\n${timestamp} -- ${this.name}\n${message}`)
   }
 
-  static error(message) {
-    Logger.log(`ERROR: ${message}`)
+  error(message) {
+    this.log(`ERROR: ${message}`)
   }
 }
 

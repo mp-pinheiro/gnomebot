@@ -1,7 +1,9 @@
 import { VoiceState } from "discord.js"
 import { WOO } from "../../constants.js"
 import DiscordUtil from "../../util/discord.js"
-import logger from "../../util/logger.js"
+import Logger from "../../util/logger.js"
+
+const logger = new Logger("woo_trigger")
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 
