@@ -73,8 +73,6 @@ client.on("message", (message) => {
       message.reply("An error occurred while executing that command!")
     }
   } else {
-    if (message.author.id === message.client.user.id) return
-
     text_triggers.forEach(async (trigger) => {
       const triggered = await trigger.test(message)
       if (triggered) {
