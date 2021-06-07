@@ -30,21 +30,22 @@ const text_trigger_files = fs
 const voice_triggers = []
 const text_triggers = []
 
-// Load commands
+// Dynamically load commands
 for (const file of command_files) {
   const { default: command } = await import(`./commands/${file}`)
   client.commands.set(command.name, command)
 }
 
-// Load Voice Triggers
+// Dynamically load voice triggers
 for (const file of voice_trigger_files) {
-  const trigger = await import(`./triggers/voice/${file}`)
-  voice_triggers.push(trigger.default)
+  const { default: trigger } = await import(`./triggers/voice/${file}`)
+  voice_triggers.push(trigger)
 }
 
+// Dynamically load text triggers
 for (const file of text_trigger_files) {
-  const trigger = await import(`./triggers/text/${file}`)
-  text_triggers.push(trigger.default)
+  const { default: trigger } = await import(`./triggers/text/${file}`)
+  text_triggers.push(trigger)
 }
 
 client.on("ready", (event) => {

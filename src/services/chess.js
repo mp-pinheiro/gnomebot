@@ -24,7 +24,7 @@ export default function handleDiscordMessage(message, move) {
     const game = getChessGame(message.channel.id)
     if (!game.move(move)) {
         logger.log(`${message.author.username} tried to play ${move}, what an idiot lol`)
-        return message.reply('Invalid move!')
+        return message.reply('invalid move!')
     }
 
     // If the user's move ended the game
