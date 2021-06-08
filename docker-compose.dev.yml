@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  gnomebot-dev:
+    container_name: 'gnomebot_dev'
+    extends:
+      file: docker-compose.yml
+      service: gnomebot
+    volumes:
+      - './src:/app/src'
+    command: npm run dev
