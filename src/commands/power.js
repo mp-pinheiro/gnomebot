@@ -1,27 +1,63 @@
 import Logger from "../util/logger.js"
 import { Message } from "discord.js"
-import { GNOME_POWER } from "../constants.js"
+import { GNOME_POWER, HELP_GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
+import _ from "lodash"
 
-const logger = new Logger("gnome_power")
+const logger = new Logger("commands/gnome_power")
 
 export default {
   name: "power",
   desc: "Plays GNOME POWER in your voice chat.",
+  help: HELP_GNOME_POWER,
   /**
    *
    * @param {Message} message
    * @param {Array<String>} args
    */
   async execute(message, args) {
-    if (args.length > 0 && args[0].toLowerCase() == "stop") {
-      message.guild?.voice?.channel?.leave()
-      return
+    // !gnome power
+    if (!args || args.length == 0) {
+      if (message.member.voice.channel) {
+        return DiscordUtil.play_sound(message.member.voice.channel, GNOME_POWER)
+      } else {
+        return message.reply("you are not in a voice channel!")
+      }
     }
-    if (message.member.voice.channel) {
-      DiscordUtil.play_sound(message.member.voice.channel, GNOME_POWER)
-    } else {
-      message.reply("you are not in a voice channel!")
+
+    // !gnome power stop
+    if (args[0] == "stop") {
+      return message.guild?.voice?.channel?.leave()
+    }
+
+    // !gnome power @member
+    if (message.mentions.members?.size > 0) {
+      const channel = DiscordUtil.getFirstVoiceChannelOfMembers(message.mentions.members)
+
+      if (!channel) {
+        return message.reply("that user is not in a voice channel!")
+      }
+
+      return DiscordUtil.play_sound(channel, GNOME_POWER)
+    }
+
+    if (message.mentions.roles?.size > 0) {
+      const channel = DiscordUtil.getFirstVoiceChannelOfMembers(_.uniq(message.mentions.roles.flatMap(x => x.members)))
+
+      if (!channel) {
+        return message.reply("that user is not in a voice channel!")
+      }
+
+      return DiscordUtil.play_sound(channel, GNOME_POWER)
+    }
+
+    // !gnome power <channel_id>
+    if (args[0].match(/^\d+$/g)) {
+      if (!message.member?.permissions.has("ADMINISTRATOR")) {
+        return message.reply("you don't have permission to run that command!")
+      }
+      const channel = await message.client.channels.fetch(args[0])
+      return DiscordUtil.play_sound(channel, GNOME_POWER)
     }
   },
 }

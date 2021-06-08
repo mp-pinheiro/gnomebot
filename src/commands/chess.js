@@ -1,6 +1,7 @@
 import Logger from "../util/logger.js"
 import { Message, MessageAttachment } from "discord.js"
 import handleDiscordMessage, { getMoves } from "../services/chess.js"
+import { HELP_CHESS } from "../constants.js"
 
 
 const logger = new Logger("commands/chess")
@@ -8,7 +9,7 @@ const logger = new Logger("commands/chess")
 export default {
   name: "chess",
   desc: "Play chess with gnomebot",
-  help: '**!gnome chess moves** - Displays possible moves',
+  help: HELP_CHESS,
   /**
    *
    * @param {Message} message

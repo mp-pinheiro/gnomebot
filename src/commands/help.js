@@ -1,11 +1,13 @@
 import Logger from '../util/logger.js'
 import { Message } from 'discord.js'
+import { HELP_HELP } from '../constants.js'
 
 const logger = new Logger("help")
 
 export default {
   name: 'help',
   desc: 'Displays help for all or specific commands.',
+  help: HELP_HELP,
   /**
    * @param {Message} message
    * @param {Array<String>} args

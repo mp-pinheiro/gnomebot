@@ -1,6 +1,6 @@
 import Logger from "./logger.js"
 import fs from "fs"
-import Discord from "discord.js"
+import Discord, { Collection, GuildMember, VoiceChannel } from "discord.js"
 
 const logger = new Logger("util/discord")
 
@@ -46,14 +46,14 @@ export default class DiscordUtil {
    */
   static async play_sound(channel, file_path) {
     if (channel === undefined) {
-      logger.log("Channel undefined!")
+      logger.log('"Channel undefined!"')
       return
     }
 
     const channelString = DiscordUtil.getChannelNameIDString(channel)
 
     if (file_path === undefined) {
-      logger.error("No file path specified!!")
+      logger.error("No file path specified")
       return
     }
 
@@ -75,19 +75,37 @@ export default class DiscordUtil {
         connection.disconnect()
       })
 
-      dispatcher.on("error", (e) => {
-        logger.log(
-          `An error occured while playing a sound in ${channelString}.`
-        )
+      dispatcher.on("error", (err) => {
+        logger.log(`An error occured while playing a sound in ${channelString}.`)
+        logger.log(err)
         dispatcher.destroy()
         connection.disconnect()
       })
       connection.on("disconnect", (err) => {
+        if (err) {
+          logger.log(`An error occurred while disconnecting from ${channelString}`)
+          logger.log(err)
+        } else {
+          logger.log(`Gnomebot disconnected from ${channelString}. Destroying dispatcher...`)
+        }
         dispatcher.destroy()
       })
     } catch (err) {
       logger.log(`An error occured while joining ${channelString}`)
       logger.log(err)
     }
+  }
+
+  /**
+   * 
+   * @param {Collection<string, GuildMember>} members 
+   * @returns {VoiceChannel}
+   */
+  static getFirstVoiceChannelOfMembers(members) {
+    if (!members) {
+      return null
+    }
+
+    return members.map(x => x.voice).find(x => x.channel)?.channel
   }
 }
