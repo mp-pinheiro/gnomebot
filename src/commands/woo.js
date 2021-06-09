@@ -1,15 +1,20 @@
 import Logger from "../util/logger.js"
 import DiscordUtil from "../util/discord.js"
 import { Message } from "discord.js"
-import { WOO, HELP_WOO } from "../constants.js"
+import { WOO } from "../constants.js"
 
 const logger = new Logger("woo")
 const { getUserNameIDString } = DiscordUtil
 
+const usageHelp = `\
+!gnome woo   -   Joins your voice channel and makes a noise
+!gnome woo *<channel_id>*   -   Joins the specified voice channel and makes a noise (Admin)
+!gnome woo *@<user>*   -   Joins @<user>'s voice channel and makes a noise (Admin)`
+
 export default {
   name: "woo",
-  desc: "Gnomebot will join your channel and deliver a woo.",
-  help: HELP_WOO,
+  desc: "Gnomebot will join your channel and makes a noise.",
+  help: usageHelp,
   /**
    * @param {Message} message
    * @param {Array<String>} args

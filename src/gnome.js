@@ -102,6 +102,14 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   })
 })
 
+client.on("disconnect", (err) => {
+  logger.log("Gnombot disconnected from discord")
+})
+
+client.on("error", (err) => {
+  logger.error(`An unexpected error occured:\n${err}`)
+})
+
 client.login(DISCORD_AUTH_TOKEN)
 
 export default client

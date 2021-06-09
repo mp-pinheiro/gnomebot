@@ -1,15 +1,19 @@
 import Logger from "../util/logger.js"
 import { Message, MessageAttachment } from "discord.js"
 import handleDiscordMessage, { getMoves } from "../services/chess.js"
-import { HELP_CHESS } from "../constants.js"
 
 
 const logger = new Logger("commands/chess")
 
+const usageHelp = `\
+!gnome chess *<move>*   -   Makes a move against me in the current channel
+!gnome chess moves   -   Displays possible moves
+!gnome chess new *[side]*   -   Starts a new game in this channel (Admin)`
+
 export default {
   name: "chess",
   desc: "Play chess with gnomebot",
-  help: HELP_CHESS,
+  help: usageHelp,
   /**
    *
    * @param {Message} message

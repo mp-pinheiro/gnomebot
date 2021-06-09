@@ -1,15 +1,21 @@
 import Logger from "../util/logger.js"
 import { Message } from "discord.js"
-import { GNOME_POWER, HELP_GNOME_POWER } from "../constants.js"
+import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
 import _ from "lodash"
 
 const logger = new Logger("commands/gnome_power")
 
+const usageHelp = `\
+!gnome power   -   Joins your voice channel and plays GNOME POWER
+!gnome power *<channel_id>*   -   Plays GNOME POWER in the specified voice channel (Admin)
+!gnome power *@<user>*   -   Joins @<user>'s voice channel and plays GNOME POWER (Admin)
+!gnome power stop   -   Stops playing gnome power in this server`
+
 export default {
   name: "power",
   desc: "Plays GNOME POWER in your voice chat.",
-  help: HELP_GNOME_POWER,
+  help: usageHelp,
   /**
    *
    * @param {Message} message
