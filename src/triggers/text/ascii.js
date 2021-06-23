@@ -6,7 +6,7 @@ const gnome_regex = /.*g.*n.*[o0].*m.*[e3].*/gi
 
 export default {
   name: "Random Woo",
-  desc: `Prints a gnome if a message contains 'gnome'.`,
+  desc: `Prints a gnome if a message contains g n o m e.`,
   /**
    * @param {Message} message
    */
