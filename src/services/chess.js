@@ -130,7 +130,7 @@ async function replyWithGameImage(message, fen, { move = {}, reply = '', side = 
  * @param {String} fen
  */
 async function generateImage(fen, { move = {}, flipped = false }) {
-    imageGenerator.setHighlighted(move)
+    imageGenerator.setHighlightedSquares(move)
     imageGenerator.flipped = flipped
     imageGenerator.loadFEN(fen)
     return imageGenerator.generateBuffer()
