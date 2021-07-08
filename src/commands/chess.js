@@ -1,6 +1,6 @@
 import Logger from "../util/logger.js"
-import { Message, MessageAttachment } from "discord.js"
-import handleDiscordMessage, { getMoves } from "../services/chess.js"
+import { Message } from "discord.js"
+import handleDiscordMessage, { getMoves, newGameInChannel } from "../services/chess.js"
 
 
 const logger = new Logger("commands/chess")
@@ -28,6 +28,11 @@ export default {
       const moves = getMoves(message.channel.id).join(', ')
       return message.reply(`valid moves are: ${moves}`)
     }
+
+    // if (args[0] == "new") {
+    //   const side = args.length > 1 && args[1].toLowerCase().startsWith("b") ? "b" : "w"
+    //   const game = newGameInChannel(message.channel.id, { side: side })
+    // }
 
     const move = args[0]
 
