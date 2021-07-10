@@ -49,9 +49,7 @@ for (const file of text_trigger_files) {
 }
 
 client.on("ready", (event) => {
-  logger.log(
-    `Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`
-  )
+  logger.log(`Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`)
   client.user.setActivity("Hello me ol' chum!")
 })
 
