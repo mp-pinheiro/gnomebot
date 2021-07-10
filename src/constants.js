@@ -57,5 +57,5 @@ export const ASCII_GNOMES = [
 ]
 
 
-export const WOO = "assets/sounds/woo.ogg"
-export const GNOME_POWER = "assets/sounds/gnome_power.ogg"
+export const WOO = "src/assets/sounds/woo.ogg"
+export const GNOME_POWER = "src/assets/sounds/gnome_power.ogg"
