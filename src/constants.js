@@ -86,6 +86,7 @@ export const WOO = "assets/sounds/woo.ogg";
 export const SOUNDS = {
   WOOHOHO: "assets/sounds/wohoho.ogg",
   ELF: "assets/sounds/elf.ogg",
+  WOO: "assets/sounds/woo.ogg"
 };
 
 export const GNOME_POWER = "assets/sounds/gnome_power.ogg"

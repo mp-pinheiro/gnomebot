@@ -16,7 +16,7 @@ export default {
   async test(oldVoiceState, newVoiceState) {
     return (
       newVoiceState.channel &&
-      Math.random() < RANDOM_WOO_CHANCE &&
+      Math.random() <= RANDOM_WOO_CHANCE &&
       oldVoiceState.channelID !== newVoiceState.channelID &&
       !oldVoiceState.member.bot
     )
