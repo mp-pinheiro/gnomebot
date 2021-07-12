@@ -1,11 +1,11 @@
 import logger from "../util/logger.js"
 import { Message } from "discord.js"
-import { ASCII_GNOMES } from "../constants.js"
+import { PHRASES } from "../constants.js"
 import _ from "lodash"
 
 export default {
-  name: "ascii",
-  desc: "Prints a random ascii gnome to the chat.",
+  name: "motd",
+  desc: "Prints a random phrase from our philosopher SHADOW to the chat.",
   /**
    *
    * @param {Message} message
@@ -13,10 +13,10 @@ export default {
    */
   async execute(message, args) {
     try {
-      const gnome = _.sample(ASCII_GNOMES)
-      message.channel.send(gnome)
+      const phrase = _.sample(PHRASES)
+      message.channel.send(phrase)
+      logger.log("An error occured in motd command")
     } catch (err) {
-      logger.log("An error occured in ascii command")
     }
   },
 }
