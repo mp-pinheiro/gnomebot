@@ -2,6 +2,8 @@ version: '3'
 
 services:
   gnomebot-dev:
+    environment:
+      - NODE_ENV=development
     container_name: 'gnomebot_dev'
     extends:
       file: docker-compose.yml

@@ -1,4 +1,4 @@
-import Discord, { Client, Collection } from "discord.js"
+import { Client, Collection } from "discord.js"
 import DiscordUtil from "./util/discord.js"
 import Logger from "./util/logger.js"
 import fs from "fs"

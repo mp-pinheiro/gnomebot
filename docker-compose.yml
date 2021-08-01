@@ -4,3 +4,5 @@ services:
   gnomebot:
     container_name: 'gnomebot'
     build: .
+    environment:
+      - NODE_ENV=production

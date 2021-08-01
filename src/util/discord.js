@@ -1,6 +1,6 @@
 import Logger from "./logger.js"
 import fs from "fs"
-import Discord, { Collection, GuildMember, VoiceChannel } from "discord.js"
+import { Collection, GuildMember, VoiceChannel } from "discord.js"
 
 const logger = new Logger("util/discord")
 
