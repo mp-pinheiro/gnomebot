@@ -5,8 +5,8 @@ import { SOUNDS } from "../constants.js"
 
 const { getUserNameIDString } = DiscordUtil
 
-var random = function (object) {
-  var keys = Object.keys(object);
+let random = function (object) {
+  let keys = Object.keys(object);
   return object[keys[Math.floor(keys.length * Math.random())]];
 };
 
