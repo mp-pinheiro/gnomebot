@@ -8,8 +8,12 @@ export default class AddSubcommand extends SubCommand {
 
     try {
       if (quoteMsg !== null && quoteMsg !== '') {
-        await QuoteDAO.addQuote(message.author, quoteMsg);
-        message.channel.send(`Poof! ${message.author}'s quote was added to the quote list.`);
+        if (quoteMsg.length <= 300) {
+          await QuoteDAO.addQuote(message.author, quoteMsg);
+          message.channel.send(`Poof! ${message.author}'s quote was added to the quote list.`);
+        } else {
+          message.channel.send(`Oof! That quote is too mighty and big. 300 characters only!`);
+        }
       } else {
         throw new Error(`Invalid add quote param type.`);
       }
