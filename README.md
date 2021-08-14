@@ -9,18 +9,17 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 **source** - Replies with a link to source repository.<br>
 **woo** - Gnomebot joins your voice channel and says 'woo'.<br>
 **power** - Gnomebot joins your voice channel and plays 'GNOME POWER'.<br>
+**chess** - Play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
 
 ### Future Commands:
 
 **translate** - Translates text using Google Cloud Translation API.<br>
 **checkvideo** - Checks to see if a video contains gnomes.<br>
 **script** - Ability to run gnomescripts (We'll see).<br>
-**chess** - Ability to play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
 
 ## Triggers
 
 ### Text Channels
-
 - For each message that matches `/.*g.*n.*o.*m.*e.*/`, gnomebot will repond with:
 
 ```
@@ -49,20 +48,28 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 ```
 
 ### Voice Channels
-
 - Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel, leaving shortly after.<br>
 - If you become impatient, you can type `!gnome woo` and gnomebot will perform the same action on command. You must be in a voice channel for this feature to work.<br>
 - Users with the Administrator permission can type `!gnome woo <voice channel id>` to prank their friends without the need to be in a voice channel.
 
-## Setup
+## Development
 
-### Required Libraries
+### Prereqresites
+- Node.js (14.17.0)
+- Docker (Optional, but recommended)
+- Discord Bot (With access to token)
 
-Install the necessary libraries using:  
-`$ sudo apt install make autoconf libtool g++`
+### Environment
+Create a `.env` file using `.env-example` as a template.
 
-###
+### Run Docker Development Server
+```sh
+npm run docker-dev
+```
 
 ## References
-
 - <a href="https://discord.js.org/#/" target="_blank">discord.js</a><br>
+- <a href="https://github.com/jhlywa/chess.js" target="_blank">chess.js</a><br>
+- <a href="https://github.com/andyruwruw/chess-image-generator" target="_blank">chess-image-generator</a> 
+(<a href="https://github.com/hadley31/chess-image-generator" target="_blank">My Fork</a>)<br>
+
