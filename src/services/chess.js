@@ -1,16 +1,10 @@
 import logger from '../util/logger.js'
 import { Chess } from 'chess.js'
 import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js'
-import ChessImageGenerator from "chess-image-generator"
+import { generateImage } from '../util/chess.js'
 import _ from "lodash"
 import { closestMatch } from 'closest-match'
 
-const imageOptions = {
-  'size': 512,
-  'style': 'cburnett'
-}
-
-const imageGenerator = new ChessImageGenerator(imageOptions)
 const games = {}
 
 
@@ -19,8 +13,8 @@ const games = {}
  * @param {CommandInteraction} interaction
  * @param {String} move
  */
-export default function handleDiscordMessage(interaction, move) {
-  const { side, game } = getGameInChannel(interaction.channel.id)
+export default async function handleDiscordMessage(interaction, move) {
+  const { side, game } = await getGameInChannel(interaction.channel.id, { createIfNotExists: true })
 
   if (!game) {
     return interaction.reply("No game for this channel! Start a new game with `/chess new [side]`")
@@ -38,7 +32,6 @@ export default function handleDiscordMessage(interaction, move) {
       ephemeral: true
     })
   }
-
 
   // If the user's move ended the game
   if (game.game_over()) {
@@ -74,67 +67,74 @@ export default function handleDiscordMessage(interaction, move) {
   })
 }
 
+
 /**
  *
- * @param {string} channelID 
+ * @param {String} channelId 
  * @returns {Array<String>}
  */
-export function getMoves(channelID) {
-  return getGameInChannel(channelID).game.moves()
+export async function getMoves(channelId) {
+  return (await getGameInChannel(channelId, { createIfNotExists: true })).game.moves()
 }
+
 
 /**
  * 
- * @param {import('discord.js').Channel} channelID 
+ * @param {String} channelId
+ * @returns {Boolean}
+ */
+export async function gameExistsInChannel(channelId) {
+  return games[channelId]?.game && !games[channelId]?.game?.game_over()
+}
+
+
+/**
+ * 
+ * @param {String} channelId 
  * @returns
  */
-export function getGameInChannel(channelID) {
-  if (!(channelID in games)) {
-    games[channelID] = { side: 'w', game: new Chess() }
+export async function getGameInChannel(channelId, { createIfNotExists = false } = {}) {
+  if (!(channelId in games) && createIfNotExists) {
+    games[channelId] = await newGameInChannel(channelId)
   }
-  return games[channelID]
+  return games[channelId]
 }
 
 
 /**
  * 
- * @param {string} channelID
+ * @param {string} channelId
  * @param {object} options
  * @param {string} options.side
  * @param {string} options.fen
- * @returns {import('chess.js').ChessInstance}
+ * @returns {}
  */
-export function newGameInChannel(channelID, { side, fen, force = false }) {
-  const currentGame = getGameInChannel(channelID)
-  if (currentGame?.game && !currentGame.game.game_over() && !force) {
-    return false
-  }
-
-  side ||= 'w'
+export async function newGameInChannel(channelId, { side = 'w', fen } = {}) {
   const game = new Chess(fen)
 
   if (side === 'b') {
     game.move('e4')
   }
 
-  games[channelID] = {
+  games[channelId] = {
     side: side,
     game: game
   }
 
-  return games[channelID]
+  return games[channelId]
 }
-
 
 
 /**
  * Sends a reply message containing an image of the current board state
  * @param {CommandInteraction} interaction
  * @param {String} fen
- * @param {Move} move
- * @param {String} reply
+ * @param {Object} options
+ * @param {Move} options.move
+ * @param {String} options.reply
+ * @param {String} options.side
  */
-export async function replyWithGameImage(interaction, fen, { move = {}, reply = '', side = 'w' }) {
+export async function replyWithGameImage(interaction, fen, { move = {}, reply = '', side = 'w' } = {}) {
   const imageBuffer = await generateImage(fen, {
     move: { [move.from]: true, [move.to]: true, },
     flipped: side === 'b'
@@ -150,16 +150,4 @@ export async function replyWithGameImage(interaction, fen, { move = {}, reply = 
       imageAttachment
     ]
   })
-}
-
-
-/**
- * Generates an image buffer of a particular board state
- * @param {String} fen
- */
-export async function generateImage(fen, { move = {}, flipped = false }) {
-  imageGenerator.setHighlightedSquares(move)
-  imageGenerator.flipped = flipped
-  imageGenerator.loadFEN(fen)
-  return imageGenerator.generateBuffer()
 }

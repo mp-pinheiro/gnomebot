@@ -1,5 +1,6 @@
 .vscode/
-*.log
 node_modules/
+logs/
+*.log
 secret/
 .env

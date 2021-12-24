@@ -8,7 +8,8 @@ export default {
    * @param {import('discord.js').Message} message
    */
   async test(message) {
-    return getMoves(message.channel.id).includes(message.content)
+    const moves = await getMoves(message.channel.id) || []
+    return moves.includes(message.content)
   },
   
   /**

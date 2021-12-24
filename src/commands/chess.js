@@ -1,4 +1,4 @@
-import handleDiscordMessage, { getMoves, newGameInChannel, replyWithGameImage } from "../services/chess.js"
+import handleDiscordMessage, { gameExistsInChannel, getMoves, newGameInChannel, replyWithGameImage } from "../services/chess.js"
 
 
 const usageHelp = `\
@@ -21,14 +21,20 @@ export default {
     }
 
     if (interaction.options.getSubcommand() === 'moves') {
-      const moves = getMoves(interaction.channel.id).join(', ')
-      return interaction.reply({ content: `Valid moves are: ${moves}`, ephemeral: true })
+      const moves = await getMoves(interaction.channel.id) || []
+      const moveString = moves.map(x => `**${x}**`).join(', ')
+      return interaction.reply({ content: `Valid moves are: ${moveString}`, ephemeral: true })
     }
 
     if (interaction.options.getSubcommand() == "new") {
       const sideOption = interaction.options.getString('side')
       const forceCreateOption = interaction.options.getBoolean('force')
       const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
+      const gameExists = gameExistsInChannel(interaction.channelId)
+
+      if (gameExists && !forceCreateOption) {
+        return interaction.reply({ content: 'There is already game in progress in this channel', ephemeral: true })
+      }
 
       if (forceCreateOption && !hasPermission) {
         return interaction.reply({ content: 'You do not have permission to use force option.', ephemeral: true })
@@ -36,10 +42,10 @@ export default {
 
       const side = sideOption === "black" ? "b" : "w"
 
-      const result = newGameInChannel(interaction.channel.id, { side: side, force: forceCreateOption })
+      const result = await newGameInChannel(interaction.channel.id, { side: side })
 
       if (!result) {
-        return interaction.reply({ content: 'Game in progress, could not create new game.', ephemeral: true })
+        return interaction.reply({ content: 'Something went wrong... Unable to create new game.', ephemeral: true })
       }
 
       const { _, game } = result
