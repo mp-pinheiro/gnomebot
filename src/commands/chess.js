@@ -4,7 +4,7 @@ import handleDiscordMessage, { gameExistsInChannel, getMoves, newGameInChannel, 
 const usageHelp = `\
 !gnome chess *<move>*   -   Makes a move against me in the current channel
 !gnome chess moves   -   Displays possible moves
-!gnome chess new *[side]*   -   Starts a new game in this channel (Admin)`
+!gnome chess new *[side]* *[force]*   -   Starts a new game in this channel (Admin)`
 
 export default {
   name: "chess",
