@@ -37,7 +37,7 @@ export default function handleDiscordMessage(interaction, move) {
     const closestMatchingMove = closestMatch(move, validMoves)
     return interaction.reply({
       content: `Invalid move: **${move}**\n*Did you mean*: **${closestMatchingMove}**? Use \`/chess moves\` to see all possible moves.`,
-      ephemeral: false
+      ephemeral: true
     })
   }
 
