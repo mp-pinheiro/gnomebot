@@ -42,7 +42,7 @@ export function logMessage(message) {
  */
 export async function playSound(channel, resourceFilePath) {
   if (channel === undefined) {
-    logger.info('"Channel undefined!"')
+    logger.warning('PlaySound: Channel undefined!')
     return
   }
 
@@ -59,7 +59,7 @@ export async function playSound(channel, resourceFilePath) {
       guildId: channel.guild.id,
       adapterCreator: channel.guild.voiceAdapterCreator,
     })
-    logger.info(`\nJoined voice channel: ${channelString}`)
+    logger.info(`Joined voice channel: ${channelString}`)
 
     const player = createAudioPlayer({
       behaviors: {
@@ -73,8 +73,8 @@ export async function playSound(channel, resourceFilePath) {
 
     player.on(AudioPlayerStatus.Idle, (_, __) => connection.destroy())
   } catch (err) {
-    logger.info(`An error occured while joining ${channelString}`)
-    logger.info(err)
+    logger.error(`An error occured while joining ${channelString}`)
+    logger.error(err)
   }
 }
 

@@ -31,6 +31,7 @@ logger.info('Loading commands...')
 for (const file of commandFiles) {
   const { default: command } = await import(`./commands/${file}`)
   client.commands.set(command.name, command)
+  logger.debug(`Added command: ${command.name}`)
 }
 
 // Dynamically load voice triggers
@@ -38,6 +39,7 @@ logger.info('Loading voice triggers...')
 for (const file of voiceTriggerFiles) {
   const { default: trigger } = await import(`./triggers/voice/${file}`)
   voiceTriggers.push(trigger)
+  logger.debug(`Added voice trigger: ${trigger.name}`)
 }
 
 // Dynamically load text triggers
@@ -45,6 +47,7 @@ logger.info('Loading text triggers...')
 for (const file of textTriggerFiles) {
   const { default: trigger } = await import(`./triggers/text/${file}`)
   textTriggers.push(trigger)
+  logger.debug(`Added text trigger: ${trigger.name}`)
 }
 
 client.on("ready", (event) => {
@@ -74,7 +77,7 @@ client.on("messageCreate", (message) => {
     textTriggers.forEach(async (trigger) => {
       try {
         if (await trigger.test(message)) {
-          logger.info(`Executing text trigger: ${trigger.name}`)
+          logger.info(`${getUserNameIDString(message.author)} triggered a text event: ${trigger.name}`, {'content': message.content})
           trigger.execute(message)
         }
       } catch (err) {
@@ -89,7 +92,7 @@ client.on("interactionCreate", (interaction) => {
   if (!client.commands.has(interaction.commandName)) return
 
   try {
-    logger.info(`${interaction.user.username} used command: ${interaction.commandName}`)
+    logger.info(`${getUserNameIDString(interaction.user)} used command: ${interaction}`)
     return client.commands.get(interaction.commandName).execute(interaction)
   } catch (err) {
     logger.error(err)
@@ -104,11 +107,11 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   voiceTriggers.forEach(async (trigger) => {
     try {
       if (await trigger.test(oldVoiceState, newVoiceState)) {
-        logger.info(`Executing voice trigger: ${trigger.name}`)
+        logger.info(`${getUserNameIDString(oldVoiceState.member.user)} triggered a voice event: ${trigger.name}`)
         trigger.execute(oldVoiceState, newVoiceState)
       }
     } catch (err) {
-      logger.error(`An error occurred while executing ${trigger.name} text trigger:\n${err}`)
+      logger.error(`An error occurred while executing ${trigger.name} voice trigger:\n${err}`)
     }
   })
 })

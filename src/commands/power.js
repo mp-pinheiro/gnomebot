@@ -34,7 +34,7 @@ export default {
       if (!userOption && !channelOption) {
         const userChannel = interaction.member?.voice?.channel
         if (userChannel) {
-          await interaction.reply({ content: `Playing GNOME POWER in ${userOption}'s voice channel: ${userChannel}` })
+          await interaction.reply({ content: `Playing GNOME POWER in ${interaction.member}'s voice channel: ${userChannel}` })
           return DiscordUtil.playSound(userChannel, GNOME_POWER)
         } else {
           return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })

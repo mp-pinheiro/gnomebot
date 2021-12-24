@@ -4,7 +4,7 @@ import _ from "lodash"
 const gnome_regex = /.*g.*n.*[o0].*m.*[e3].*/gi
 
 export default {
-  name: "Random Woo",
+  name: "ASCII Gnome",
   desc: `Prints a gnome if a message contains g n o m e.`,
   /**
    * @param {import('discord.js').Message} message
