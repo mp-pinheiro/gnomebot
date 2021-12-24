@@ -72,6 +72,20 @@ const commands = [
         )
     ),
   new SlashCommandBuilder()
+    .setName('woo')
+    .setDescription('Plays woo sound in your voice chat!')
+    .addChannelOption(channel =>
+      channel
+        .setName('channel')
+        .setDescription('Join this voice channel')
+        .addChannelType(ChannelType.GuildVoice)
+    )
+    .addUserOption(user =>
+      user
+        .setName('user')
+        .setDescription('Join this user\'s voice channel')
+    ),
+  new SlashCommandBuilder()
     .setName('ascii')
     .setDescription('Prints an ASCII gnome to the chat')
 ].map(command => command.toJSON())

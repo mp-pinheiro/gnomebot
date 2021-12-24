@@ -5,9 +5,9 @@
   "main": "src/gnome.js",
   "scripts": {
     "dev": "nodemon src/gnome.js",
-    "start": "node src/gnome.js",
     "docker-dev": "COMPOSE_FILE=docker-compose.dev.yml docker compose up gnomebot-dev",
-    "dc": "node deploy-commands.js"
+    "deploy-commands": "node scripts/deploy-commands.js",
+    "start": "node src/gnome.js"
   },
   "author": "Nick Hadley",
   "license": "ISC",

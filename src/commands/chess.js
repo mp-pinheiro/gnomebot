@@ -29,14 +29,20 @@ export default {
     }
 
     if (interaction.options.getSubcommand() == "new") {
-      const commandSide = interaction.options.getString('side')
-      const force = interaction.options.getBoolean('force') && interaction.member?.permissions.has("ADMINISTRATOR")
-      const side = commandSide === "black" ? "b" : "w"
-      logger.log(`CommandSide: ${commandSide}   Side: ${side}`)
-      const result = newGameInChannel(interaction.channel.id, { side: side, force: force })
+      const sideOption = interaction.options.getString('side')
+      const forceCreateOption = interaction.options.getBoolean('force')
+      const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
+
+      if (forceCreateOption && !hasPermission) {
+        return interaction.reply({ content: 'You do not have permission to use force option.', ephemeral: true })
+      }
+
+      const side = sideOption === "black" ? "b" : "w"
+
+      const result = newGameInChannel(interaction.channel.id, { side: side, force: forceCreateOption })
 
       if (!result) {
-        return interaction.reply({ content: 'Game in progress, could not create new game.' })
+        return interaction.reply({ content: 'Game in progress, could not create new game.', ephemeral: true })
       }
 
       const { _, game } = result

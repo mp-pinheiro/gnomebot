@@ -35,7 +35,10 @@ export default function handleDiscordMessage(interaction, move) {
   if (!moveFromMessage) {
     logger.log(`${interaction.member.username} tried to play ${move}, what an idiot lol`)
     const closestMatchingMove = closestMatch(move, validMoves)
-    return interaction.reply(`Invalid move: ${move}\nDid you mean: ${closestMatchingMove}`)
+    return interaction.reply({
+      content: `Invalid move: **${move}**\n*Did you mean*: **${closestMatchingMove}**? Use \`/chess moves\` to see all possible moves.`,
+      ephemeral: false
+    })
   }
 
 
@@ -67,7 +70,7 @@ export default function handleDiscordMessage(interaction, move) {
 
   // Game is not over
   return replyWithGameImage(interaction, game.fen(), {
-    reply: `Sick move! My move is ${gnomeStringMove}.`,
+    reply: `Nice move! My move is **${gnomeStringMove}**.`,
     move: gnomeMove,
     side: side
   })
@@ -138,16 +141,15 @@ export async function replyWithGameImage(interaction, fen, { move = {}, reply = 
     move: { [move.from]: true, [move.to]: true, },
     flipped: side === 'b'
   })
-  // const attachment = new MessageAttachment(imageBuffer)
-  // logger.log(attachment.url)
-  // const imageEmbed = new MessageEmbed()
-  //     .setTitle('Chess Game')
-  //     .setImage(undefined)
+  const imageAttachment = new MessageAttachment(imageBuffer, 'chess.png')
+  const imageEmbed = new MessageEmbed()
+    .setTitle('Chess Game')
+    .setDescription(reply)
+    .setImage('attachment://chess.png')
   return interaction.reply({
-    content: reply,
-    embeds: [],
+    embeds: [imageEmbed],
     files: [
-      { attachment: imageBuffer }
+      imageAttachment
     ]
   })
 }
