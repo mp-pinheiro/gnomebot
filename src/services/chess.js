@@ -25,7 +25,7 @@ export default function handleDiscordMessage(interaction, move) {
   const { side, game } = getGameInChannel(interaction.channel.id)
 
   if (!game) {
-    return interaction.reply("no game for this channel! Start a new game with `!gnome chess new [side]`")
+    return interaction.reply("No game for this channel! Start a new game with `/chess new [side]`")
   }
 
   const moveFromMessage = game.move(move) // verbose move
@@ -47,7 +47,7 @@ export default function handleDiscordMessage(interaction, move) {
     const fen = game.fen()
     game.reset()
     return replyWithGameImage(interaction, fen, {
-      reply: 'you win. Well played!',
+      reply: 'You win. Well played!',
       move: moveFromMessage,
       side: side
     })
@@ -62,7 +62,7 @@ export default function handleDiscordMessage(interaction, move) {
     const fen = game.fen()
     game.reset()
     return replyWithGameImage(interaction, fen, {
-      reply: `nice try, but ${gnomeStringMove} is checkmate. Better luck next time!`,
+      reply: `Nice try, but **${gnomeStringMove}** is checkmate. Better luck next time!`,
       move: gnomeMove,
       side: side
     })
