@@ -45,10 +45,10 @@ export default {
         const channel = userOption.voice?.channel
 
         if (!channel) {
-          return interaction.reply({ content: "That user is not in a voice channel!", ephemeral: true })
+          return interaction.reply({ content: `${userOption} is not in a voice channel!`, ephemeral: true })
         }
 
-        await interaction.reply({ content: `Joining voice channel: ${channel.name}` })
+        await interaction.reply({ content: `Joining ${userOption}'s voice channel: ${channel.name}` })
 
         return DiscordUtil.playSound(channel, GNOME_POWER)
       }
