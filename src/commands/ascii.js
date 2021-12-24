@@ -1,5 +1,4 @@
 import Logger from "../util/logger.js"
-import { Message } from "discord.js"
 import { ASCII_GNOMES } from "../constants.js"
 import _ from "lodash"
 
@@ -10,13 +9,12 @@ export default {
   desc: "Prints a random ascii gnome to the chat.",
   /**
    *
-   * @param {Message} message
-   * @param {Array<String>} args
+   * @param {import('discord.js').MessageInteraction} interaction
    */
-  async execute(message, args) {
+  async execute(interaction) {
     try {
       const gnome = _.sample(ASCII_GNOMES)
-      message.channel.send(gnome)
+      interaction.reply(gnome)
     } catch (err) {
       logger.log("An error occured in ascii command")
     }

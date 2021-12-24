@@ -1,4 +1,3 @@
-import { Message } from "discord.js"
 import { ASCII_GNOMES } from "../../constants.js"
 import _ from "lodash"
 
@@ -8,13 +7,13 @@ export default {
   name: "Random Woo",
   desc: `Prints a gnome if a message contains g n o m e.`,
   /**
-   * @param {Message} message
+   * @param {import('discord.js').Message} message
    */
   async test(message) {
     return gnome_regex.test(message.content)
   },
   /**
-   * @param {Message} message
+   * @param {import('discord.js').Message} message
    */
   async execute(message) {
     const gnome = _.sample(ASCII_GNOMES)

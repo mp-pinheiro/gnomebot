@@ -6,20 +6,25 @@
   "scripts": {
     "dev": "nodemon src/gnome.js",
     "start": "node src/gnome.js",
-    "docker-dev": "COMPOSE_FILE=docker-compose.dev.yml docker compose up gnomebot-dev"
+    "docker-dev": "COMPOSE_FILE=docker-compose.dev.yml docker compose up gnomebot-dev",
+    "dc": "node deploy-commands.js"
   },
   "author": "Nick Hadley",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.5.0",
+    "@discordjs/builders": "^0.9.0",
+    "@discordjs/opus": "^0.7.0",
+    "@discordjs/rest": "^0.2.0-canary.0",
+    "@discordjs/voice": "^0.7.5",
     "@google-cloud/translate": "^6.0.5",
     "bufferutil": "^4.0.2",
     "chess-image-generator": "github:hadley31/chess-image-generator",
     "chess.js": "^0.12.0",
-    "discord.js": "^12.5.3",
-    "dotenv": "^8.2.0",
+    "closest-match": "^1.3.3",
+    "discord-api-types": "^0.25.2",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
     "erlpack": "^0.1.3",
-    "ffmpeg-static": "^4.2.7",
     "lodash": "^4.17.20",
     "sodium": "^3.0.2",
     "string-argv": "^0.3.1",
@@ -27,7 +32,7 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "eslint": "^7.16.0",
+    "eslint": "^8.5.0",
     "nodemon": "^2.0.6"
   },
   "type": "module"

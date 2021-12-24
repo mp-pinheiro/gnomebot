@@ -1,10 +1,8 @@
 import Logger from "../util/logger.js"
-import DiscordUtil from "../util/discord.js"
-import { Message } from "discord.js"
+import { getUserNameIDString, playSound } from "../util/discord.js"
 import { WOO } from "../constants.js"
 
 const logger = new Logger("woo")
-const { getUserNameIDString } = DiscordUtil
 
 const usageHelp = `\
 !gnome woo   -   Joins your voice channel and makes a noise
@@ -16,43 +14,50 @@ export default {
   desc: "Gnomebot will join your channel and makes a noise.",
   help: usageHelp,
   /**
-   * @param {Message} message
-   * @param {Array<String>} args
+   * @param {import('discord.js').CommandInteraction} interaction
    */
-  async execute(message, args) {
+  async execute(interaction) {
     // !gnome woo
-    if (!args || args.length == 0) {
-      if (!message.member?.voice.channel) {
-        logger.log(`${getUserNameIDString(message.author)} is not in a voice channel.`)
-        return message.reply("you are not in a voice channel!")
+
+    const userOption = interaction.options.getMember('user')
+    const channelOption = interaction.options.getChannel('channel')
+
+    if (!userOption && !channelOption) {
+      const userChannel = interaction.member?.voice?.channel
+      if (!userChannel) {
+        logger.log(`${getUserNameIDString(interaction.member)} is not in a voice channel.`)
+        return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
       }
 
-      return DiscordUtil.play_sound(message.member.voice.channel, WOO)
+      await interaction.reply({ content: `Joining voice channel: ${userChannel}`, ephemeral: true })
+
+      return playSound(userChannel, WOO)
     }
 
     // !gnome woo @member
-    if (message.mentions.members?.size > 0) {
-      const channel = DiscordUtil.getFirstVoiceChannelOfMembers(message.mentions.members)
+    if (userOption) {
+      const channel = userOption.voice?.channel
 
       if (!channel) {
-        return message.reply("that user is not in a voice channel!")
+        logger.log(`${getUserNameIDString(userOption)} is not in a voice channel.`)
+        return interaction.reply({ content: `${userOption} is not in a voice channel!`, ephemeral: true })
       }
 
-      return DiscordUtil.play_sound(channel, WOO)
+      await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
+
+      return playSound(channel, WOO)
     }
 
     // !gnome woo <channel_id>
-    if (args[0].match(/^\d+$/)) {
-      const channel_id = args[0]
-
-      if (!message.member?.permissions.has("ADMINISTRATOR")) {
-        logger.log(`${getUserNameIDString(message.author)} is not an administrator.`)
-        return
+    if (channelOption) {
+      if (!interaction.member?.permissions.has("ADMINISTRATOR")) {
+        logger.log(`${getUserNameIDString(interaction.author)} is not an administrator.`)
+        return interaction.reply({ content: "You must be an administrator to use that command", ephemeral: true })
       }
 
-      let channel = await message.client.channels.fetch(channel_id)
+      await interaction.reply({ content: `Joining voice channel: ${channelOption}`, ephemeral: true })
 
-      return DiscordUtil.play_sound(channel, WOO)
+      return playSound(channelOption, WOO)
     }
   },
 }

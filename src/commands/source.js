@@ -1,14 +1,11 @@
-import { Message } from "discord.js"
-
 export default {
   name: "source",
   desc: "Replies with my github repository.",
   /**
    *
-   * @param {Message} message
-   * @param {Array<String>} args
+   * @param {import('discord.js').CommandInteraction} interaction
    */
-  async execute(message, args) {
-    message.channel.send("https://www.github.com/hadley31/gnomebot")
+  async execute(interaction) {
+    interaction.reply("https://www.github.com/hadley31/gnomebot")
   },
 }

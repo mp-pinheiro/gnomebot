@@ -1,111 +1,102 @@
 import Logger from "./logger.js"
-import fs from "fs"
-import { Collection, GuildMember, VoiceChannel } from "discord.js"
+import { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } from "@discordjs/voice"
 
 const logger = new Logger("util/discord")
 
-export default class DiscordUtil {
-  /**
-   *
-   * @param {Discord.User} user
-   */
-  static getUserNameIDString(user) {
-    return `${user.username} (${user.id})`
+/**
+ *
+ * @param {import('discord.js').User} user
+ */
+export function getUserNameIDString(user) {
+  return `${user.username} (${user.id})`
+}
+
+/**
+ *
+ * @param {import('discord.js').Channel} channel
+ */
+export function getChannelNameIDString(channel) {
+  return `${channel.name} (${channel.id})`
+}
+
+/**
+ *
+ * @param {import('discord.js').Message} message
+ */
+export function logMessage(message) {
+  let userString = getUserNameIDString(message.author)
+  let server = message.guild
+    ? `${message.guild.name} (${message.guild.id})`
+    : "none"
+  let channel =
+    server === "none"
+      ? message.channel.id
+      : getChannelNameIDString(message.channel)
+  logger.log(
+    `Message (${message.id}):\n\tUser: ${userString}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`
+  )
+}
+
+/**
+ *
+ * @param {import('discord.js').VoiceChannel} channel
+ * @param {String} resourceFilePath
+ */
+export async function playSound(channel, resourceFilePath) {
+  if (channel === undefined) {
+    logger.log('"Channel undefined!"')
+    return
   }
 
-  /**
-   *
-   * @param {Discord.Channel} channel
-   */
-  static getChannelNameIDString(channel) {
-    return `${channel.name} (${channel.id})`
+  const channelString = getChannelNameIDString(channel)
+
+  if (resourceFilePath === undefined) {
+    logger.error("No file path specified")
+    return
   }
 
-  /**
-   *
-   * @param {Discord.Message} message
-   */
-  static logMessage(message) {
-    let userString = DiscordUtil.getUserNameIDString(message.author)
-    let server = message.guild
-      ? `${message.guild.name} (${message.guild.id})`
-      : "none"
-    let channel =
-      server === "none"
-        ? message.channel.id
-        : DiscordUtil.getChannelNameIDString(message.channel)
-    logger.log(
-      `Message (${message.id}):\n\tUser: ${userString}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`
-    )
+  try {
+    const connection = joinVoiceChannel({
+      channelId: channel.id,
+      guildId: channel.guild.id,
+      adapterCreator: channel.guild.voiceAdapterCreator,
+    })
+    logger.log(`\nJoined voice channel: ${channelString}`)
+
+    const player = createAudioPlayer({
+      behaviors: {
+        noSubscriber: NoSubscriberBehavior.Pause,
+      }
+    })
+    const resource = createAudioResource(resourceFilePath)
+
+    connection.subscribe(player)
+    player.play(resource)
+
+    player.on(AudioPlayerStatus.Idle, (_, __) => connection.destroy())
+  } catch (err) {
+    logger.log(`An error occured while joining ${channelString}`)
+    logger.log(err)
+  }
+}
+
+/**
+ * 
+ * @param {import('discord.js').Collection<string, import('discord.js').GuildMember>} members 
+ * @returns {import('discord.js').VoiceChannel}
+ */
+export function getFirstVoiceChannelOfMembers(members) {
+  if (!members) {
+    return null
   }
 
-  /**
-   *
-   * @param {Discord.VoiceChannel} channel
-   * @param {String} file_path
-   */
-  static async play_sound(channel, file_path) {
-    if (channel === undefined) {
-      logger.log('"Channel undefined!"')
-      return
-    }
+  return members.map(x => x.voice).find(x => x.channel)?.channel
+}
 
-    const channelString = DiscordUtil.getChannelNameIDString(channel)
-
-    if (file_path === undefined) {
-      logger.error("No file path specified")
-      return
-    }
-
-    try {
-      const connection = await channel.join()
-      logger.log(`\nJoined voice channel: ${channelString}`)
-      const dispatcher = connection.play(fs.createReadStream(file_path), {
-        highWaterMark: 1,
-      })
-
-      dispatcher.on("start", () => {
-        logger.log(`Started voice in ${channelString}.`)
-        connection.player.streamingData.pausedTime = 0
-      })
-
-      dispatcher.on("finish", () => {
-        logger.log(`Finished voice in ${channelString}.`)
-        dispatcher.destroy()
-        connection.disconnect()
-      })
-
-      dispatcher.on("error", (err) => {
-        logger.log(`An error occured while playing a sound in ${channelString}.`)
-        logger.log(err)
-        dispatcher.destroy()
-        connection.disconnect()
-      })
-      connection.on("disconnect", (err) => {
-        if (err) {
-          logger.log(`An error occurred while disconnecting from ${channelString}`)
-          logger.log(err)
-        } else {
-          logger.log(`Gnomebot disconnected from ${channelString}. Destroying dispatcher...`)
-        }
-        dispatcher.destroy()
-      })
-    } catch (err) {
-      logger.log(`An error occured while joining ${channelString}`)
-      logger.log(err)
-    }
-  }
-
-  /**
-   * 
-   * @param {Collection<string, GuildMember>} members 
-   * @returns {VoiceChannel}
-   */
-  static getFirstVoiceChannelOfMembers(members) {
-    if (!members) {
-      return null
-    }
-
-    return members.map(x => x.voice).find(x => x.channel)?.channel
-  }
+export default {
+  playSound,
+  logMessage,
+  getChannelNameIDString,
+  getUserNameIDString,
+  getFirstVoiceChannelOfMembers,
 }

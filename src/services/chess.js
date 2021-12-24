@@ -1,14 +1,15 @@
 import Logger from '../util/logger.js'
 import { Chess } from 'chess.js'
-import { Message, MessageAttachment } from 'discord.js'
+import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js'
 import ChessImageGenerator from "chess-image-generator"
 import _ from "lodash"
+import { closestMatch } from 'closest-match'
 
 const logger = new Logger('services/chess')
 
 const imageOptions = {
-    'size': 512,
-    'style': 'cburnett'
+  'size': 512,
+  'style': 'cburnett'
 }
 
 const imageGenerator = new ChessImageGenerator(imageOptions)
@@ -17,70 +18,80 @@ const games = {}
 
 /**
  * Handles a message from discord and replies accordingly
- * @param {Message} message
+ * @param {CommandInteraction} interaction
  * @param {String} move
  */
-export default function handleDiscordMessage(message, move) {
-    const { side, game } = getGameInChannel(message.channel.id)
+export default function handleDiscordMessage(interaction, move) {
+  const { side, game } = getGameInChannel(interaction.channel.id)
 
-    if (!game) {
-        return message.reply("no game for this channel! Start a new game with `!gnome chess new [side]`")
-    }
+  if (!game) {
+    return interaction.reply("no game for this channel! Start a new game with `!gnome chess new [side]`")
+  }
 
-    const moveFromMessage = game.move(move) // verbose move
+  const moveFromMessage = game.move(move) // verbose move
 
-    if (!moveFromMessage) {
-        logger.log(`${message.author.username} tried to play ${move}, what an idiot lol`)
-        return message.reply('invalid move!')
-    }
+  const validMoves = game.moves()
+
+  if (!moveFromMessage) {
+    logger.log(`${interaction.member.username} tried to play ${move}, what an idiot lol`)
+    const closestMatchingMove = closestMatch(move, validMoves)
+    return interaction.reply(`Invalid move: ${move}\nDid you mean: ${closestMatchingMove}`)
+  }
 
 
-    // If the user's move ended the game
-    if (game.game_over()) {
-        const fen = game.fen()
-        game.reset()
-        return replyWithGameImage(message, fen, {
-            reply: 'you win. Well played!',
-            move: moveFromMessage
-        })
-    }
-
-    // Gnomebot makes a move
-    const gnomeStringMove = _.sample(game.moves())
-    const gnomeMove = game.move(gnomeStringMove) // verbose move
-
-    // Check if gnomebot wins after moving
-    if (game.game_over()) {
-        const fen = game.fen()
-        game.reset()
-        return replyWithGameImage(message, fen, {
-            reply: `nice try, but ${gnomeStringMove} is checkmate. Better luck next time!`,
-            move: gnomeMove
-        })
-    }
-
-    // Game is not over
-    return replyWithGameImage(message, game.fen(), {
-        reply: `sick move! My move is ${gnomeStringMove}.`,
-        move: gnomeMove
+  // If the user's move ended the game
+  if (game.game_over()) {
+    const fen = game.fen()
+    game.reset()
+    return replyWithGameImage(interaction, fen, {
+      reply: 'you win. Well played!',
+      move: moveFromMessage,
+      side: side
     })
+  }
+
+  // Gnomebot makes a move
+  const gnomeStringMove = _.sample(validMoves)
+  const gnomeMove = game.move(gnomeStringMove) // verbose move
+
+  // Check if gnomebot wins after moving
+  if (game.game_over()) {
+    const fen = game.fen()
+    game.reset()
+    return replyWithGameImage(interaction, fen, {
+      reply: `nice try, but ${gnomeStringMove} is checkmate. Better luck next time!`,
+      move: gnomeMove,
+      side: side
+    })
+  }
+
+  // Game is not over
+  return replyWithGameImage(interaction, game.fen(), {
+    reply: `Sick move! My move is ${gnomeStringMove}.`,
+    move: gnomeMove,
+    side: side
+  })
+}
+
+/**
+ *
+ * @param {string} channelID 
+ * @returns {Array<String>}
+ */
+export function getMoves(channelID) {
+  return getGameInChannel(channelID).game.moves()
 }
 
 /**
  * 
- * @param {string} channelID 
- * @returns {ChessInstance}
+ * @param {import('discord.js').Channel} channelID 
+ * @returns
  */
-export function getMoves(channelID) {
-    return getGameInChannel(channelID).game.moves()
-}
-
-
 export function getGameInChannel(channelID) {
-    if (!(channelID in games)) {
-        games[channelID] = { side: 'w', game: new Chess() }
-    }
-    return games[channelID]
+  if (!(channelID in games)) {
+    games[channelID] = { side: 'w', game: new Chess() }
+  }
+  return games[channelID]
 }
 
 
@@ -90,48 +101,65 @@ export function getGameInChannel(channelID) {
  * @param {object} options
  * @param {string} options.side
  * @param {string} options.fen
- * @returns 
+ * @returns {import('chess.js').ChessInstance}
  */
-export function newGameInChannel(channelID, { side, fen }) {
-    const currentGame = getGameInChannel(channelID)
-    if (currentGame?.game && !currentGame.game.game_over()) {
-        return false
-    }
+export function newGameInChannel(channelID, { side, fen, force = false }) {
+  const currentGame = getGameInChannel(channelID)
+  if (currentGame?.game && !currentGame.game.game_over() && !force) {
+    return false
+  }
 
-    games[channelID] = {
-        side: side || 'w',
-        game: new Chess(fen)
-    }
+  side ||= 'w'
+  const game = new Chess(fen)
 
-    return games[channelID]
+  if (side === 'b') {
+    game.move('e4')
+  }
+
+  games[channelID] = {
+    side: side,
+    game: game
+  }
+
+  return games[channelID]
 }
 
 
 
 /**
  * Sends a reply message containing an image of the current board state
- * @param {Message} message
+ * @param {CommandInteraction} interaction
  * @param {String} fen
  * @param {Move} move
  * @param {String} reply
  */
-async function replyWithGameImage(message, fen, { move = {}, reply = '', side = 'w' }) {
-    const imageBuffer = await generateImage(fen, {
-        move: { [move.from]: true, [move.to]: true, },
-        flipped: side === 'b'
-    })
-    return message.reply(reply, new MessageAttachment(imageBuffer))
+export async function replyWithGameImage(interaction, fen, { move = {}, reply = '', side = 'w' }) {
+  const imageBuffer = await generateImage(fen, {
+    move: { [move.from]: true, [move.to]: true, },
+    flipped: side === 'b'
+  })
+  // const attachment = new MessageAttachment(imageBuffer)
+  // logger.log(attachment.url)
+  // const imageEmbed = new MessageEmbed()
+  //     .setTitle('Chess Game')
+  //     .setImage(undefined)
+  return interaction.reply({
+    content: reply,
+    embeds: [],
+    files: [
+      { attachment: imageBuffer }
+    ]
+  })
 }
-
 
 
 /**
  * Generates an image buffer of a particular board state
  * @param {String} fen
  */
-async function generateImage(fen, { move = {}, flipped = false }) {
-    imageGenerator.setHighlightedSquares(move)
-    imageGenerator.flipped = flipped
-    imageGenerator.loadFEN(fen)
-    return imageGenerator.generateBuffer()
+export async function generateImage(fen, { move = {}, flipped = false }) {
+  imageGenerator.setHighlightedSquares(move)
+  imageGenerator.flipped = flipped
+  imageGenerator.loadFEN(fen)
+  return imageGenerator.generateBuffer()
 }

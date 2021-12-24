@@ -1,6 +1,5 @@
 import Logger from "../util/logger.js"
-import { Message } from "discord.js"
-import handleDiscordMessage, { getMoves, newGameInChannel } from "../services/chess.js"
+import handleDiscordMessage, { getMoves, newGameInChannel, replyWithGameImage } from "../services/chess.js"
 
 
 const logger = new Logger("commands/chess")
@@ -16,26 +15,35 @@ export default {
   help: usageHelp,
   /**
    *
-   * @param {Message} message
-   * @param {Array<String>} args
+   * @param {import('discord.js').CommandInteraction} interaction
    */
-  async execute(message, args) {
-    if (args.length == 0) {
-      return message.reply('Please specify a move!')
+  async execute(interaction) {
+    if (interaction.options.getSubcommand() === 'move') {
+      const move = interaction.options.getString('move')
+      return handleDiscordMessage(interaction, move)
     }
 
-    if (args[0] == "moves") {
-      const moves = getMoves(message.channel.id).join(', ')
-      return message.reply(`valid moves are: ${moves}`)
+    if (interaction.options.getSubcommand() === 'moves') {
+      const moves = getMoves(interaction.channel.id).join(', ')
+      return interaction.reply({ content: `Valid moves are: ${moves}`, ephemeral: true })
     }
 
-    // if (args[0] == "new") {
-    //   const side = args.length > 1 && args[1].toLowerCase().startsWith("b") ? "b" : "w"
-    //   const game = newGameInChannel(message.channel.id, { side: side })
-    // }
+    if (interaction.options.getSubcommand() == "new") {
+      const commandSide = interaction.options.getString('side')
+      const force = interaction.options.getBoolean('force') && interaction.member?.permissions.has("ADMINISTRATOR")
+      const side = commandSide === "black" ? "b" : "w"
+      logger.log(`CommandSide: ${commandSide}   Side: ${side}`)
+      const result = newGameInChannel(interaction.channel.id, { side: side, force: force })
 
-    const move = args[0]
+      if (!result) {
+        return interaction.reply({ content: 'Game in progress, could not create new game.' })
+      }
 
-    return handleDiscordMessage(message, move)
+      const { _, game } = result
+
+      const move = game.history({ verbose: true }).at(-1) || {}
+
+      return replyWithGameImage(interaction, game.fen(), { reply: 'Created new game.', move: move, side: side })
+    }
   },
 }

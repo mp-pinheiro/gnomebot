@@ -1,5 +1,4 @@
 import Logger from '../util/logger.js'
-import { Message } from 'discord.js'
 
 const logger = new Logger("help")
 
@@ -12,31 +11,29 @@ export default {
   desc: 'Displays help for all or specific commands.',
   help: usageHelp,
   /**
-   * @param {Message} message
-   * @param {Array<String>} args
+   * @param {import('discord.js').CommandInteraction} interaction
    */
-  async execute(message, args) {
-    if (args.length == 0) {
-      const m = message.client.commands
+  async execute(interaction) {
+    const commandName = interaction.options.getString('command')
+    if (!commandName) {
+      const m = interaction.client.commands
         .mapValues((x) => `**${x.name}** - ${x.desc}`)
         .array()
         .join('\n')
-      return message.reply(`here are my commands:\n${m}`)
+      return interaction.reply(`here are my commands:\n${m}`)
     }
 
-    const c = args[0]
-
-    const command = message.client.commands.find(x => x.name.toLowerCase() == c.toLowerCase())
+    const command = interaction.client.commands.find(x => x.name.toLowerCase() == commandName.toLowerCase())
 
     if (!command) {
-      return message.reply(`Couldn't resolve command: ${c}`)
+      return interaction.reply(`Couldn't resolve command: ${commandName}`)
     }
 
     if ('help' in command) {
-      return message.reply(`\n${command.help}`)
+      return interaction.reply(`\n${command.help}`)
     }
-    else{
-      return message.reply('that command does not have a detailed help description.')
+    else {
+      return interaction.reply('That command does not have a detailed help description.')
     }
   },
 }

@@ -1,5 +1,4 @@
 import Logger from "../util/logger.js"
-import { Message } from "discord.js"
 import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
 import _ from "lodash"
@@ -18,52 +17,52 @@ export default {
   help: usageHelp,
   /**
    *
-   * @param {Message} message
+   * @param {import('discord.js').CommandInteraction} interaction
    * @param {Array<String>} args
    */
-  async execute(message, args) {
-    // !gnome power
-    if (!args || args.length == 0) {
-      if (message.member.voice.channel) {
-        return DiscordUtil.play_sound(message.member.voice.channel, GNOME_POWER)
-      } else {
-        return message.reply("you are not in a voice channel!")
-      }
+  async execute(interaction) {
+    // Command /power stop
+    if (interaction.options.getSubcommand() === 'stop') {
+      return interaction.guild?.voice?.channel?.leave()
     }
 
-    // !gnome power stop
-    if (args[0] == "stop") {
-      return message.guild?.voice?.channel?.leave()
-    }
+    if (interaction.options.getSubcommand() === 'play') {
+      const userOption = interaction.options.getMember('user')
+      const channelOption = interaction.options.getChannel('channel')
 
-    // !gnome power @member
-    if (message.mentions.members?.size > 0) {
-      const channel = DiscordUtil.getFirstVoiceChannelOfMembers(message.mentions.members)
-
-      if (!channel) {
-        return message.reply("that user is not in a voice channel!")
+      if (!userOption && !channelOption) {
+        const userChannel = interaction.member?.voice?.channel
+        if (userChannel) {
+          await interaction.reply({ content: `Joining voice channel: ${userChannel.name}` })
+          return DiscordUtil.playSound(userChannel, GNOME_POWER)
+        } else {
+          return interaction.reply("You are not in a voice channel!")
+        }
       }
 
-      return DiscordUtil.play_sound(channel, GNOME_POWER)
-    }
+      // !gnome power @member
+      if (userOption) {
+        const channel = userOption.voice?.channel
 
-    if (message.mentions.roles?.size > 0) {
-      const channel = DiscordUtil.getFirstVoiceChannelOfMembers(_.uniq(message.mentions.roles.flatMap(x => x.members)))
+        if (!channel) {
+          return interaction.reply({ content: "That user is not in a voice channel!", ephemeral: true })
+        }
 
-      if (!channel) {
-        return message.reply("that user is not in a voice channel!")
+        await interaction.reply({ content: `Joining voice channel: ${channel.name}` })
+
+        return DiscordUtil.playSound(channel, GNOME_POWER)
       }
 
-      return DiscordUtil.play_sound(channel, GNOME_POWER)
-    }
+      // !gnome power <channel_id>
+      if (channelOption) {
+        if (!interaction.member?.permissions.has("ADMINISTRATOR")) {
+          return interaction.reply({ content: "You don't have permission to run that command!", ephemeral: true })
+        }
 
-    // !gnome power <channel_id>
-    if (args[0].match(/^\d+$/g)) {
-      if (!message.member?.permissions.has("ADMINISTRATOR")) {
-        return message.reply("you don't have permission to run that command!")
+        await interaction.reply({ content: `Joining voice channel: ${channelOption.name}` })
+
+        return DiscordUtil.playSound(channelOption, GNOME_POWER)
       }
-      const channel = await message.client.channels.fetch(args[0])
-      return DiscordUtil.play_sound(channel, GNOME_POWER)
     }
-  },
+  }
 }

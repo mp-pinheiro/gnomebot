@@ -1,10 +1,12 @@
-FROM node:14.17.0
+FROM node:16.13.1
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+RUN apt update && apt install ffmpeg -y
+
+COPY package.json yarn.lock ./
+RUN yarn install --pure-lockfile
 
 COPY . .
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]
