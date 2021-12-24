@@ -1,11 +1,9 @@
-import Logger from '../util/logger.js'
+import logger from '../util/logger.js'
 import { Chess } from 'chess.js'
 import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js'
 import ChessImageGenerator from "chess-image-generator"
 import _ from "lodash"
 import { closestMatch } from 'closest-match'
-
-const logger = new Logger('services/chess')
 
 const imageOptions = {
   'size': 512,
@@ -33,7 +31,7 @@ export default function handleDiscordMessage(interaction, move) {
   const validMoves = game.moves()
 
   if (!moveFromMessage) {
-    logger.log(`${interaction.member.username} tried to play ${move}, what an idiot lol`)
+    logger.info(`${interaction.member.username} tried to play ${move}, what an idiot lol`)
     const closestMatchingMove = closestMatch(move, validMoves)
     return interaction.reply({
       content: `Invalid move: **${move}**\n*Did you mean*: **${closestMatchingMove}**? Use \`/chess moves\` to see all possible moves.`,

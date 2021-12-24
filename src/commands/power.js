@@ -1,10 +1,7 @@
-import Logger from "../util/logger.js"
 import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../util/discord.js"
 import { getVoiceConnection } from "@discordjs/voice"
 import _ from "lodash"
-
-const logger = new Logger("commands/gnome_power")
 
 const usageHelp = `\
 !gnome power   -   Joins your voice channel and plays GNOME POWER

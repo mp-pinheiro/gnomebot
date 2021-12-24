@@ -1,7 +1,3 @@
-import Logger from '../util/logger.js'
-
-const logger = new Logger("help")
-
 const usageHelp = `\
 !gnome help   -   Displays all available commands and their descriptions
 !gnome help *<command>*   -   Displays usage for a specific command`

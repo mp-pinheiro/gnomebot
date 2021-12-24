@@ -1,8 +1,6 @@
 import { WOO } from "../../constants.js"
 import DiscordUtil from "../../util/discord.js"
-import Logger from "../../util/logger.js"
-
-const logger = new Logger("woo_trigger")
+import logger from "../../util/logger.js"
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 
@@ -28,7 +26,7 @@ export default {
   async execute(oldVoiceState, newVoiceState) {
     let member = newVoiceState.member
 
-    logger.log(
+    logger.info(
       `${getUserNameIDString(
         member.user
       )} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`

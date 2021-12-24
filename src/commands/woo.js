@@ -1,8 +1,6 @@
-import Logger from "../util/logger.js"
+import logger from "../util/logger.js"
 import { getUserNameIDString, playSound } from "../util/discord.js"
 import { WOO } from "../constants.js"
-
-const logger = new Logger("woo")
 
 const usageHelp = `\
 !gnome woo   -   Joins your voice channel and makes a noise
@@ -25,7 +23,7 @@ export default {
     if (!userOption && !channelOption) {
       const userChannel = interaction.member?.voice?.channel
       if (!userChannel) {
-        logger.log(`${getUserNameIDString(interaction.member)} is not in a voice channel.`)
+        logger.info(`${getUserNameIDString(interaction.member)} is not in a voice channel.`)
         return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
       }
 
@@ -39,7 +37,7 @@ export default {
       const channel = userOption.voice?.channel
 
       if (!channel) {
-        logger.log(`${getUserNameIDString(userOption)} is not in a voice channel.`)
+        logger.info(`${getUserNameIDString(userOption)} is not in a voice channel.`)
         return interaction.reply({ content: `${userOption} is not in a voice channel!`, ephemeral: true })
       }
 
@@ -51,7 +49,7 @@ export default {
     // !gnome woo <channel_id>
     if (channelOption) {
       if (!interaction.member?.permissions.has("ADMINISTRATOR")) {
-        logger.log(`${getUserNameIDString(interaction.author)} is not an administrator.`)
+        logger.info(`${getUserNameIDString(interaction.author)} is not an administrator.`)
         return interaction.reply({ content: "You must be an administrator to use that command", ephemeral: true })
       }
 

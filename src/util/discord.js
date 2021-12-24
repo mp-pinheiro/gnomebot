@@ -1,7 +1,5 @@
-import Logger from "./logger.js"
+import logger from "./logger.js"
 import { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } from "@discordjs/voice"
-
-const logger = new Logger("util/discord")
 
 /**
  *
@@ -32,7 +30,7 @@ export function logMessage(message) {
     server === "none"
       ? message.channel.id
       : getChannelNameIDString(message.channel)
-  logger.log(
+  logger.info(
     `Message (${message.id}):\n\tUser: ${userString}\n\tServer: ${server}\n\tChannel: ${channel}\n\tContent: ${message.content}`
   )
 }
@@ -44,7 +42,7 @@ export function logMessage(message) {
  */
 export async function playSound(channel, resourceFilePath) {
   if (channel === undefined) {
-    logger.log('"Channel undefined!"')
+    logger.info('"Channel undefined!"')
     return
   }
 
@@ -61,7 +59,7 @@ export async function playSound(channel, resourceFilePath) {
       guildId: channel.guild.id,
       adapterCreator: channel.guild.voiceAdapterCreator,
     })
-    logger.log(`\nJoined voice channel: ${channelString}`)
+    logger.info(`\nJoined voice channel: ${channelString}`)
 
     const player = createAudioPlayer({
       behaviors: {
@@ -75,8 +73,8 @@ export async function playSound(channel, resourceFilePath) {
 
     player.on(AudioPlayerStatus.Idle, (_, __) => connection.destroy())
   } catch (err) {
-    logger.log(`An error occured while joining ${channelString}`)
-    logger.log(err)
+    logger.info(`An error occured while joining ${channelString}`)
+    logger.info(err)
   }
 }
 

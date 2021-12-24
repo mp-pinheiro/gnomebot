@@ -1,8 +1,6 @@
-import Logger from "../util/logger.js"
+import logger from "../util/logger.js"
 import { ASCII_GNOMES } from "../constants.js"
 import _ from "lodash"
-
-const logger = new Logger('ascii')
 
 export default {
   name: "ascii",
@@ -16,7 +14,7 @@ export default {
       const gnome = _.sample(ASCII_GNOMES)
       interaction.reply(gnome)
     } catch (err) {
-      logger.log("An error occured in ascii command")
+      logger.info("An error occured in ascii command")
     }
   },
 }

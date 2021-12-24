@@ -9,5 +9,6 @@ services:
       file: docker-compose.yml
       service: gnomebot
     volumes:
-      - './src:/app/src'
+      - './src:/app/src:ro'
+      - './logs:/app/logs:rw'
     command: yarn run dev

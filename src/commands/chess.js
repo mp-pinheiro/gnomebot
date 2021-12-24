@@ -1,8 +1,5 @@
-import Logger from "../util/logger.js"
 import handleDiscordMessage, { getMoves, newGameInChannel, replyWithGameImage } from "../services/chess.js"
 
-
-const logger = new Logger("commands/chess")
 
 const usageHelp = `\
 !gnome chess *<move>*   -   Makes a move against me in the current channel

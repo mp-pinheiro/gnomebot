@@ -1,8 +1,6 @@
 import { Message } from 'discord.js'
 import URL from 'url'
-import Logger from '../util/logger.js'
-
-const logger = new Logger("checkvideo")
+import logger from '../util/logger.js'
 
 export default {
   name: 'checkvideo',
@@ -20,7 +18,7 @@ export default {
     const id = url?.query?.v
 
     if (!id) {
-      logger.log('Unable to parse URL.')
+      logger.info('Unable to parse URL.')
       return
     }
 

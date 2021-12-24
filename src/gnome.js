@@ -1,6 +1,6 @@
 import { Client, Collection, Intents } from "discord.js"
 import DiscordUtil, { getUserNameIDString } from "./util/discord.js"
-import Logger from "./util/logger.js"
+import logger from "./util/logger.js"
 import fs from "fs"
 import env from "dotenv"
 import { COMMAND_PREFIX } from "./constants.js"
@@ -8,49 +8,47 @@ import { parseArgsStringToArgv as parseArgs } from "string-argv"
 
 env.config()
 
-const logger = new Logger('gnome.js')
-
 const { DISCORD_AUTH_TOKEN } = process.env
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] })
 client.commands = new Collection()
 
-const command_files = fs
+const commandFiles = fs
   .readdirSync("./src/commands")
   .filter((file) => file.endsWith(".js"))
-const voice_trigger_files = fs
+const voiceTriggerFiles = fs
   .readdirSync("./src/triggers/voice")
   .filter((file) => file.endsWith(".js"))
-const text_trigger_files = fs
+const textTriggerFiles = fs
   .readdirSync("./src/triggers/text")
   .filter((file) => file.endsWith(".js"))
 
-const voice_triggers = []
-const text_triggers = []
+const voiceTriggers = []
+const textTriggers = []
 
 // Dynamically load commands
-logger.log('Loading commands...')
-for (const file of command_files) {
+logger.info('Loading commands...')
+for (const file of commandFiles) {
   const { default: command } = await import(`./commands/${file}`)
   client.commands.set(command.name, command)
 }
 
 // Dynamically load voice triggers
-logger.log('Loading voice triggers...')
-for (const file of voice_trigger_files) {
+logger.info('Loading voice triggers...')
+for (const file of voiceTriggerFiles) {
   const { default: trigger } = await import(`./triggers/voice/${file}`)
-  voice_triggers.push(trigger)
+  voiceTriggers.push(trigger)
 }
 
 // Dynamically load text triggers
-logger.log('Loading text triggers...')
-for (const file of text_trigger_files) {
+logger.info('Loading text triggers...')
+for (const file of textTriggerFiles) {
   const { default: trigger } = await import(`./triggers/text/${file}`)
-  text_triggers.push(trigger)
+  textTriggers.push(trigger)
 }
 
 client.on("ready", (event) => {
-  logger.log(`Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`)
+  logger.info(`Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`)
   client.user.setActivity("Hello me ol' chum!")
 })
 
@@ -69,14 +67,14 @@ client.on("messageCreate", (message) => {
       DiscordUtil.logMessage(message)
       client.commands.get(command).execute(message, args)
     } catch (err) {
-      logger.log(err)
+      logger.info(err)
       message.reply("An error occurred while executing that command!")
     }
   } else {
-    text_triggers.forEach(async (trigger) => {
+    textTriggers.forEach(async (trigger) => {
       try {
         if (await trigger.test(message)) {
-          logger.log(`Executing text trigger: ${trigger.name}`)
+          logger.info(`Executing text trigger: ${trigger.name}`)
           trigger.execute(message)
         }
       } catch (err) {
@@ -91,11 +89,11 @@ client.on("interactionCreate", (interaction) => {
   if (!client.commands.has(interaction.commandName)) return
 
   try {
-    logger.log(`${interaction.user.username} used command: ${interaction.commandName}`)
+    logger.info(`${interaction.user.username} used command: ${interaction.commandName}`)
     return client.commands.get(interaction.commandName).execute(interaction)
   } catch (err) {
     logger.error(err)
-    return interaction.reply("An error occurred while executing that command!")
+    return interaction.reply({ content: "An error occurred while executing that command!", ephemeral: true })
   }
 })
 
@@ -103,10 +101,10 @@ client.on("interactionCreate", (interaction) => {
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
 client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   if (oldVoiceState.member.user.id === oldVoiceState.client.user.id) return
-  voice_triggers.forEach(async (trigger) => {
+  voiceTriggers.forEach(async (trigger) => {
     try {
       if (await trigger.test(oldVoiceState, newVoiceState)) {
-        logger.log(`Executing voice trigger: ${trigger.name}`)
+        logger.info(`Executing voice trigger: ${trigger.name}`)
         trigger.execute(oldVoiceState, newVoiceState)
       }
     } catch (err) {
@@ -116,7 +114,7 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
 })
 
 client.on("disconnect", (err) => {
-  logger.log("Gnombot disconnected from discord")
+  logger.info("Gnombot disconnected from discord")
 })
 
 client.on("error", (err) => {
