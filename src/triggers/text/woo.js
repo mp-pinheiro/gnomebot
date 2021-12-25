@@ -2,7 +2,7 @@ import { WOO } from "../../constants.js"
 import DiscordUtil from "../../util/discord.js"
 
 export default {
-  name: "woo",
+  name: "Woo",
   desc: `A throwback to the original trigger for woo`,
   /**
    * @param {import('discord.js').Message} message

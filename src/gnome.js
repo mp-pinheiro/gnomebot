@@ -4,7 +4,6 @@ import logger from "./util/logger.js"
 import fs from "fs"
 import env from "dotenv"
 import { COMMAND_PREFIX } from "./constants.js"
-import { parseArgsStringToArgv as parseArgs } from "string-argv"
 
 env.config()
 
@@ -31,7 +30,7 @@ logger.info('Loading commands...')
 for (const file of commandFiles) {
   const { default: command } = await import(`./commands/${file}`)
   client.commands.set(command.name, command)
-  logger.debug(`Added command: ${command.name}`)
+  logger.debug(`Added command: ${command.name} (${file})`)
 }
 
 // Dynamically load voice triggers
@@ -39,7 +38,7 @@ logger.info('Loading voice triggers...')
 for (const file of voiceTriggerFiles) {
   const { default: trigger } = await import(`./triggers/voice/${file}`)
   voiceTriggers.push(trigger)
-  logger.debug(`Added voice trigger: ${trigger.name}`)
+  logger.debug(`Added voice trigger: ${trigger.name} (${file})`)
 }
 
 // Dynamically load text triggers
@@ -47,7 +46,7 @@ logger.info('Loading text triggers...')
 for (const file of textTriggerFiles) {
   const { default: trigger } = await import(`./triggers/text/${file}`)
   textTriggers.push(trigger)
-  logger.debug(`Added text trigger: ${trigger.name}`)
+  logger.debug(`Added text trigger: ${trigger.name} (${file})`)
 }
 
 client.on("ready", (event) => {
@@ -57,34 +56,17 @@ client.on("ready", (event) => {
 
 client.on("messageCreate", (message) => {
   if (message.author.id == client.user.id) return
-  if (message.content.toLowerCase().startsWith(COMMAND_PREFIX)) {
-    //const args = message.content.split(/\s+/)
-    const args = parseArgs(message.content).filter((x) => !!x.trim())
 
-    args.shift()
-    const command = args.shift()?.toLowerCase()
-
-    if (!client.commands.has(command)) return
-
+  textTriggers.forEach(async (trigger) => {
     try {
-      DiscordUtil.logMessage(message)
-      client.commands.get(command).execute(message, args)
-    } catch (err) {
-      logger.info(err)
-      message.reply("An error occurred while executing that command!")
-    }
-  } else {
-    textTriggers.forEach(async (trigger) => {
-      try {
-        if (await trigger.test(message)) {
-          logger.info(`${getUserNameIDString(message.author)} triggered a text event: ${trigger.name}`, {'content': message.content})
-          trigger.execute(message)
-        }
-      } catch (err) {
-        logger.error(`An error occurred while executing ${trigger.name} text trigger:\n${err}`)
+      if (await trigger.test(message)) {
+        logger.info(`${getUserNameIDString(message.author)} triggered a text event: ${trigger.name}`, { 'content': message.content })
+        trigger.execute(message)
       }
-    })
-  }
+    } catch (err) {
+      logger.error(`An error occurred while executing ${trigger.name} text trigger:\n${err}`)
+    }
+  })
 })
 
 client.on("interactionCreate", (interaction) => {
@@ -104,6 +86,7 @@ client.on("interactionCreate", (interaction) => {
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
 client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   if (oldVoiceState.member.user.id === oldVoiceState.client.user.id) return
+  logger.debug(`${oldVoiceState.member.user.username}'s voice state changed`)
   voiceTriggers.forEach(async (trigger) => {
     try {
       if (await trigger.test(oldVoiceState, newVoiceState)) {

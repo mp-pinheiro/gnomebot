@@ -15,7 +15,7 @@ export default {
     return (
       newVoiceState.channel &&
       Math.random() < 0.04 &&
-      (oldVoiceState.channelID !== newVoiceState.channelID ||
+      (oldVoiceState.channelId !== newVoiceState.channelId ||
         (oldVoiceState.deaf && !newVoiceState.deaf))
     )
   },

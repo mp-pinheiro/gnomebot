@@ -5,4 +5,8 @@ services:
     container_name: 'gnomebot'
     build: .
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
+    volumes:
+      - './src:/app/src:ro'
+      - './logs:/app/logs:rw'
+    command: yarn run dev

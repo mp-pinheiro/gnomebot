@@ -151,3 +151,32 @@ export async function replyWithGameImage(interaction, fen, { move = {}, reply = 
     ]
   })
 }
+
+class ChessService {
+  constructor({ moveGenerator } = {}) {
+    this.games = {}
+  }
+
+  async createGameInChannel(channelId) {
+
+  }
+
+  async getGameInChannel(channelId) {
+
+  }
+
+  async gameExistsInChannel(channelId) {
+
+  }
+
+  async possibleMovesInChannel(channelId) {
+    this.games[channelId]?.game?.moves()
+  }
+}
+
+class ChessGame {
+  constructor(side, game){
+    this.side = side
+    this.game = game
+  }
+}
