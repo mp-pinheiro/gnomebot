@@ -55,7 +55,7 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 ## Development
 
 ### Prereqresites
-- Node.js (16.13.1)
+- [Node.js](https://github.com/nvm-sh/nvm#installing-and-updating) (16.13.1)
 - [Yarn](https://yarnpkg.com/getting-started/install)
 - [Docker](https://docs.docker.com/get-docker/) (Optional, but recommended)
 - [Discord Bot](https://www.discord.com/developers) (With access to token)
@@ -65,7 +65,7 @@ Create a `.env` file using `.env-example` as a template.
 
 ### Run Docker Development Server
 ```sh
-yarn run docker-dev
+yarn run docker
 ```
 
 ## References

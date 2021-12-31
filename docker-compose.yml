@@ -1,8 +1,7 @@
 version: '3'
 
 services:
-  gnomebot:
-    container_name: 'gnomebot'
+  dev:
     build: .
     environment:
       - NODE_ENV=development
