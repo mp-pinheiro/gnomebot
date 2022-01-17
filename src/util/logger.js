@@ -14,7 +14,7 @@ const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
-    logFormat,
+    winston.format.json(),
   ),
   // defaultMeta: { service: 'gnomebot' },
   transports: [
@@ -30,7 +30,10 @@ const logger = winston.createLogger({
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format: winston.format.colorize(),
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      logFormat,
+    ),
     level: 'debug'
   }))
 }

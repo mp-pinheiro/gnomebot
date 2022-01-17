@@ -3,7 +3,6 @@ import DiscordUtil, { getUserNameIDString } from "./util/discord.js"
 import logger from "./util/logger.js"
 import fs from "fs"
 import env from "dotenv"
-import { COMMAND_PREFIX } from "./constants.js"
 
 env.config()
 
@@ -50,7 +49,7 @@ for (const file of textTriggerFiles) {
 }
 
 client.on("ready", (event) => {
-  logger.info(`Client connected.\nLogged in as: ${getUserNameIDString(client.user)}`)
+  logger.info(`Client connected. Logged in as: ${getUserNameIDString(client.user)}`)
   client.user.setActivity("Hello me ol' chum!")
 })
 
@@ -77,7 +76,7 @@ client.on("interactionCreate", (interaction) => {
     logger.info(`${getUserNameIDString(interaction.user)} used command: ${interaction}`)
     return client.commands.get(interaction.commandName).execute(interaction)
   } catch (err) {
-    logger.error(err)
+    logger.error(`An error occurred while running command: ${interaction}:\n${err}`)
     return interaction.reply({ content: "An error occurred while executing that command!", ephemeral: true })
   }
 })
@@ -86,11 +85,11 @@ client.on("interactionCreate", (interaction) => {
 // Called when anything about a user's voice state changes (i.e. mute, unmute, join,leave,change channel, etc.)
 client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   if (oldVoiceState.member.user.id === oldVoiceState.client.user.id) return
-  logger.debug(`${oldVoiceState.member.user.username}'s voice state changed`)
+  logger.debug(`${oldVoiceState.member.user.username}'s voice state changed:\n${oldVoiceState.channel?.name} -> ${newVoiceState?.channel?.name}`)
   voiceTriggers.forEach(async (trigger) => {
     try {
       if (await trigger.test(oldVoiceState, newVoiceState)) {
-        logger.info(`${getUserNameIDString(oldVoiceState.member.user)} triggered a voice event: ${trigger.name}`)
+        logger.info(`${getUserNameIDString(oldVoiceState.member.user)} triggered a voice event: ${trigger.name}`, { 'old_channel': oldVoiceState.channel, 'new_channel': newVoiceState.channel})
         trigger.execute(oldVoiceState, newVoiceState)
       }
     } catch (err) {
@@ -100,7 +99,7 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
 })
 
 client.on("disconnect", (err) => {
-  logger.info("Gnombot disconnected from discord")
+  logger.info("Gnomebot disconnected from discord")
 })
 
 client.on("error", (err) => {

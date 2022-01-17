@@ -40,6 +40,7 @@ const commands = [
             .setDescription('Sets the side guild members play as.')
             .addChoice('white', 'white')
             .addChoice('black', 'black')
+            .addChoice('random', 'random')
         )
         .addBooleanOption(option =>
           option
@@ -89,6 +90,9 @@ const commands = [
     .setName('ascii')
     .setDescription('Prints an ASCII gnome to the chat')
 ].map(command => command.toJSON())
+
+console.log('Deploying the following commands:')
+console.table(commands, ['name', 'description'])
 
 const rest = new REST({ version: '9' }).setToken(DISCORD_AUTH_TOKEN)
 

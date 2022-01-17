@@ -26,6 +26,7 @@
     "dotenv": "^10.0.0",
     "erlpack": "^0.1.3",
     "lodash": "^4.17.20",
+    "redis": "^4.0.2",
     "sodium": "^3.0.2",
     "string-argv": "^0.3.1",
     "utf-8-validate": "^5.0.3",

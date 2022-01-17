@@ -1,182 +1,158 @@
-import logger from '../util/logger.js'
 import { Chess } from 'chess.js'
-import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js'
-import { generateImage } from '../util/chess.js'
-import _ from "lodash"
 import { closestMatch } from 'closest-match'
+import _ from "lodash"
+import { ERROR_RESPONSES } from '../constants.js'
+import logger from '../util/logger.js'
+import { RedisGameStore, SimpleGameStore } from './ChessGameStore.js'
 
-const games = {}
-
-
-/**
- * Handles a message from discord and replies accordingly
- * @param {CommandInteraction} interaction
- * @param {String} move
- */
-export default async function handleDiscordMessage(interaction, move) {
-  const { side, game } = await getGameInChannel(interaction.channel.id, { createIfNotExists: true })
-
-  if (!game) {
-    return interaction.reply("No game for this channel! Start a new game with `/chess new [side]`")
-  }
-
-  const moveFromMessage = game.move(move) // verbose move
-
-  const validMoves = game.moves()
-
-  if (!moveFromMessage) {
-    logger.info(`${interaction.member.username} tried to play ${move}, what an idiot lol`)
-    const closestMatchingMove = closestMatch(move, validMoves)
-    return interaction.reply({
-      content: `Invalid move: **${move}**\n*Did you mean*: **${closestMatchingMove}**? Use \`/chess moves\` to see all possible moves.`,
-      ephemeral: true
-    })
-  }
-
-  // If the user's move ended the game
-  if (game.game_over()) {
-    const fen = game.fen()
-    game.reset()
-    return replyWithGameImage(interaction, fen, {
-      reply: 'You win. Well played!',
-      move: moveFromMessage,
-      side: side
-    })
-  }
-
-  // Gnomebot makes a move
-  const gnomeStringMove = _.sample(validMoves)
-  const gnomeMove = game.move(gnomeStringMove) // verbose move
-
-  // Check if gnomebot wins after moving
-  if (game.game_over()) {
-    const fen = game.fen()
-    game.reset()
-    return replyWithGameImage(interaction, fen, {
-      reply: `Nice try, but **${gnomeStringMove}** is checkmate. Better luck next time!`,
-      move: gnomeMove,
-      side: side
-    })
-  }
-
-  // Game is not over
-  return replyWithGameImage(interaction, game.fen(), {
-    reply: `Nice move! My move is **${gnomeStringMove}**.`,
-    move: gnomeMove,
-    side: side
-  })
-}
-
-
-/**
- *
- * @param {String} channelId 
- * @returns {Array<String>}
- */
-export async function getMoves(channelId) {
-  return (await getGameInChannel(channelId, { createIfNotExists: true })).game.moves()
-}
-
-
-/**
- * 
- * @param {String} channelId
- * @returns {Boolean}
- */
-export async function gameExistsInChannel(channelId) {
-  return games[channelId]?.game && !games[channelId]?.game?.game_over()
-}
-
-
-/**
- * 
- * @param {String} channelId 
- * @returns
- */
-export async function getGameInChannel(channelId, { createIfNotExists = false } = {}) {
-  if (!(channelId in games) && createIfNotExists) {
-    games[channelId] = await newGameInChannel(channelId)
-  }
-  return games[channelId]
-}
-
-
-/**
- * 
- * @param {string} channelId
- * @param {object} options
- * @param {string} options.side
- * @param {string} options.fen
- * @returns {}
- */
-export async function newGameInChannel(channelId, { side = 'w', fen } = {}) {
-  const game = new Chess(fen)
-
-  if (side === 'b') {
-    game.move('e4')
-  }
-
-  games[channelId] = {
-    side: side,
-    game: game
-  }
-
-  return games[channelId]
-}
-
-
-/**
- * Sends a reply message containing an image of the current board state
- * @param {CommandInteraction} interaction
- * @param {String} fen
- * @param {Object} options
- * @param {Move} options.move
- * @param {String} options.reply
- * @param {String} options.side
- */
-export async function replyWithGameImage(interaction, fen, { move = {}, reply = '', side = 'w' } = {}) {
-  const imageBuffer = await generateImage(fen, {
-    move: { [move.from]: true, [move.to]: true, },
-    flipped: side === 'b'
-  })
-  const imageAttachment = new MessageAttachment(imageBuffer, 'chess.png')
-  const imageEmbed = new MessageEmbed()
-    .setTitle('Chess Game')
-    .setDescription(reply)
-    .setImage('attachment://chess.png')
-  return interaction.reply({
-    embeds: [imageEmbed],
-    files: [
-      imageAttachment
-    ]
-  })
-}
 
 class ChessService {
-  constructor({ moveGenerator } = {}) {
-    this.games = {}
+  /**
+   * 
+   * @param {Object} options
+   * @param {import('./ChessGameStore.js').ChessGameStore} options.store
+   */
+  constructor({ store, moveGenerator } = {}) {
+    this.store = store
+    this.moveGenerator = moveGenerator
   }
 
-  async createGameInChannel(channelId) {
-
+  generateMove(game) {
+    return this.moveGenerator(game)
   }
 
-  async getGameInChannel(channelId) {
+  /**
+   * 
+   * @param {String} channelId The current Discord text channel
+   * @param {String} userMove The Discord user's move
+   */
+  async handleMove(channelId, userMove) {
+    logger.debug(`Handling ${userMove} in ${channelId}`)
+    const game = await this.getGame(channelId, { createIfNotExists: true })
+    const side = game.turn()
 
+    if (game.game_over()) {
+      return {
+        error: true,
+        errorReply: ERROR_RESPONSES['NO_CHESS_GAME']
+      }
+    }
+
+    // Attempt to make player's move
+    const move = game.move(userMove)
+
+    const possibleMoves = game.moves()
+
+    if (!move) {
+      const closestMatchingMove = closestMatch(userMove, possibleMoves)
+      return {
+        error: true,
+        errorReply: `Invalid move: **${userMove}**\n*Did you mean*: **${closestMatchingMove}**? Use \`/chess moves\` to see all possible moves.`,
+      }
+    }
+
+    // Update Game in Store
+    logger.debug('Storing new chess game state...')
+    this.store.updateGame(channelId, game)
+
+    // If the user's move ended the game
+    if (game.game_over()) {
+      return {
+        reply: 'You win. Well played!',
+        game: game,
+        side: side,
+        move: move
+      }
+    }
+
+    // Gnomebot makes a move
+    const gnomeStringMove = this.generateMove(game)
+    const gnomeMove = game.move(gnomeStringMove) // verbose move
+    logger.debug(`Making move in ${channelId}: ${gnomeStringMove}`)
+
+    // Update Game in Store
+    logger.debug('Storing new chess game state...')
+    this.store.updateGame(channelId, game)
+
+    // Check if gnomebot wins after moving
+    if (game.in_checkmate()) {
+      return {
+        reply: `Nice try, but **${gnomeStringMove}** is checkmate. Better luck next time!`,
+        game: game,
+        side: side,
+        move: gnomeMove
+      }
+    }
+
+    // Game is not over
+    return {
+      reply: `Nice move! My move is **${gnomeStringMove}**.`,
+      game: game,
+      side: side,
+      move: gnomeMove
+    }
   }
 
-  async gameExistsInChannel(channelId) {
+  /**
+   * Creates a chess game in a given channel
+   * @param {String} channelId
+   * @param {Object} options
+   * @param {String} options.side
+   * @param {String} options.fen
+   * @returns {Promise<import('chess.js').ChessInstance>}
+   */
+  async createGame(channelId, { side = 'w', fen } = {}) {
+    logger.info(`Creating new chess game for channel: ${channelId}`)
+    const game = new Chess(fen)
 
+    if (side === 'b') {
+      game.move('e4')
+    }
+
+    logger.info('Storing chess game state...')
+    await this.store.updateGame(channelId, game)
+
+    return game
   }
 
-  async possibleMovesInChannel(channelId) {
-    this.games[channelId]?.game?.moves()
+  /**
+   * 
+   * @param {String} channelId 
+   * @param {Object} options 
+   * @param {Boolean} options.createIfNotExists 
+   * @returns {Promise<import('chess.js').ChessInstance?>}
+   */
+  async getGame(channelId, { createIfNotExists = false } = {}) {
+    logger.info(`Getting chess game for channel: ${channelId}`)
+    const game = await this.store.getGame(channelId)
+
+    if (!game && createIfNotExists) {
+      logger.info(`No existing chess game found in channel: ${channelId}`)
+      return this.createGame(channelId)
+    }
+
+    return game
+  }
+
+  async clearGame(channelId) {
+    this.store.updateGame(channelId, null)
   }
 }
 
-class ChessGame {
-  constructor(side, game){
-    this.side = side
-    this.game = game
-  }
+
+const { REDIS_HOST } = process.env
+const gameStore = REDIS_HOST ? new RedisGameStore(REDIS_HOST) : new SimpleGameStore()
+
+if (gameStore instanceof RedisGameStore) {
+  logger.info('Using redis-enabled chess game store')
 }
+
+/**
+ * Generates a random move based on a given board position
+ * @param {import('chess.js').ChessInstance} game 
+ */
+const randomMove = (game) => _.sample(game.moves())
+
+const service = new ChessService({ store: gameStore, moveGenerator: randomMove })
+
+export default service

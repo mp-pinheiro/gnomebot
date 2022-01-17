@@ -68,6 +68,19 @@ Create a `.env` file using `.env-example` as a template.
 yarn run docker
 ```
 
+
+### Deploying Commands to a Guild
+First, set the following variables in your `.env` file:
+```sh
+DISCORD_AUTH_TOKEN=<your-bots-auth-token>
+CLIENT_ID=<your-bots-client-id>
+GUILD_ID=<your-guild-id>
+```
+Then, run the following command:
+```sh
+yarn run deploy-commands
+```
+
 ## References
 - <a href="https://discord.js.org/#/" target="_blank">discord.js</a><br>
 - <a href="https://github.com/jhlywa/chess.js" target="_blank">chess.js</a><br>
