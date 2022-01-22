@@ -24,7 +24,7 @@ export default {
     if (interaction.options.getSubcommand() === 'fen') return handleSubcommandFEN(interaction)
 
     if (interaction.options.getSubcommand() === "new") return handleSubcommandNew(interaction)
-  },
+  }
 }
 
 

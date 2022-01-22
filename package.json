@@ -16,7 +16,6 @@
     "@discordjs/opus": "^0.7.0",
     "@discordjs/rest": "^0.2.0-canary.0",
     "@discordjs/voice": "^0.7.5",
-    "@google-cloud/translate": "^6.0.5",
     "bufferutil": "^4.0.2",
     "chess-image-generator": "github:hadley31/chess-image-generator",
     "chess.js": "^0.12.0",
