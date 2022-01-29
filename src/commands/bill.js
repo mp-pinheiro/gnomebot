@@ -8,7 +8,7 @@ import _ from 'lodash'
 
 export default {
   name: "bill",
-  desc: "Gnomebot will join your channel and play a bill wurtz song",
+  desc: "Gnomebot will join your voice channel and play a bill wurtz song",
   /**
    * @param {import('discord.js').CommandInteraction} interaction
    */
@@ -47,8 +47,6 @@ const getSongs = async () => {
   const result = await fetch(url)
 
   if (!result.ok) {
-    logger.info(url)
-    logger.info(await result.text())
     logger.error('Unable to get songs list')
     return
   }
@@ -59,10 +57,6 @@ const getSongs = async () => {
 
   for (const item of data.items) {
     songs[item.snippet.title] = item.contentDetails.videoId
-  }
-
-  for (const [key, value] of Object.entries(songs)) {
-    console.log(`${key}: ${value}`)
   }
 
   return songs
