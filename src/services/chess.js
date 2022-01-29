@@ -2,7 +2,7 @@ import { Chess } from 'chess.js'
 import { closestMatch } from 'closest-match'
 import _ from "lodash"
 import { ERROR_RESPONSES } from '../constants.js'
-import logger from '../util/logger.js'
+import logger from '../utilities/logger.js'
 import { RedisGameStore, SimpleGameStore } from './ChessGameStore.js'
 
 
@@ -51,12 +51,12 @@ class ChessService {
       }
     }
 
-    // Update Game in Store
-    logger.debug('Storing new chess game state...')
-    this.store.updateGame(channelId, game)
-
     // If the user's move ended the game
     if (game.game_over()) {
+      // Update Game in Store
+      logger.debug('Storing new chess game state...')
+      this.store.updateGame(channelId, game)
+
       return {
         reply: 'You win. Well played!',
         game: game,

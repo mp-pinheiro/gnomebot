@@ -1,6 +1,6 @@
 import { createClient } from 'redis'
 import { Chess } from 'chess.js'
-import logger from '../util/logger.js'
+import logger from '../utilities/logger.js'
 
 export class ChessGameStore {
   /**

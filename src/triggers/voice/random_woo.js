@@ -1,6 +1,6 @@
 import { WOO } from "../../constants.js"
-import DiscordUtil from "../../util/discord.js"
-import logger from "../../util/logger.js"
+import DiscordUtil from "../../utilities/discord.js"
+import logger from "../../utilities/logger.js"
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 

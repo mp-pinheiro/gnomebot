@@ -1,6 +1,6 @@
 import _ from "lodash"
-import logger from "../../util/logger.js"
-import { getGameImageEmbed } from "../../util/chess.js"
+import logger from "../../utilities/logger.js"
+import { getGameImageEmbed } from "../../utilities/chess.js"
 import chess from "../../services/chess.js"
 
 export default {

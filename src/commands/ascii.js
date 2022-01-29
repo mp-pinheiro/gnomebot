@@ -1,4 +1,4 @@
-import logger from "../util/logger.js"
+import logger from "../utilities/logger.js"
 import { ASCII_GNOMES } from "../constants.js"
 import _ from "lodash"
 

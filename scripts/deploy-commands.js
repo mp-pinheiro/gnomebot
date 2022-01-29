@@ -88,7 +88,25 @@ const commands = [
     ),
   new SlashCommandBuilder()
     .setName('ascii')
-    .setDescription('Prints an ASCII gnome to the chat')
+    .setDescription('Prints an ASCII gnome to the chat'),
+  new SlashCommandBuilder()
+    .setName('source')
+    .setDescription('Replies with the source repository of gnomebot'),
+  new SlashCommandBuilder()
+    .setName('bill')
+    .setDescription('Plays a Bill Wurtz song in your voice channel')
+    .addStringOption(option =>
+      option
+        .setName('title')
+        .setDescription('The title of the song to play')
+        .setRequired(true)
+    )
+    .addIntegerOption(option =>
+      option
+        .setName('volume')
+        .setDescription('Volume to use: 0-100')
+        .setRequired(false)
+    ),
 ].map(command => command.toJSON())
 
 console.log('Deploying the following commands:')

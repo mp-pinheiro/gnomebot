@@ -38,9 +38,11 @@ export function logMessage(message) {
 /**
  *
  * @param {import('discord.js').VoiceChannel} channel
- * @param {String} resourceFilePath
+ * @param {String} audioAsset
+ * @param {Object} options
+ * @param {Number} options.volume
  */
-export async function playSound(channel, resourceFilePath) {
+export async function playSound(channel, audioAsset, {volume = 0.5} = {}) {
   if (channel === undefined) {
     logger.warning('PlaySound: Channel undefined!')
     return
@@ -48,8 +50,8 @@ export async function playSound(channel, resourceFilePath) {
 
   const channelString = getChannelNameIDString(channel)
 
-  if (resourceFilePath === undefined) {
-    logger.error("No file path specified")
+  if (audioAsset === undefined) {
+    logger.error("No audio asset specified. Pass either a file path or stream")
     return
   }
 
@@ -59,6 +61,7 @@ export async function playSound(channel, resourceFilePath) {
       guildId: channel.guild.id,
       adapterCreator: channel.guild.voiceAdapterCreator,
     })
+
     logger.info(`Joined voice channel: ${channelString}`)
 
     const player = createAudioPlayer({
@@ -66,7 +69,8 @@ export async function playSound(channel, resourceFilePath) {
         noSubscriber: NoSubscriberBehavior.Pause,
       }
     })
-    const resource = createAudioResource(resourceFilePath)
+    const resource = createAudioResource(audioAsset)
+    resource.volume = volume
 
     connection.subscribe(player)
     player.play(resource)

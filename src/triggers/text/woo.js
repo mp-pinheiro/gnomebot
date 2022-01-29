@@ -1,5 +1,5 @@
 import { WOO } from "../../constants.js"
-import DiscordUtil from "../../util/discord.js"
+import DiscordUtil from "../../utilities/discord.js"
 
 export default {
   name: "Woo",

@@ -1,7 +1,7 @@
 import { ERROR_RESPONSES } from "../constants.js"
 import chess from "../services/chess.js"
-import { getGameImageEmbed } from "../util/chess.js"
-import logger from "../util/logger.js"
+import { getGameImageEmbed } from "../utilities/chess.js"
+import logger from "../utilities/logger.js"
 
 const usageHelp = `\
 !gnome chess *<move>*   -   Makes a move against me in the current channel

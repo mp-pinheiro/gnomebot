@@ -1,5 +1,5 @@
 import { GNOME_POWER } from "../constants.js"
-import DiscordUtil from "../util/discord.js"
+import DiscordUtil from "../utilities/discord.js"
 import { getVoiceConnection } from "@discordjs/voice"
 import _ from "lodash"
 

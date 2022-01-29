@@ -1,6 +1,6 @@
 import { Client, Collection, Intents } from "discord.js"
-import DiscordUtil, { getUserNameIDString } from "./util/discord.js"
-import logger from "./util/logger.js"
+import DiscordUtil, { getUserNameIDString } from "./utilities/discord.js"
+import logger from "./utilities/logger.js"
 import fs from "fs"
 import env from "dotenv"
 

@@ -1,5 +1,5 @@
-import logger from "../util/logger.js"
-import { getUserNameIDString, playSound } from "../util/discord.js"
+import logger from "../utilities/logger.js"
+import { getUserNameIDString, playSound } from "../utilities/discord.js"
 import { WOO } from "../constants.js"
 
 const usageHelp = `\
