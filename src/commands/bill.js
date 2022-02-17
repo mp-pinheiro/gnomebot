@@ -17,15 +17,15 @@ export default {
     const volume = interaction.options.getInteger('volume', false) || 30
     const volumePercent = volume / 100.0
 
-    const songs = await getSongs()
-
-    const closestMatchingSong = closestMatch(song, Object.keys(songs))
-
     const userVoiceChannel = interaction.member.voice?.channel
 
     if (!userVoiceChannel) {
       return interaction.reply({ content: 'You must be in a voice channel!', ephemeral: true })
     }
+
+    const songs = await getSongs()
+
+    const closestMatchingSong = closestMatch(song, Object.keys(songs))
 
     const videoId = songs[closestMatchingSong]
     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`
@@ -43,12 +43,12 @@ const getSongs = async () => {
   logger.debug('Loading bill wurtz songs...')
   const { YOUTUBE_API_KEY } = process.env
   const playlistId = 'PLo7FOXNe7Yt8xXI3qYIualWNtIKlkeMlE'
-  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=25&playlistId=${playlistId}&key=${YOUTUBE_API_KEY}`
+  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50&playlistId=${playlistId}&key=${YOUTUBE_API_KEY}`
   const result = await fetch(url)
 
   if (!result.ok) {
     logger.error('Unable to get songs list')
-    return
+    return {}
   }
 
   const data = await result.json()
