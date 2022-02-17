@@ -12,50 +12,75 @@ export default {
   desc: "Gnomebot will join your channel and makes a noise.",
   help: usageHelp,
   /**
+   * Command handler for `/woo`
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {
-    // !gnome woo
-
     const userOption = interaction.options.getMember('user')
     const channelOption = interaction.options.getChannel('channel')
+    const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
 
-    if (!userOption && !channelOption) {
-      const userChannel = interaction.member?.voice?.channel
-      if (!userChannel) {
-        logger.info(`${getUserNameIDString(interaction.member)} is not in a voice channel.`)
-        return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
-      }
-
-      await interaction.reply({ content: `Joining voice channel: ${userChannel}`, ephemeral: true })
-
-      return playSound(userChannel, WOO)
+    if (!hasPermission && (userOption || channelOption)) {
+      logger.info(`${getUserNameIDString(interaction.author)} is not an administrator.`)
+      return interaction.reply({ content: "You must be an administrator to use that command", ephemeral: true })
     }
 
-    // !gnome woo @member
+    //  /woo @member
     if (userOption) {
-      const channel = userOption.voice?.channel
-
-      if (!channel) {
-        logger.info(`${getUserNameIDString(userOption)} is not in a voice channel.`)
-        return interaction.reply({ content: `${userOption} is not in a voice channel!`, ephemeral: true })
-      }
-
-      await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
-
-      return playSound(channel, WOO)
+      return handleUserOption(interaction, userOption)
     }
 
-    // !gnome woo <channel_id>
+    //  /woo #channel
     if (channelOption) {
-      if (!interaction.member?.permissions.has("ADMINISTRATOR")) {
-        logger.info(`${getUserNameIDString(interaction.author)} is not an administrator.`)
-        return interaction.reply({ content: "You must be an administrator to use that command", ephemeral: true })
-      }
-
-      await interaction.reply({ content: `Joining voice channel: ${channelOption}`, ephemeral: true })
-
-      return playSound(channelOption, WOO)
+      return handleChannelOption(interaction, channelOption)
     }
+
+    //  /woo
+    return handleDefaultOption(interaction)
   },
+}
+
+/**
+ * Handles specific command case: `/woo @member`
+ * @param {import('discord.js').CommandInteraction} interaction
+ * @param {import('discord.js').GuildMember} user
+ */
+const handleUserOption = async (interaction, user) => {
+  const channel = user.voice?.channel
+
+  if (!channel) {
+    logger.info(`${getUserNameIDString(user)} is not in a voice channel.`)
+    return interaction.reply({ content: `${user} is not in a voice channel!`, ephemeral: true })
+  }
+
+  await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
+
+  return playSound(channel, WOO)
+}
+
+/**
+ * Handles specific command case: `/woo #channel`
+ * @param {import('discord.js').CommandInteraction} interaction
+ * @param {import('discord.js').VoiceChannel} channel
+ */
+const handleChannelOption = async (interaction, channel) => {
+  await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
+
+  return playSound(channel, WOO)
+}
+
+/**
+ * Handles default command case: `/woo`
+ * @param {import('discord.js').CommandInteraction} interaction
+ */
+const handleDefaultOption = async (interaction) => {
+  const userChannel = interaction.member?.voice?.channel
+  if (!userChannel) {
+    logger.info(`${getUserNameIDString(interaction.member)} is not in a voice channel.`)
+    return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
+  }
+
+  await interaction.reply({ content: `Joining voice channel: ${userChannel}`, ephemeral: true })
+
+  return playSound(userChannel, WOO)
 }

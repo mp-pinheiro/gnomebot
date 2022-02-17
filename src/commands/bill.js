@@ -10,6 +10,7 @@ export default {
   name: "bill",
   desc: "Gnomebot will join your voice channel and play a bill wurtz song",
   /**
+   * Command handler for `/bill`
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {

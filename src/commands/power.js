@@ -19,52 +19,99 @@ export default {
    * @param {Array<String>} args
    */
   async execute(interaction) {
-    // Command /power stop
-    if (interaction.options.getSubcommand() === 'stop') {
-      const connection = getVoiceConnection(interaction.guildId)
-      connection?.destroy()
-
-      return interaction.reply({ content: 'Stopped playing GNOME POWER!', ephemeral: true })
-    }
-
+    //  /power play
     if (interaction.options.getSubcommand() === 'play') {
-      const userOption = interaction.options.getMember('user')
-      const channelOption = interaction.options.getChannel('channel')
-
-      if (!userOption && !channelOption) {
-        const userChannel = interaction.member?.voice?.channel
-        if (userChannel) {
-          await interaction.reply({ content: `Playing GNOME POWER in ${interaction.member}'s voice channel: ${userChannel}` })
-          return DiscordUtil.playSound(userChannel, GNOME_POWER)
-        } else {
-          return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
-        }
-      }
-
-      // !gnome power @member
-      if (userOption) {
-        const channel = userOption.voice?.channel
-
-        if (!channel) {
-          return interaction.reply({ content: `${userOption} is not in a voice channel!`, ephemeral: true })
-        }
-
-        await interaction.reply({ content: `Playing GNOME POWER in ${userOption}'s voice channel: ${channel}` })
-
-        return DiscordUtil.playSound(channel, GNOME_POWER)
-      }
-
-      // !gnome power <channel_id>
-      if (channelOption) {
-        const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
-        if (!hasPermission) {
-          return interaction.reply({ content: "You don't have permission to run that command!", ephemeral: true })
-        }
-
-        await interaction.reply({ content: `Playing GNOME POWER in voice channel: ${channelOption}` })
-
-        return DiscordUtil.playSound(channelOption, GNOME_POWER)
-      }
+      return handlePlaySubcommand(interaction)
     }
+
+    //  /power stop
+    if (interaction.options.getSubcommand() === 'stop') {
+      return handleStopSubcommand(interaction)
+    }
+  }
+}
+
+/**
+ * Handles specific command case: `/power stop`
+ * @param {import('discord.js').CommandInteraction} interaction 
+ * @returns 
+ */
+const handleStopSubcommand = async (interaction) => {
+  const connection = getVoiceConnection(interaction.guildId)
+  connection?.destroy()
+
+  return interaction.reply({ content: 'Stopped playing GNOME POWER!', ephemeral: true })
+}
+
+
+/**
+ * Handles specific command case: `/power play`
+ * @param {import('discord.js').CommandInteraction} interaction 
+ */
+const handlePlaySubcommand = async (interaction) => {
+  const userOption = interaction.options.getMember('user')
+  const channelOption = interaction.options.getChannel('channel')
+  const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
+
+  if (!hasPermission && (userOption || channelOption)) {
+    return interaction.reply({ content: "You don't have permission to run that command!", ephemeral: true })
+  }
+
+  //  /power @member
+  if (userOption) {
+    return handleUserPlaySubcommand(interaction, userOption)
+  }
+
+  //  /power #channel
+  if (channelOption) {
+    return handleChannelPlaySubcommand(interaction, channelOption)
+  }
+
+  //  /power
+  return handleDefaultPlaySubcommand(interaction)
+}
+
+
+/**
+ * Handles specific command case: `/power play`
+ * @param {import('discord.js').CommandInteraction} interaction
+ * @param {import('discord.js').GuildMember} member
+ */
+const handleUserPlaySubcommand = async (interaction, user) => {
+  const channel = user.voice?.channel
+
+  if (!channel) {
+    return interaction.reply({ content: `${user} is not in a voice channel!`, ephemeral: true })
+  }
+
+  await interaction.reply({ content: `Playing GNOME POWER in ${user}'s voice channel: ${channel}` })
+
+  return DiscordUtil.playSound(channel, GNOME_POWER)
+}
+
+
+/**
+ * Handles specific command case: `/power play`
+ * @param {import('discord.js').CommandInteraction} interaction
+ * @param {import('discord.js').VoiceChannel} channel
+ */
+const handleChannelPlaySubcommand = async (interaction, channel) => {
+  await interaction.reply({ content: `Playing GNOME POWER in voice channel: ${channel}` })
+
+  return DiscordUtil.playSound(channel, GNOME_POWER)
+}
+
+
+/**
+ * Handles specific command case: `/power play`
+ * @param {import('discord.js').CommandInteraction} interaction 
+ */
+const handleDefaultPlaySubcommand = async (interaction) => {
+  const userChannel = interaction.member?.voice?.channel
+  if (userChannel) {
+    await interaction.reply({ content: `Playing GNOME POWER in ${interaction.member}'s voice channel: ${userChannel}` })
+    return DiscordUtil.playSound(userChannel, GNOME_POWER)
+  } else {
+    return interaction.reply({ content: "You are not in a voice channel!", ephemeral: true })
   }
 }

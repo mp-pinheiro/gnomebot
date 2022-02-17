@@ -46,11 +46,12 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 ⣿⣿⣿⣿⣿⣿⡟⠄⠄⠁⠄⠻⠇⠄⠐⠄⠄⠈⠙⢻
 ⣿⣿⣿⣿⣿⣿⡇⡀⠄⠂⠁⢀⠐⠄⣥⡀⠁⢀⠄⣿
 ```
+- If there is an active chess match in the current channel, gnomebot will detect a valid chess move instead of having to use the `/chess move <move>` command.
 
 ### Voice Channels
 - Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel, leaving shortly after.<br>
-- If you become impatient, you can type `!gnome woo` and gnomebot will perform the same action on command. You must be in a voice channel for this feature to work.<br>
-- Users with the Administrator permission can type `!gnome woo <voice channel id>` to prank their friends without the need to be in a voice channel.
+- If you become impatient, you can type `/woo` and gnomebot will perform the same action on demand. You must be in a voice channel for this feature to work.<br>
+- Users with the Administrator permission can type `/woo #channel` or `/woo @member` to prank their friends without the need to be in a voice channel.
 
 ## Development
 
