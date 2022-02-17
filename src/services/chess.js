@@ -105,8 +105,12 @@ class ChessService {
     logger.info(`Creating new chess game for channel: ${channelId}`)
     const game = new Chess(fen)
 
-    if (side === 'b') {
-      game.move('e4')
+    if (game.turn() != side) {
+      const move = this.generateMove(game)
+
+      logger.info(`Starting fen turn does not match desired side, making initial move: ${move}`)
+
+      game.move(move)
     }
 
     logger.info('Storing chess game state...')

@@ -60,7 +60,9 @@ const handleSubcommandNew = async (interaction) => {
   const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
   const existingGame = await chess.getGame(interaction.channelId)
 
+  
   if (existingGame && !existingGame.game_over() && !forceCreateOption) {
+    logger.debug(`Existing game: ${existingGame}`)
     return interaction.reply({ content: 'There is already game in progress in this channel', ephemeral: true })
   }
 

@@ -42,6 +42,12 @@ const commands = [
             .addChoice('black', 'black')
             .addChoice('random', 'random')
         )
+        .addStringOption(option =>
+          option
+            .setName('fen')
+            .setDescription('Sets the starting fen position')
+            .setRequired(false)
+        )
         .addBooleanOption(option =>
           option
             .setName('force')
