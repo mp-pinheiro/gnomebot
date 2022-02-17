@@ -19,7 +19,7 @@ services:
     networks:
       - gnomebot
   gnomebot:
-    build: https://github.com/hadley31/gnomebot.git
+    build: .
     environment:
       - REDIS_HOST=redis
     volumes:
