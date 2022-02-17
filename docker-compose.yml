@@ -18,6 +18,18 @@ services:
       - redis
     networks:
       - gnomebot
+  gnomebot:
+    build: https://github.com/hadley31/gnomebot.git
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - './src:/app/src:ro'
+      - './logs:/app/logs:rw'
+    command: yarn run dev
+    depends_on:
+      - redis
+    networks:
+      - gnomebot
   redis:
     image: redis
     ports:
