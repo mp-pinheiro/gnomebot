@@ -25,7 +25,6 @@ services:
     volumes:
       - './src:/app/src:ro'
       - './logs:/app/logs:rw'
-    command: yarn run dev
     depends_on:
       - redis
     networks:
