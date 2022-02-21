@@ -127,7 +127,7 @@ class ChessService {
    * @returns {Promise<import('chess.js').ChessInstance?>}
    */
   async getGame(channelId, { createIfNotExists = false } = {}) {
-    logger.info(`Getting chess game for channel: ${channelId}`)
+    logger.debug(`Getting chess game for channel: ${channelId}`)
     const game = await this.store.getGame(channelId)
 
     if (!game && createIfNotExists) {
