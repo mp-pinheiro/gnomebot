@@ -4,18 +4,12 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 
 ## Commands
 
-**ascii** - Replies with a random ascii gnome.<br>
-**help** - Replies with list of commands and their descriptions.<br>
-**source** - Replies with a link to source repository.<br>
-**woo** - Gnomebot joins your voice channel and says 'woo'.<br>
-**power** - Gnomebot joins your voice channel and plays 'GNOME POWER'.<br>
-**chess** - Play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
-
-### Future Commands:
-
-**translate** - Translates text using Google Cloud Translation API.<br>
-**checkvideo** - Checks to see if a video contains gnomes.<br>
-**script** - Ability to run gnomescripts (We'll see).<br>
+**/ascii** - Replies with a random ascii gnome.<br>
+**/bill** - Gnomebot will join your voice channel and play a bill wurtz song.<br>
+**/chess** - Play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
+**/power** - Gnomebot joins your voice channel and plays 'GNOME POWER'.<br>
+**/source** - Replies with a link to source repository.<br>
+**/woo** - Gnomebot joins your voice channel and says 'woo'.<br>
 
 ## Triggers
 
@@ -87,4 +81,3 @@ yarn run deploy-commands
 - <a href="https://github.com/jhlywa/chess.js" target="_blank">chess.js</a><br>
 - <a href="https://github.com/andyruwruw/chess-image-generator" target="_blank">chess-image-generator</a> 
 (<a href="https://github.com/hadley31/chess-image-generator" target="_blank">My Fork</a>)<br>
-
