@@ -1,5 +1,5 @@
 .vscode/
 log.txt
 node_modules/
-.env
+.env*
 key.json
