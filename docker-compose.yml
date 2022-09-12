@@ -12,6 +12,7 @@ services:
       - REDIS_HOST=redis
     volumes:
       - './src:/app/src:ro'
+      - './.env:/app/.env:ro'
       - './logs:/app/logs:rw'
     command: yarn run dev
     depends_on:

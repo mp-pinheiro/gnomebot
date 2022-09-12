@@ -5,10 +5,10 @@
   "main": "src/gnome.js",
   "scripts": {
     "dev": "nodemon src/gnome.js",
-    "docker": "docker compose up dev --force-recreate --remove-orphans",
-    "docker-prod": "docker compose up gnomebot --force-recreate --remove-orphans",
+    "dev:docker": "docker compose up dev --force-recreate --remove-orphans",
     "deploy-commands": "node scripts/deploy-commands.js",
-    "start": "node src/gnome.js"
+    "start": "node src/gnome.js",
+    "start:docker": "docker compose up gnomebot --force-recreate --remove-orphans"
   },
   "author": "Nick Hadley",
   "license": "ISC",

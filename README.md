@@ -58,11 +58,16 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 ### Environment
 Create a `.env` file using `.env-example` as a template.
 
-### Run Docker Development Server
+### Run Application Locally (With Docker)
 ```sh
-yarn run docker
+yarn dev:docker
 ```
 
+### Run Application Locally (Without Docker)
+```sh
+yarn install
+yarn dev
+```
 
 ### Deploying Commands to a Guild
 First, set the following variables in your `.env` file:
@@ -73,7 +78,7 @@ GUILD_ID=<your-guild-id>
 ```
 Then, run the following command:
 ```sh
-yarn run deploy-commands
+yarn deploy-commands
 ```
 
 ## References
