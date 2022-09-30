@@ -5,6 +5,7 @@ import RemoveSubcommand from "../modules/sub_command/quote/remove_subcommand.js"
 import ListSubcommand from "../modules/sub_command/quote/list_subcommand.js";
 import RandomSubcommand from "../modules/sub_command/quote/random_subcommand.js";
 import HelpSubcommand from "../modules/sub_command/quote/help_subcommand.js";
+import Discord from "discord.js"; // melhorar esse import lixo
 
 function parseCommand(cmd) {
   // remove bot and quote commands
@@ -39,7 +40,11 @@ export default {
       // execute operation
       switch (parsed.operation) {
         case 'add':
-          let addSubcommand = new AddSubcommand('string');
+          let addRepliedSubCommand = new AddRepliedSubCommand('string');
+          var messageToAdd = message
+          if (message.type == 'REPLY') {
+            messageToAdd = originalMessage = await Discord.fetchReference(message);
+          }
           await addSubcommand.process({
             'message': message,
             'quoteMsg': parsed.params
