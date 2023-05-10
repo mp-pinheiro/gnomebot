@@ -2,18 +2,18 @@ import Translate from '@google-cloud/translate'
 import { Message } from 'discord.js'
 
 export default {
-  name: 'translate',
-  desc: 'Translates a language from detected language to desired language',
-  /**
-   *
-   * @param {Message} message
-   * @param {Array<String>} args
-   */
-  async execute(message, args) {
-    if (!args[0]) {
-      message.channel.send('Please specify a language')
-    }
-  },
+    name: 'translate',
+    desc: 'Translates a language from detected language to desired language',
+    /**
+     *
+     * @param {Message} message
+     * @param {Array<String>} args
+     */
+    async execute(message, args) {
+        if (!args[0]) {
+            message.channel.send('Please specify a language')
+        }
+    },
 }
 
 /**
@@ -21,8 +21,8 @@ export default {
  * @param {String} text
  */
 async function detectLanguage(text) {
-  let [detection] = await translate.detect(text)
-  return detection
+    let [detection] = await translate.detect(text)
+    return detection
 }
 
 /**
@@ -31,10 +31,10 @@ async function detectLanguage(text) {
  * @param {String} lang
  */
 async function translateString(text, lang) {
-  translate.translate(text, { targetLanguageCode: lang })
+    translate.translate(text, { targetLanguageCode: lang })
 }
 
 async function getSupportedLanguages() {
-  const [languages] = await translate.getLanguages()
-  return languages
+    const [languages] = await translate.getLanguages()
+    return languages
 }
