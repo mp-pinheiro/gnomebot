@@ -1,7 +1,7 @@
 import logger from "../util/logger.js"
 import DiscordUtil from "../util/discord.js"
 import { Message } from "discord.js"
-import { MONKI } from "../constants.js"
+import { SOUNDS } from "../constants.js"
 
 const { getUserNameIDString } = DiscordUtil
 
@@ -25,9 +25,9 @@ export default {
 
       let channel = await message.client.channels.fetch(channel_id);
 
-      DiscordUtil.play_sound(channel, MONKI);
+      DiscordUtil.play_sound(channel, SOUNDS.MONKI);
     } else if (message.member.voice.channel) {
-      DiscordUtil.play_sound(message.member.voice.channel, MONKI);
+      DiscordUtil.play_sound(message.member.voice.channel, SOUNDS.MONKI);
     } else {
       message.reply("you are not in a voice channel!");
     }
