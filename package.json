@@ -25,7 +25,7 @@
         "zlib-sync": "^0.1.7"
     },
     "devDependencies": {
-        "nodemon": "^2.0.6"
+        "nodemon": "^2.0.22"
     },
     "type": "module"
 }
