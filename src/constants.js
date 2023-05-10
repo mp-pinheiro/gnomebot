@@ -81,16 +81,13 @@ export const ASCII_GNOMES = [
   `Ho 🎅ho 🎅ho 🎅ha 😂ha 😂, ho 🎅ho 🎅ho 🎅he 😂ha 😂. Hello 👋there, old chum 😴. I’m gnot an elf 🤳. I’m gnot a goblin 👺. I’m a gnome 🙌. And you’ve 👉😟been, GNOMED’ 😂🔥👌💯⁭`,
 ];
 
-export const WOO = "assets/sounds/woo.ogg";
-
 export const SOUNDS = {
   WOOHOHO: "assets/sounds/wohoho.ogg",
   ELF: "assets/sounds/elf.ogg",
   MONKI: "assets/sounds/monki.ogg",
-  WOO: "assets/sounds/woo.ogg"
+  WOO: "assets/sounds/woo.ogg",
+  GNOME_POWER: "assets/sounds/gnome_power.ogg"
 };
-
-export const GNOME_POWER = "assets/sounds/gnome_power.ogg"
 
 export const RANDOM_WOO_CHANCE = 0.1; // testing 10%
 
