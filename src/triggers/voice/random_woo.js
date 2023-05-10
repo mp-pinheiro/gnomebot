@@ -33,7 +33,10 @@ export default {
         member.user
       )} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`
     )
-
-    DiscordUtil.play_sound(newVoiceState.channel, SOUNDS.WOO)
+    if(Math.random() < 0.5) {
+      DiscordUtil.play_sound(newVoiceState.channel, SOUNDS.WOO)
+    } else {
+      DiscordUtil.play_sound(newVoiceState.channel, SOUNDS.MONKI)
+    }
   },
 }
