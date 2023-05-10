@@ -3,15 +3,15 @@ import QuoteDAO from "../../quote_dao.js";
 import QuoteEmbed from "../../../views/quote_embed.js";
 
 export default class RandomSubcommand extends SubCommand {
-  async process(params) {
-    let message = params.message;
+    async process(params) {
+        let message = params.message;
 
-    try {
-      const quote = await QuoteDAO.getRandomQuote();
-      const embed = await QuoteEmbed.getRandomQuoteEmbed(quote);
-      message.channel.send({ embed: embed });
-    } catch (err) {
-      message.channel.send(`Oof! Failed to fetch a random quote.`);
+        try {
+            const quote = await QuoteDAO.getRandomQuote();
+            const embed = await QuoteEmbed.getRandomQuoteEmbed(quote);
+            message.channel.send({ embed: embed });
+        } catch (err) {
+            message.channel.send(`Oof! Failed to fetch a random quote.`);
+        }
     }
-  }
 }
