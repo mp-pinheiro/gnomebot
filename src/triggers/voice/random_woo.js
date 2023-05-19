@@ -1,6 +1,7 @@
 import { SOUNDS } from "../../constants.js"
 import DiscordUtil from "../../utilities/discord.js"
 import logger from "../../utilities/logger.js"
+import { RANDOM_WOO_CHANCE } from "../../constants.js"
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 
@@ -14,7 +15,7 @@ export default {
   async test(oldVoiceState, newVoiceState) {
     return (
       newVoiceState.channel &&
-      Math.random() < 0.04 &&
+      Math.random() < RANDOM_WOO_CHANCE &&
       (oldVoiceState.channelId !== newVoiceState.channelId ||
         (oldVoiceState.deaf && !newVoiceState.deaf))
     )

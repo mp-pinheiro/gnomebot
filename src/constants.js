@@ -104,7 +104,7 @@ export const SOUNDS = {
     GNOME_POWER: "assets/sounds/gnome_power.ogg"
 };
 
-export const RANDOM_WOO_CHANCE = 0.1; // testing 10%
+export const RANDOM_WOO_CHANCE = 0.2; // 20%
 
 export const PHRASES = [
     "Que homem é um homem que não torna o mundo melhor.",

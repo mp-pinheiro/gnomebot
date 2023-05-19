@@ -99,6 +99,41 @@ const commands = [
     .setName('source')
     .setDescription('Replies with the source repository of gnomebot'),
   new SlashCommandBuilder()
+    .setName('monki')
+    .setDescription('Plays hmm monki sound in your voice chat!')
+    .addChannelOption(channel =>
+      channel
+        .setName('channel')
+        .setDescription('Join this voice channel')
+        .addChannelType(ChannelType.GuildVoice)
+    )
+    .addUserOption(user =>
+      user
+        .setName('user')
+        .setDescription('Join this user\'s voice channel')
+    ),
+  new SlashCommandBuilder()
+    .setName('quote')
+    .setDescription('Adds, displays and lists quotes created by users'),
+    .addStringOption(option =>
+      option
+        .setName('operation')
+        .setDescription('Operation to be executed')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('quote')
+        .setDescription('Quote')
+        .setRequired(false)
+    )
+    .addIntegerOption(option =>
+      option
+        .setName('index')
+        .setDescription('Index of a quote')
+        .setRequired(false)
+    )
+  new SlashCommandBuilder()
     .setName('bill')
     .setDescription('Plays a Bill Wurtz song in your voice channel')
     .addStringOption(option =>
