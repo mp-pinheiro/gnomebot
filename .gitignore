@@ -1,6 +1,6 @@
 .vscode/
-log.txt
 node_modules/
-.env*
-key.json
-build.sh
+logs/
+*.log
+secret/
+.env
