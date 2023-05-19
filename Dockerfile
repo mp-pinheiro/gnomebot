@@ -1,23 +1,12 @@
-FROM node:14
+FROM node:16.13.1
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install app dependencies
-RUN apt update
-RUN apt install ffmpeg -y
-COPY package*.json ./
+RUN apt update && apt install ffmpeg -y
 
-ENV NODE_ENV=production
-RUN npm install --production
+COPY package.json yarn.lock ./
+RUN yarn install --pure-lockfile
 
-# Setup env vars
-ARG DISCORD_AUTH_TOKEN
-RUN touch .env
-RUN echo "DISCORD_AUTH_TOKEN=${DISCORD_AUTH_TOKEN}" >> .env
-
-# Bundle app source
 COPY . .
 
-RUN chmod +x gnome.sh
-CMD [ "bash", "gnome.sh" ]
+CMD ["yarn", "run", "start"]
