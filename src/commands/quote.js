@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import logger from "../util/logger.js"
+import logger from "../utilities/logger.js"
 import AddSubcommand from "../modules/sub_command/quote/add_subcommand.js";
 import RemoveSubcommand from "../modules/sub_command/quote/remove_subcommand.js";
 import ListSubcommand from "../modules/sub_command/quote/list_subcommand.js";
