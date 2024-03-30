@@ -2,7 +2,6 @@ import logger from "../utilities/logger.js"
 import { playSound } from "../utilities/discord.js"
 import ytdl from "ytdl-core"
 import { closestMatch } from 'closest-match'
-import fetch from 'node-fetch'
 import _ from 'lodash'
 
 

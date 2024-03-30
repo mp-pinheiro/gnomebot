@@ -1,5 +1,5 @@
 import ChessImageGenerator from "chess-image-generator"
-import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js'
+import { CommandInteraction, AttachmentBuilder, EmbedBuilder } from 'discord.js'
 
 const imageOptions = {
   'size': 512,
@@ -33,8 +33,9 @@ export const getGameImageEmbed = async (fen, { move = {}, reply = '', side = 'w'
     move: { [move.from]: true, [move.to]: true, },
     flipped: side === 'b'
   })
-  const imageAttachment = new MessageAttachment(imageBuffer, 'chess.png')
-  const imageEmbed = new MessageEmbed()
+
+  const imageAttachment = new AttachmentBuilder(imageBuffer, { name: 'chess.png' })
+  const imageEmbed = new EmbedBuilder()
     .setTitle('Chess Game')
     .setDescription(reply)
     .setImage('attachment://chess.png')

@@ -38,9 +38,11 @@ const commands = [
           option
             .setName('side')
             .setDescription('Sets the side guild members play as.')
-            .addChoice('white', 'white')
-            .addChoice('black', 'black')
-            .addChoice('random', 'random')
+            .addChoices(
+              { name: 'white', value: 'white' },
+              { name: 'black', value: 'black' },
+              { name: 'random', value: 'random' }
+            )
         )
         .addStringOption(option =>
           option
@@ -70,7 +72,7 @@ const commands = [
           channel
             .setName('channel')
             .setDescription('Join this voice channel')
-            .addChannelType(ChannelType.GuildVoice)
+            .addChannelTypes(ChannelType.GuildVoice)
         )
         .addUserOption(user =>
           user
@@ -85,7 +87,7 @@ const commands = [
       channel
         .setName('channel')
         .setDescription('Join this voice channel')
-        .addChannelType(ChannelType.GuildVoice)
+        .addChannelTypes(ChannelType.GuildVoice)
     )
     .addUserOption(user =>
       user

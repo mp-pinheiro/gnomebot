@@ -7,7 +7,7 @@ export default {
   desc: "Prints a random ascii gnome to the chat.",
   /**
    *
-   * @param {import('discord.js').MessageInteraction} interaction
+   * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {
     try {

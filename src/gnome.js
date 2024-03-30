@@ -1,4 +1,4 @@
-import { Client, Collection, Intents } from "discord.js"
+import { Client, GatewayIntentBits, Collection } from "discord.js"
 import DiscordUtil, { getUserNameIDString } from "./utilities/discord.js"
 import logger from "./utilities/logger.js"
 import fs from "fs"
@@ -8,7 +8,13 @@ env.config()
 
 const { DISCORD_AUTH_TOKEN } = process.env
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] })
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
+})
 client.commands = new Collection()
 
 const commandFiles = fs
@@ -89,7 +95,7 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
   voiceTriggers.forEach(async (trigger) => {
     try {
       if (await trigger.test(oldVoiceState, newVoiceState)) {
-        logger.info(`${getUserNameIDString(oldVoiceState.member.user)} triggered a voice event: ${trigger.name}`, { 'old_channel': oldVoiceState.channel, 'new_channel': newVoiceState.channel})
+        logger.info(`${getUserNameIDString(oldVoiceState.member.user)} triggered a voice event: ${trigger.name}`, { 'old_channel': oldVoiceState.channel, 'new_channel': newVoiceState.channel })
         trigger.execute(oldVoiceState, newVoiceState)
       }
     } catch (err) {

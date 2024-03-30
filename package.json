@@ -13,30 +13,27 @@
   "author": "Nick Hadley",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/builders": "^0.9.0",
-    "@discordjs/opus": "^0.8.0",
-    "@discordjs/rest": "^0.2.0-canary.0",
-    "@discordjs/voice": "^0.7.5",
-    "bufferutil": "^4.0.2",
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/voice": "^0.16.1",
+    "bufferutil": "^4.0.8",
     "chess-image-generator": "github:hadley31/chess-image-generator",
-    "chess.js": "^0.12.0",
+    "chess.js": "^1.0.0-beta.8",
     "closest-match": "^1.3.3",
-    "discord-api-types": "^0.25.2",
-    "discord.js": "^13.3.1",
-    "dotenv": "^10.0.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
     "erlpack": "^0.1.3",
     "lodash": "^4.17.20",
-    "redis": "^4.0.2",
-    "sodium": "^3.0.2",
-    "string-argv": "^0.3.1",
-    "utf-8-validate": "^5.0.3",
-    "winston": "^3.3.3",
-    "ytdl-core": "^4.10.0",
-    "zlib-sync": "^0.1.7"
+    "redis": "^4.6.13",
+    "sodium": "github:distubejs/sodium",
+    "string-argv": "^0.3.2",
+    "utf-8-validate": "^6.0.3",
+    "winston": "^3.13.0",
+    "ytdl-core": "^4.11.5",
+    "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "eslint": "^8.5.0",
-    "nodemon": "^2.0.6"
+    "eslint": "^8.57.0",
+    "nodemon": "^3.1.0"
   },
   "type": "module"
 }

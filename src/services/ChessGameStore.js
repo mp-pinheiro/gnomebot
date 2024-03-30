@@ -6,7 +6,7 @@ export class ChessGameStore {
   /**
    * Retrieves the current game for the given channel id
    * @param {String} channelId The channel id
-   * @returns {Promise<import('chess.js').ChessInstance?>}
+   * @returns {Promise<import('chess.js').Chess?>}
    */
   async getGame(channelId) {
     throw Error('Not Implemented!')
@@ -15,7 +15,7 @@ export class ChessGameStore {
   /**
    * Updates or sets a game for the given channel id
    * @param {String} channelId The channel id
-   * @param {import('chess.js').ChessInstance} game 
+   * @param {import('chess.js').Chess} game 
    */
   async updateGame(channelId, game) {
     throw Error('Not Implemented!')
@@ -31,7 +31,7 @@ export class SimpleGameStore extends ChessGameStore {
   /**
    * Retrieves the current game for the given channel id
    * @param {String} channelId The channel id
-   * @returns {Promise<import('chess.js').ChessInstance?>}
+   * @returns {Promise<import('chess.js').Chess?>}
    */
   async getGame(channelId) {
     const key = this.getKey(channelId)
@@ -41,7 +41,7 @@ export class SimpleGameStore extends ChessGameStore {
   /**
    * Updates or sets a game for the given channel id
    * @param {String} channelId The channel id
-   * @param {import('chess.js').ChessInstance} game 
+   * @param {import('chess.js').Chess} game 
    */
   async updateGame(channelId, game) {
     const key = this.getKey(channelId)
@@ -70,13 +70,13 @@ export class RedisGameStore extends ChessGameStore {
   /**
    * Retrieves the current game for the given channel id
    * @param {String} channelId The channel id
-   * @returns {Promise<import('chess.js').ChessInstance?>}
+   * @returns {Promise<import('chess.js').Chess?>}
    */
   async getGame(channelId) {
     if (!this.client.isOpen) await this.client.connect()
     const key = this.getKey(channelId)
     const fen = await this.client.get(key)
-    
+
     logger.info(`${channelId} fen: ${fen}`)
     if (!fen) {
       return null
@@ -88,7 +88,7 @@ export class RedisGameStore extends ChessGameStore {
   /**
    * Updates or sets a game for the given channel id
    * @param {String} channelId The channel id
-   * @param {import('chess.js').ChessInstance} game 
+   * @param {import('chess.js').Chess} game 
    */
   async updateGame(channelId, game) {
     if (!this.client.isOpen) await this.client.connect()

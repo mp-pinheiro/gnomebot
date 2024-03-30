@@ -31,7 +31,7 @@ class ChessService {
     const game = await this.getGame(channelId, { createIfNotExists: true })
     const side = game.turn()
 
-    if (game.game_over()) {
+    if (game.isGameOver()) {
       return {
         error: true,
         errorReply: ERROR_RESPONSES['NO_CHESS_GAME']
@@ -52,7 +52,7 @@ class ChessService {
     }
 
     // If the user's move ended the game
-    if (game.game_over()) {
+    if (game.isGameOver()) {
       // Update Game in Store
       logger.debug('Storing new chess game state...')
       this.store.updateGame(channelId, game)
@@ -75,7 +75,7 @@ class ChessService {
     this.store.updateGame(channelId, game)
 
     // Check if gnomebot wins after moving
-    if (game.in_checkmate()) {
+    if (game.isCheckmate()) {
       return {
         reply: `Nice try, but **${gnomeStringMove}** is checkmate. Better luck next time!`,
         game: game,
@@ -99,7 +99,7 @@ class ChessService {
    * @param {Object} options
    * @param {String} options.side
    * @param {String} options.fen
-   * @returns {Promise<import('chess.js').ChessInstance>}
+   * @returns {Promise<import('chess.js').Chess>}
    */
   async createGame(channelId, { side = 'w', fen } = {}) {
     logger.info(`Creating new chess game for channel: ${channelId}`)
@@ -124,7 +124,7 @@ class ChessService {
    * @param {String} channelId 
    * @param {Object} options 
    * @param {Boolean} options.createIfNotExists 
-   * @returns {Promise<import('chess.js').ChessInstance?>}
+   * @returns {Promise<import('chess.js').Chess?>}
    */
   async getGame(channelId, { createIfNotExists = false } = {}) {
     logger.debug(`Getting chess game for channel: ${channelId}`)
@@ -153,7 +153,7 @@ if (gameStore instanceof RedisGameStore) {
 
 /**
  * Generates a random move based on a given board position
- * @param {import('chess.js').ChessInstance} game 
+ * @param {import('chess.js').Chess} game 
  */
 const randomMove = (game) => _.sample(game.moves())
 
