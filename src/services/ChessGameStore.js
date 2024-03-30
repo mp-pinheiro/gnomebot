@@ -75,14 +75,18 @@ export class RedisGameStore extends ChessGameStore {
   async getGame(channelId) {
     if (!this.client.isOpen) await this.client.connect()
     const key = this.getKey(channelId)
-    const fen = await this.client.get(key)
+    const pgn = await this.client.get(key)
 
-    logger.info(`${channelId} fen: ${fen}`)
-    if (!fen) {
+    logger.info(`channel: ${channelId} pgn: ${pgn}`)
+    if (!pgn) {
       return null
     }
 
-    return new Chess(fen)
+    const game = new Chess()
+
+    game.loadPgn(pgn)
+
+    return game
   }
 
   /**
@@ -94,7 +98,7 @@ export class RedisGameStore extends ChessGameStore {
     if (!this.client.isOpen) await this.client.connect()
     const key = this.getKey(channelId)
     if (game) {
-      this.client.set(key, game.fen())
+      this.client.set(key, game.pgn())
     } else {
       this.client.del(key)
     }

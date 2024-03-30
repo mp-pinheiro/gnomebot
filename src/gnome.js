@@ -3,6 +3,7 @@ import DiscordUtil, { getUserNameIDString } from "./utilities/discord.js"
 import logger from "./utilities/logger.js"
 import fs from "fs"
 import env from "dotenv"
+import deployCommands from "./utilities/deployCommands.js"
 
 env.config()
 
@@ -37,6 +38,8 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command)
   logger.debug(`Added command: ${command.name} (${file})`)
 }
+
+deployCommands()
 
 // Dynamically load voice triggers
 logger.info('Loading voice triggers...')

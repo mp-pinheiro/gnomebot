@@ -18,7 +18,7 @@ export default {
    * @param {import('discord.js').Message} message
    */
   async execute(message) {
-    const result = await chess.handleMove(message.channelId, message.content)
+    const result = await chess.handleMove(message.channel, message.author, message.content)
 
     if (result.error) {
       logger.error('Something went wrong')

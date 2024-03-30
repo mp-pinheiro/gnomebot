@@ -23,12 +23,13 @@ class ChessService {
 
   /**
    * 
-   * @param {String} channelId The current Discord text channel
+   * @param {import('discord.js').Channel} channel The current Discord text channel
+   * @param {import('discord.js').User} user The current Discord text channel
    * @param {String} userMove The Discord user's move
    */
-  async handleMove(channelId, userMove) {
-    logger.debug(`Handling ${userMove} in ${channelId}`)
-    const game = await this.getGame(channelId, { createIfNotExists: true })
+  async handleMove(channel, user, userMove) {
+    logger.debug(`Handling ${userMove} by ${user} in ${channel.id}`)
+    const game = await this.getGame(channel, { createIfNotExists: true })
     const side = game.turn()
 
     if (game.isGameOver()) {
@@ -38,12 +39,19 @@ class ChessService {
       }
     }
 
+    if (user.id != this.getUserBySide(game, side)) {
+      return {
+        error: true,
+        errorReply: ERROR_RESPONSES['NOT_YOUR_TURN'],
+      }
+    }
+
     // Attempt to make player's move
-    const move = game.move(userMove)
-
-    const possibleMoves = game.moves()
-
-    if (!move) {
+    let move;
+    try {
+      move = game.move(userMove)
+    } catch (err) {
+      const possibleMoves = game.moves()
       const closestMatchingMove = closestMatch(userMove, possibleMoves)
       return {
         error: true,
@@ -52,13 +60,34 @@ class ChessService {
     }
 
     // If the user's move ended the game
-    if (game.isGameOver()) {
+    if (game.isCheckmate()) {
       // Update Game in Store
       logger.debug('Storing new chess game state...')
-      this.store.updateGame(channelId, game)
+      this.store.updateGame(channel.id, game)
 
       return {
         reply: 'You win. Well played!',
+        game: game,
+        side: side,
+        move: move
+      }
+    } else if (game.isGameOver()) {
+      return {
+        reply: 'It\'s a draw!',
+        game: game,
+        side: side,
+        move: move
+      }
+    }
+
+    if (!this.isBotGame(game, channel)) {
+      this.store.updateGame(channel.id, game)
+      const otherUserId = this.getUserBySide(game, side == 'w' ? 'b' : 'w')
+      logger.debug(`Other user: ${otherUserId}`)
+      logger.debug(channel.client.users)
+      const otherUser = await channel.client.users.fetch(otherUserId)
+      return {
+        reply: `${user} made the move: **${userMove}**. Your move, ${otherUser}!`,
         game: game,
         side: side,
         move: move
@@ -68,11 +97,11 @@ class ChessService {
     // Gnomebot makes a move
     const gnomeStringMove = this.generateMove(game)
     const gnomeMove = game.move(gnomeStringMove) // verbose move
-    logger.debug(`Making move in ${channelId}: ${gnomeStringMove}`)
+    logger.debug(`Gnomebot making move in ${channel}: ${gnomeStringMove}`)
 
     // Update Game in Store
     logger.debug('Storing new chess game state...')
-    this.store.updateGame(channelId, game)
+    this.store.updateGame(channel.id, game)
 
     // Check if gnomebot wins after moving
     if (game.isCheckmate()) {
@@ -101,9 +130,12 @@ class ChessService {
    * @param {String} options.fen
    * @returns {Promise<import('chess.js').Chess>}
    */
-  async createGame(channelId, { side = 'w', fen } = {}) {
+  async createGame(channelId, { side = 'w', fen, whiteUserId, blackUserId } = {}) {
     logger.info(`Creating new chess game for channel: ${channelId}`)
     const game = new Chess(fen)
+
+    game.header('White', whiteUserId)
+    game.header('Black', blackUserId)
 
     if (game.turn() != side) {
       const move = this.generateMove(game)
@@ -113,26 +145,36 @@ class ChessService {
       game.move(move)
     }
 
-    logger.info('Storing chess game state...')
+    logger.info(`Storing chess game state for channel: ${channelId}`)
     await this.store.updateGame(channelId, game)
 
     return game
   }
 
+  isBotGame(game, channel) {
+    const botId = channel.client.user.id
+    return game.header().White == botId || game.header().Black == botId
+  }
+
+  getUserBySide(game, side) {
+    const color = side == 'w' ? 'White' : 'Black'
+    return game.header()[color]
+  }
+
   /**
    * 
-   * @param {String} channelId 
+   * @param {import('discord.js').Channel} channel
    * @param {Object} options 
    * @param {Boolean} options.createIfNotExists 
    * @returns {Promise<import('chess.js').Chess?>}
    */
-  async getGame(channelId, { createIfNotExists = false } = {}) {
-    logger.debug(`Getting chess game for channel: ${channelId}`)
-    const game = await this.store.getGame(channelId)
+  async getGame(channel, { createIfNotExists = false } = {}) {
+    logger.debug(`Getting chess game for channel: ${channel.id}`)
+    const game = await this.store.getGame(channel.id)
 
     if (!game && createIfNotExists) {
-      logger.info(`No existing chess game found in channel: ${channelId}`)
-      return this.createGame(channelId)
+      logger.info(`No existing chess game found in channel: ${channel.id}`)
+      return this.createGame(channel.id, { whiteUserId: null, blackUserId: channel.client.user.id })
     }
 
     return game

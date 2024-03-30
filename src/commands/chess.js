@@ -34,7 +34,7 @@ export default {
  */
 const handleSubcommandMove = async (interaction) => {
   const moveOption = interaction.options.getString('move')
-  const result = await chess.handleMove(interaction.channelId, moveOption)
+  const result = await chess.handleMove(interaction.channel, interaction.user, moveOption)
 
   if (result.error) {
     return interaction.reply({ content: result.errorReply, ephemeral: true })
@@ -55,6 +55,7 @@ const handleSubcommandMove = async (interaction) => {
  */
 const handleSubcommandNew = async (interaction) => {
   const sideOption = interaction.options.getString('side')
+  const opponentOption = interaction.options.getUser('opponent')
   const fenOption = interaction.options.getString('fen') || undefined
   const forceCreateOption = interaction.options.getBoolean('force')
   const hasPermission = interaction.member?.permissions.has("ADMINISTRATOR")
@@ -71,8 +72,9 @@ const handleSubcommandNew = async (interaction) => {
   }
 
   const side = getSide(sideOption)
+  const opponentUserId = opponentOption?.id ?? interaction.client.user.id
 
-  const game = await chess.createGame(interaction.channelId, { side: side, fen: fenOption })
+  const game = await chess.createGame(interaction.channelId, { side: side, fen: fenOption, whiteUserId: interaction.user.id, blackUserId: opponentUserId })
 
   if (!game) {
     return interaction.reply({ content: 'Something went wrong... Unable to create new game.', ephemeral: true })
@@ -113,7 +115,7 @@ const handleSubcommandFEN = async (interaction) => {
  * @param {import('discord.js').CommandInteraction} interaction
  */
 const handleSubcommandMoves = async (interaction) => {
-  const game = await chess.getGame(interaction.channelId)
+  const game = await chess.getGame(interaction.channel)
 
   if (!game) {
     return interaction.reply({ content: ERROR_RESPONSES['NO_CHESS_GAME'], ephemeral: true })
