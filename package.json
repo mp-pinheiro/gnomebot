@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "nodemon src/gnome.js",
     "dev:docker": "docker compose up dev --force-recreate --remove-orphans",
-    "deploy-commands": "node scripts/deploy-commands.js",
     "start": "node src/gnome.js",
     "start:docker": "docker compose up gnomebot --force-recreate --remove-orphans"
   },

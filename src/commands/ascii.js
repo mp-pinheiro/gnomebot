@@ -1,6 +1,7 @@
 import logger from "../utilities/logger.js"
 import { ASCII_GNOMES } from "../constants.js"
 import _ from "lodash"
+import { SlashCommandBuilder } from '@discordjs/builders'
 
 export default {
   name: "ascii",
@@ -17,4 +18,10 @@ export default {
       logger.info("An error occured in ascii command")
     }
   },
+
+  getSlashCommand() {
+    return new SlashCommandBuilder()
+      .setName('ascii')
+      .setDescription('Prints a random ascii gnome to the chat.')
+  }
 }

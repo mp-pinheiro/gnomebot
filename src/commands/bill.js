@@ -3,6 +3,7 @@ import { playSound } from "../utilities/discord.js"
 import ytdl from "ytdl-core"
 import { closestMatch } from 'closest-match'
 import _ from 'lodash'
+import { SlashCommandBuilder } from '@discordjs/builders'
 
 
 export default {
@@ -35,6 +36,24 @@ export default {
     playSound(userVoiceChannel, stream, { volume: volumePercent })
 
     return interaction.reply(`**Now playing**: \`${closestMatchingSong}\` by Bill Wurtz in ${userVoiceChannel}`)
+  },
+
+  getSlashCommand() {
+    return new SlashCommandBuilder()
+      .setName('bill')
+      .setDescription('Plays a Bill Wurtz song in your voice channel')
+      .addStringOption(option =>
+        option
+          .setName('title')
+          .setDescription('The title of the song to play')
+          .setRequired(true)
+      )
+      .addIntegerOption(option =>
+        option
+          .setName('volume')
+          .setDescription('Volume to use: 0-100')
+          .setRequired(false)
+      )
   }
 }
 

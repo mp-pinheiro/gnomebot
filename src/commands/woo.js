@@ -1,6 +1,8 @@
 import logger from "../utilities/logger.js"
 import { getUserNameIDString, playSound } from "../utilities/discord.js"
 import { WOO } from "../constants.js"
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { ChannelType } from "discord.js"
 
 const usageHelp = `\
 !gnome woo   -   Joins your voice channel and makes a noise
@@ -38,6 +40,23 @@ export default {
     //  /woo
     return handleDefaultOption(interaction)
   },
+
+  getSlashCommand() {
+    return new SlashCommandBuilder()
+      .setName('woo')
+      .setDescription('Plays woo sound in your voice chat!')
+      .addChannelOption(channel =>
+        channel
+          .setName('channel')
+          .setDescription('Join this voice channel')
+          .addChannelTypes(ChannelType.GuildVoice)
+      )
+      .addUserOption(user =>
+        user
+          .setName('user')
+          .setDescription('Join this user\'s voice channel')
+      )
+  }
 }
 
 /**

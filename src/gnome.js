@@ -39,7 +39,7 @@ for (const file of commandFiles) {
   logger.debug(`Added command: ${command.name} (${file})`)
 }
 
-deployCommands()
+deployCommands(client.commands.map(command => command.getSlashCommand()))
 
 // Dynamically load voice triggers
 logger.info('Loading voice triggers...')

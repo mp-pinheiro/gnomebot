@@ -2,6 +2,7 @@ import { ERROR_RESPONSES } from "../constants.js"
 import chess from "../services/chess.js"
 import { getGameImageEmbed } from "../utilities/chess.js"
 import logger from "../utilities/logger.js"
+import { SlashCommandBuilder } from '@discordjs/builders'
 
 const usageHelp = `\
 !gnome chess *<move>*   -   Makes a move against me in the current channel
@@ -24,6 +25,61 @@ export default {
     if (interaction.options.getSubcommand() === 'fen') return handleSubcommandFEN(interaction)
 
     if (interaction.options.getSubcommand() === "new") return handleSubcommandNew(interaction)
+  },
+
+  getSlashCommand() {
+    return new SlashCommandBuilder()
+      .setName('chess')
+      .setDescription('Play chess against gnomebot!')
+      // Command: /chess move
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('move')
+          .setDescription('Make a move')
+          // Command: /chess move [san]
+          .addStringOption(option =>
+            option
+              .setName('move')
+              .setDescription('The move to make')
+              .setRequired(true)
+          )
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('moves')
+          .setDescription('Lists possible moves for the current game in this channel')
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('new')
+          .setDescription('Creates a new game in this channel')
+          .addStringOption(option =>
+            option
+              .setName('side')
+              .setDescription('Sets the side guild members play as.')
+              .addChoices(
+                { name: 'white', value: 'white' },
+                { name: 'black', value: 'black' },
+                { name: 'random', value: 'random' }
+              )
+          )
+          .addStringOption(option =>
+            option
+              .setName('fen')
+              .setDescription('Sets the starting fen position')
+              .setRequired(false)
+          )
+          .addUserOption(option => option
+            .setName('opponent')
+            .setDescription('The opponent to play against')
+            .setRequired(false)
+          )
+          .addBooleanOption(option =>
+            option
+              .setName('force')
+              .setDescription('Administrators can use this option to force re-create games')
+          )
+      )
   }
 }
 

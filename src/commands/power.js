@@ -2,6 +2,8 @@ import { GNOME_POWER } from "../constants.js"
 import DiscordUtil from "../utilities/discord.js"
 import { getVoiceConnection } from "@discordjs/voice"
 import _ from "lodash"
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { ChannelType } from "discord.js"
 
 const usageHelp = `\
 !gnome power   -   Joins your voice channel and plays GNOME POWER
@@ -28,6 +30,33 @@ export default {
     if (interaction.options.getSubcommand() === 'stop') {
       return handleStopSubcommand(interaction)
     }
+  },
+
+  getSlashCommand() {
+    return new SlashCommandBuilder()
+      .setName('power')
+      .setDescription('Plays GNOME POWER in your voice chat!')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('stop')
+          .setDescription('Stops the song')
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('play')
+          .setDescription('Plays GNOME POWER in a voice channel')
+          .addChannelOption(channel =>
+            channel
+              .setName('channel')
+              .setDescription('Join this voice channel')
+              .addChannelTypes(ChannelType.GuildVoice)
+          )
+          .addUserOption(user =>
+            user
+              .setName('user')
+              .setDescription('Join this user\'s voice channel')
+          )
+      )
   }
 }
 
