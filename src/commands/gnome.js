@@ -37,8 +37,8 @@ export default {
 
   getSlashCommand() {
     return new SlashCommandBuilder()
-      .setName('woo')
-      .setDescription('Plays woo sound in your voice chat!')
+      .setName('gnome')
+      .setDescription('Plays the gnome sound in your voice chat!')
       .addChannelOption(channel =>
         channel
           .setName('channel')
