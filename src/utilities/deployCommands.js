@@ -21,11 +21,11 @@ export default function deployCommands(commandBuilders) {
 
   if (process.env.NODE_ENV === 'production') {
     rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands })
-      .then(() => console.log('Successfully registered application commands.'))
+      .then(() => console.log('Successfully registered application commands in all registered guilds.'))
       .catch(console.error)
   } else if (process.env.NODE_ENV === 'development') {
     rest.put(Routes.applicationCommands(CLIENT_ID, GUILD_ID), { body: commands })
-      .then(() => console.log('Successfully registered guild commands.'))
+      .then(() => console.log(`Successfully registered commands in guild: ${GUILD_ID}`))
       .catch(console.error)
   }
 }
