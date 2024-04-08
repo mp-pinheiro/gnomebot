@@ -9,7 +9,7 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 **/chess** - Play Gnomebot in chess using [chess.js](https://github.com/jhlywa/chess.js).<br>
 **/power** - Gnomebot joins your voice channel and plays 'GNOME POWER'.<br>
 **/source** - Replies with a link to source repository.<br>
-**/woo** - Gnomebot joins your voice channel and says 'woo'.<br>
+**/gnome** - Gnomebot joins your voice channel and says "OOH".<br>
 
 ## Triggers
 
@@ -43,9 +43,9 @@ Gnomebot started as a silly discord bot I created to prank my friends and slowly
 - If there is an active chess match in the current channel, gnomebot will detect a valid chess move instead of having to use the `/chess move <move>` command.
 
 ### Voice Channels
-- Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful "woo!" to those in the voice channel, leaving shortly after.<br>
-- If you become impatient, you can type `/woo` and gnomebot will perform the same action on demand. You must be in a voice channel for this feature to work.<br>
-- Users with the Administrator permission can type `/woo #channel` or `/woo @member` to prank their friends without the need to be in a voice channel.
+- Upon entering a voice channel, there is a 4% chance gnomebot will join and deliver a delightful gnome noise to those in the voice channel, leaving shortly after.<br>
+- If you become impatient, you can type `/gnome` and gnomebot will perform the same action on demand. You must be in a voice channel for this feature to work.<br>
+- Users with the Administrator permission can type `/gnome #channel` or `/gnome @member` to prank their friends without the need to be in a voice channel.
 
 ## Development
 
@@ -65,7 +65,7 @@ yarn dev:docker
 
 ### Run Application Locally (Without Docker)
 ```sh
-yarn install
+yarn
 yarn dev
 ```
 
@@ -75,10 +75,6 @@ First, set the following variables in your `.env` file:
 DISCORD_AUTH_TOKEN=<your-bots-auth-token>
 CLIENT_ID=<your-bots-client-id>
 GUILD_ID=<your-guild-id>
-```
-Then, run the following command:
-```sh
-yarn deploy-commands
 ```
 
 ## References

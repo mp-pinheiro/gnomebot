@@ -1,9 +1,9 @@
-import { WOO } from "../../constants.js"
+import { GNOME_SOUND } from "../../constants.js"
 import DiscordUtil from "../../utilities/discord.js"
 
 export default {
-  name: "Woo",
-  desc: `A throwback to the original trigger for woo`,
+  name: "Random Gnome",
+  desc: `A throwback to the original trigger for gnome`,
   /**
    * @param {import('discord.js').Message} message
    */
@@ -14,6 +14,6 @@ export default {
    * @param {import('discord.js').Message} message
    */
   async execute(message) {
-    DiscordUtil.playSound(message.member.voice.channel, WOO)
+    DiscordUtil.playSound(message.member.voice.channel, GNOME_SOUND)
   },
 }

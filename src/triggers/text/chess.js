@@ -10,7 +10,7 @@ export default {
    * @param {import('discord.js').Message} message
    */
   async test(message) {
-    const game = await chess.getGame(message.channelId)
+    const game = await chess.getGame(message.channel)
     return game && game.moves().includes(message.content)
   },
 

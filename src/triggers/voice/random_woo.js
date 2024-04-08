@@ -1,12 +1,12 @@
-import { WOO } from "../../constants.js"
+import { GNOME_SOUND } from "../../constants.js"
 import DiscordUtil from "../../utilities/discord.js"
 import logger from "../../utilities/logger.js"
 
 const { getUserNameIDString, getChannelNameIDString } = DiscordUtil
 
 export default {
-  name: "Random Woo",
-  desc: "Randomly joins a chat channel and woo.",
+  name: "Random Gnome",
+  desc: "Randomly joins a chat channel and makes a noise.",
   /**
    * @param {import('discord.js').VoiceState} oldVoiceState
    * @param {import('discord.js').VoiceState} newVoiceState
@@ -32,6 +32,6 @@ export default {
       )} joined channel: ${getChannelNameIDString(newVoiceState.channel)})`
     )
 
-    DiscordUtil.playSound(newVoiceState.channel, WOO)
+    DiscordUtil.playSound(newVoiceState.channel, GNOME_SOUND)
   },
 }

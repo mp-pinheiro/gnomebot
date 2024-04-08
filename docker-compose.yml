@@ -8,6 +8,8 @@ services:
     environment:
       - NODE_ENV=development
       - REDIS_HOST=redis
+    env_file:
+      - .env
     volumes:
       - './src:/app/src:ro'
       - './.env:/app/.env:ro'
@@ -23,7 +25,6 @@ services:
       - REDIS_HOST=redis
       - NODE_ENV=production
     volumes:
-      - './src:/app/src:ro'
       - './logs:/app/logs:rw'
     depends_on:
       - redis

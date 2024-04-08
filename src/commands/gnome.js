@@ -1,20 +1,14 @@
 import logger from "../utilities/logger.js"
 import { getUserNameIDString, playSound } from "../utilities/discord.js"
-import { WOO } from "../constants.js"
+import { GNOME_SOUND } from "../constants.js"
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { ChannelType } from "discord.js"
 
-const usageHelp = `\
-!gnome woo   -   Joins your voice channel and makes a noise
-!gnome woo *<channel_id>*   -   Joins the specified voice channel and makes a noise (Admin)
-!gnome woo *@<user>*   -   Joins @<user>'s voice channel and makes a noise (Admin)`
-
 export default {
-  name: "woo",
+  name: "gnome",
   desc: "Gnomebot will join your channel and makes a noise.",
-  help: usageHelp,
   /**
-   * Command handler for `/woo`
+   * Command handler for `/gnome`
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {
@@ -27,17 +21,17 @@ export default {
       return interaction.reply({ content: "You must be an administrator to use that command", ephemeral: true })
     }
 
-    //  /woo @member
+    //  /gnome @member
     if (userOption) {
       return handleUserOption(interaction, userOption)
     }
 
-    //  /woo #channel
+    //  /gnome #channel
     if (channelOption) {
       return handleChannelOption(interaction, channelOption)
     }
 
-    //  /woo
+    //  /gnome
     return handleDefaultOption(interaction)
   },
 
@@ -60,7 +54,7 @@ export default {
 }
 
 /**
- * Handles specific command case: `/woo @member`
+ * Handles specific command case: `/gnome @member`
  * @param {import('discord.js').CommandInteraction} interaction
  * @param {import('discord.js').GuildMember} user
  */
@@ -74,22 +68,22 @@ const handleUserOption = async (interaction, user) => {
 
   await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
 
-  return playSound(channel, WOO)
+  return playSound(channel, GNOME_SOUND)
 }
 
 /**
- * Handles specific command case: `/woo #channel`
+ * Handles specific command case: `/gnome #channel`
  * @param {import('discord.js').CommandInteraction} interaction
  * @param {import('discord.js').VoiceChannel} channel
  */
 const handleChannelOption = async (interaction, channel) => {
   await interaction.reply({ content: `Joining voice channel: ${channel}`, ephemeral: true })
 
-  return playSound(channel, WOO)
+  return playSound(channel, GNOME_SOUND)
 }
 
 /**
- * Handles default command case: `/woo`
+ * Handles default command case: `/gnome`
  * @param {import('discord.js').CommandInteraction} interaction
  */
 const handleDefaultOption = async (interaction) => {
@@ -101,5 +95,5 @@ const handleDefaultOption = async (interaction) => {
 
   await interaction.reply({ content: `Joining voice channel: ${userChannel}`, ephemeral: true })
 
-  return playSound(userChannel, WOO)
+  return playSound(userChannel, GNOME_SOUND)
 }

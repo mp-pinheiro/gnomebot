@@ -2,11 +2,11 @@
   "name": "gnomebot",
   "version": "1.0.0",
   "description": "Gnomes everywhere!",
-  "main": "src/gnome.js",
+  "main": "src/main.js",
   "scripts": {
-    "dev": "nodemon src/gnome.js",
+    "dev": "nodemon src/main.js",
     "dev:docker": "docker compose up dev --force-recreate --remove-orphans",
-    "start": "node src/gnome.js",
+    "start": "node src/main.js",
     "start:docker": "docker compose up gnomebot --force-recreate --remove-orphans"
   },
   "author": "Nick Hadley",

@@ -54,7 +54,7 @@ export const ASCII_GNOMES = [
 ⣿⣿⣿⣿⣿⣶⣄⣀⠐⢀⣸⣷⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿`,
 ]
 
-export const WOO = "src/assets/sounds/woo.ogg"
+export const GNOME_SOUND = "src/assets/sounds/gnome_sound.ogg"
 export const GNOME_POWER = "src/assets/sounds/gnome_power.ogg"
 
 
