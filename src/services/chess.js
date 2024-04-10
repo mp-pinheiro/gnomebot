@@ -82,14 +82,15 @@ class ChessService {
 
     if (!this.isBotGame(game, channel)) {
       this.store.updateGame(channel.id, game)
-      const otherUserId = this.getUserBySide(game, side == 'w' ? 'b' : 'w')
+      const otherUserSide = side == 'w' ? 'b' : 'w';
+      const otherUserId = this.getUserBySide(game, otherUserSide)
       logger.debug(`Other user: ${otherUserId}`)
       logger.debug(channel.client.users)
       const otherUser = await channel.client.users.fetch(otherUserId)
       return {
         reply: `${user} made the move: **${userMove}**. Your move, ${otherUser}!`,
         game: game,
-        side: side,
+        side: otherUserSide,
         move: move
       }
     }
