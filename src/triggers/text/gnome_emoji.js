@@ -7,7 +7,7 @@ export default {
      * @param {import('discord.js').Message} message
      */
     async test(message) {
-        return Math.random() < 0.5 && gnome_regex.test(message.content)
+        return Math.random() < 0.05 && gnome_regex.test(message.content)
     },
     /**
      * @param {import('discord.js').Message} message
