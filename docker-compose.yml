@@ -24,6 +24,8 @@ services:
     environment:
       - REDIS_HOST=redis
       - NODE_ENV=production
+    env_file:
+      - .env
     volumes:
       - './logs:/app/logs:rw'
     depends_on:
