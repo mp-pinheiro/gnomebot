@@ -5,6 +5,7 @@ networks:
 services:
   dev:
     build: .
+    restart: always
     environment:
       - NODE_ENV=development
       - REDIS_HOST=redis
@@ -34,6 +35,7 @@ services:
       - gnomebot
   redis:
     image: redis
+    restart: always
     ports:
       - "6379:6379"
     networks:
