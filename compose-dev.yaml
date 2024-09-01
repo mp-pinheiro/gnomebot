@@ -1,0 +1,21 @@
+networks:
+  gnomebot:
+    driver: bridge
+
+services:
+  gnomebot:
+    extends:
+      file: compose.yaml
+      service: gnomebot
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+    volumes:
+      - './src:/app/src:ro'
+      - './.env:/app/.env:ro'
+      - './logs:/app/logs:rw'
+    command: yarn run dev
+  redis:
+    extends:
+      file: compose.yaml
+      service: redis
